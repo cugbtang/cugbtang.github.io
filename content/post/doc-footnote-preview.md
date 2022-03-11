@@ -22,6 +22,8 @@ You can create footnotes like this[^footnote].
 [^footnote]: Here is the *text* of the **footnote**.
 ```
 
+
+
 will produce:
 
 You can create footnotes like this[^footnote1].
