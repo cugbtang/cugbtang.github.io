@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: http://cugbtang.github.io/sitemap.xml
