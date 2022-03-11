@@ -2,7 +2,7 @@
 title: "namespace、cgroups、layerfs support container"
 date: 2018-03-01T16:01:23+08:00
 lastmod: 2018-03-01T16:01:23+08:00
-draft: true
+draft: false
 tags: ["docker", "namespace"]
 categories: ["container", "linux"]
 author: "cugbtang"
