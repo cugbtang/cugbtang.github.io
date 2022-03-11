@@ -3,7 +3,7 @@
 # And see https://gohugo.io/getting-started/configuration/ .
 
 baseURL = "http://cugbtang.github.io/"
-title = "Jane - A super concise theme for Hugo"
+title = "✌yesplease's blog"
 enableRobotsTXT = true
 enableEmoji = true
 theme = "jane"
@@ -15,13 +15,20 @@ disqusShortname = ""      # disqus_shortname
 googleAnalytics = ""      # UA-XXXXXXXX-X
 copyright = ""            # default: author.name ↓        # 默认为下面配置的author.name ↓
 
+# Highlight options.
+# See https://gohugo.io/content-management/syntax-highlighting/
+PygmentsCodeFences = true # Enable syntax highlighting with GitHub flavoured code fences
+PygmentsUseClasses = true # Use CSS classes to format highlighted code
+PygmentsCodefencesGuessSyntax = true
+PygmentsOptions = "linenos=table"
+
 # language support # en / zh-cn / other... translations present in i18n/
 defaultContentLanguage = "en"           # Default language to use
 [languages.en]
   languageCode = "en"
 
 [author]                  # essential                     # 必需
-  name = "xianmin"
+  name = "cugbtang"
 
 [sitemap]                 # essential                     # 必需
   changefreq = "weekly"
@@ -49,9 +56,9 @@ defaultContentLanguage = "en"           # Default language to use
   identifier = "categories"
   url = "/categories/"
 [[menu.main]]
-  name = "external-link"
+  name = "github"
   weight = 50
-  url = "https://gohugo.io"
+  url = "https://github.com/cugbtang"
 
 
 [params]
@@ -60,12 +67,23 @@ defaultContentLanguage = "en"           # Default language to use
   rssFullContent = true     # if false, Rss feed instead of the summary
 
   # site info (optional)                                  # 站点信息（可选，不需要的可以直接注释掉）
-  logoTitle = "Jane"        # default: the title value    # 默认值: 上面设置的title值
-  keywords = ["Hugo", "theme","jane"]
-  description = "Hugo theme jane example site."
+  logoTitle = "yesplease"        # default: the title value    # 默认值: 上面设置的title值
+  keywords = ["yesplease", "blog", "technology"]
+  description = "some records for yesplease."
+
+  # paginate of archives, tags and categories             # 归档、标签、分类每页显示的文章数目，建议修改为一个较大的值
+  archive-paginate = 3
 
   # The date format to use; for a list of valid formats, see https://gohugo.io/functions/format/
   dateFormatToUse = "2006-01-02"
+
+  # show word count and read time ?                       # 是否显示字数统计与阅读时间
+  moreMeta = true
+
+  # show language chooser in menu
+  showMenuLanguageChooser = true
+
+  showAuthorInfo = true # show author info below the article
 
   # 一些全局开关，你也可以在每一篇内容的 front matter 中针对单篇内容关闭或开启某些功能，在 archetypes/default.md 查看更多信息。
   # Some global options, you can also close or open something in front matter for a single post, see more information from `archetypes/default.md`.
@@ -79,24 +97,27 @@ defaultContentLanguage = "en"           # Default language to use
   customJS = []             # if ['custom.js'], load '/static/js/custom.js' file
 
   [params.social]                                         # 社交链接
-    a-email = "mailto:your@email.com"
-    b-stack-overflow = "http://cugbtang.github.io"
-    c-twitter = "http://cugbtang.github.io"
-    d-facebook = "http://cugbtang.github.io"
-    e-linkedin = "http://cugbtang.github.io"
-    f-google = "http://cugbtang.github.io"
     g-github = "http://cugbtang.github.io"
-    h-weibo = "http://cugbtang.github.io"
-    i-zhihu = "http://cugbtang.github.io"
-    j-douban = "http://cugbtang.github.io"
-    k-pocket = "http://cugbtang.github.io"
-    l-tumblr = "http://cugbtang.github.io"
-    m-instagram = "http://cugbtang.github.io"
-    n-gitlab = "http://cugbtang.github.io"
-    o-goodreads = "http://cugbtang.github.io"
-    p-coding = "http://cugbtang.github.io"
     q-bilibili = "http://cugbtang.github.io"
-    r-codeforces = "http://cugbtang.github.io"
-    s-mastodon = "http://cugbtang.github.io"
-    t-youtube = "http://cugbtang.github.io"
-    u-twitch = "http://cugbtang.github.io"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      definitionList = true
+      footnote = true
+      linkify = true
+      linkifyProtocol = 'https'
+      strikethrough = true
+      table = true
+      taskList = true
+      typographer = true
+    [markup.goldmark.parser]
+      autoHeadingID = true
+      autoHeadingIDType = 'github'
+      [markup.goldmark.parser.attribute]
+        block = false
+        title = true
+    [markup.goldmark.renderer]
+      hardWraps = false
+      unsafe = false
+      xhtml = false
