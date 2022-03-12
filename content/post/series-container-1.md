@@ -1,11 +1,11 @@
 ---
-title: "namespace、cgroups、layerfs support container"
+title: "Container, how to play?"
 date: 2018-03-01T16:01:23+08:00
 lastmod: 2018-03-01T16:01:23+08:00
 draft: false
 tags: ["docker", "namespace"]
 categories: ["container", "linux"]
-author: "cugbtang"
+author: "yesplease"
 ---
 
 container technology become a necessary for developer during operating the linux system.
