@@ -1,10 +1,10 @@
 ---
 title: "Jenkins, Q&A"
-date: 2018-03-01T16:01:23+08:00
-lastmod: 2018-03-01T16:01:23+08:00
+date: 2022-01-15T16:01:23+08:00
+lastmod: 2022-01-15T16:01:23+08:00
 draft: false
 tags: ["cicd", "jenkins"]
-categories: ["cicd", "jenkins"]
+categories: ["devops", "cloudnative"]
 author: "yesplease"
 ---
 

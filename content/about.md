@@ -1,7 +1,7 @@
 ---
 title: "About"
-date: 2017-08-20T21:38:52+08:00
-lastmod: 2021-08-28T21:41:52+08:00
+date: 2022-01-01T21:38:52+08:00
+lastmod: 2022-01-01T21:41:52+08:00
 menu: "main"
 weight: 50
 
@@ -10,15 +10,6 @@ comment: false
 mathjax: false
 ---
 
-Hugo is a static site engine written in Go.
+A new generation of migrant workers that peek technology in cloudnative!
 
-
-It makes use of a variety of open source projects including:
-
-* [Cobra](https://github.com/spf13/cobra)
-* [Viper](https://github.com/spf13/viper)
-* [J Walter Weatherman](https://github.com/spf13/jWalterWeatherman)
-* [Cast](https://github.com/spf13/cast)
-
-Learn more and contribute on [GitHub](https://github.com/gohugoio).
 

@@ -1,7 +1,7 @@
 ---
 title: "Container, how to play?"
-date: 2018-03-01T16:01:23+08:00
-lastmod: 2018-03-01T16:01:23+08:00
+date: 2022-03-01T16:01:23+08:00
+lastmod: 2022-03-01T16:01:23+08:00
 draft: false
 tags: ["docker", "namespace"]
 categories: ["container", "linux"]
