@@ -1,10 +1,10 @@
 ---
 title: "kubeadm startup Kubernetes more than v1.20.0 (centos7+containerd+ipvs+calico)"
-date: 2022-05-15T16:01:23+08:00
-lastmod: 2022-05-15T16:01:23+08:00
+date: 2022-03-01T16:01:23+08:00
+lastmod: 2022-03-01T16:01:23+08:00
 draft: false
 tags: ["kubernetes", "kubeadm","deploy"]
-categories: ["kubernetes", "cn"]
+categories: ["kubernetes", "cloudnative"]
 author: "yesplease"
 ---
 这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。

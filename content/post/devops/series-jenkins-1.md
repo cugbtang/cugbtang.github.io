@@ -148,17 +148,50 @@ author: "yesplease"
   [one example](https://github.com/go-atomci/workflow)
 
 
+
 ##  都在玩儿plugin
 
-- Jenkins Configuration as Code[^footnote4]
-[^footnote4]: https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos
+- 插件下载问题，更改了国内镜像源，还总是下载失败？
+
+  > 1、设置代理
+  >
+  > 2、手动修改 jenkins/updates/default.json 中url ---> https://mirrors.tuna.tsinghua.edu.cn
+  >
+  > 3、[Jenkins Customize](https://github.com/jenkins-zh/jenkins-formulas)  更新
+
+- Jenkins Configuration as Code
 
   > 虽然新部署的 Jenkins 实例自动为我们安装了所有所需的插件，并配置好了初始化 Job 等工作，但在开始使用它之前，我们仍需要完成一系列手动工作，如配置 Jenkins 的 “Configure System” 页面
 
   > 如果你是一名 Jenkins 管理员，那么你一定不会对这个页面感到陌生，每次部署完一个新的 Jenkins 实例，在可以使用之前，我们往往都需要在该页面作出一些相应的配置。该页面除了包含 Jenkins 自身的一些基本配置信息外，同时还包括了当前系统中所安装的插件的配置信息。也就是说，当你的 Jenkins 安装的插件越多，该页面的配置项就有可能会越多。
 
   ```yaml
-  云时代 这个插件用处就少些了，所有的配置都放在
-  ```
+  云时代 这个插件用处就少些了，所有的配置都放在打包在镜像中了
+	```
+
+
+- [generic-webhook-trigger-plugin](https://github.com/jenkinsci/generic-webhook-trigger-plugin)
+
+  >it can trigger on ant webhook
+
+## 最佳实践
+
+### 1、multi-branch + library
+
+- [jenkins library + ]()
+
+### 2、webhook+library
+
+- [generic-webhook对接各种webhook封装到library中，打通端到端自动化](https://github.com/cugbtang/jenkinslibrary-zeyangli)
+- 往后就是不断积累library的日子了。。。
+
+## 参考文献
+
+- [【introduction not offical】](https://github.com/jenkins-zh/jenkins-zh/wiki)
+- [【jenkins offical】](https://www.jenkins.io/) ===> [【github】](https://github.com/jenkinsci/)
+- [【国人都在玩】](https://github.com/jenkins-zh/jenkins-zh/issues)
+- [【Jenkins Community Kubernetes Helm Charts】](https://github.com/jenkinsci/helm-charts)
+- [【plugin: Jenkins Configuration as Code】](https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos)
+- [【jenkinslibrary-zeyangli】](https://github.com/cugbtang/jenkinslibrary-zeyangli)
 
   

@@ -4,7 +4,7 @@ date: 2022-05-01T16:01:23+08:00
 lastmod: 2022-05-01T16:01:23+08:00
 draft: false
 tags: ["kubernetes", "deploy"]
-categories: ["kubernetes", "cn"]
+categories: ["kubernetes", "cloudnative"]
 author: "yesplease"
 ---
 
