@@ -6,7 +6,16 @@
     <description>Recent content in kubernetes on ✌yesplease&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 15 May 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 01 Jun 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>namespace &amp;&amp; cgroups </title>
+      <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</link>
+      <pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</guid>
+      <description>namespace 定义 ​ namespace是 Linux 内核的一项功能，该功能对内核资源进行分区，以使一组进程看到一组资源，而另一组进程看到另一组资源。namespa</description>
+    </item>
+    
     <item>
       <title>kubeadm startup Kubernetes less than v1.20.0 (centos&#43;docker&#43;ipvs&#43;calico)</title>
       <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-2/</link>
@@ -17,21 +26,50 @@
     </item>
     
     <item>
-      <title>kubeadm startup Kubernetes more than v1.20.0 (centos7&#43;containerd&#43;ipvs&#43;calico)</title>
-      <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</link>
-      <pubDate>Sun, 15 May 2022 16:01:23 +0800</pubDate>
-      
-      <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</guid>
-      <description>这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。 我绝的主要是针对D</description>
-    </item>
-    
-    <item>
       <title>Kubernetes, how to deploy?</title>
       <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-1/</link>
       <pubDate>Sun, 01 May 2022 16:01:23 +0800</pubDate>
       
       <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-1/</guid>
       <description>汇总kubernetes部署的方案： kubernetes &amp;lt; 1.20 + centos7 + docker + iptables + flannel kubernetes &amp;lt; 1.20 + centos7 + docker + ipvs + calico 1.20 &amp;lt;kubernetes &amp;lt; 1.24 + centos7 + docker + ipvs + calico kubernetes &amp;gt; 1.24 + centos7 + containerd + ipvs + calico kubernetes &amp;gt; 1.24 + centos7 + cri-o</description>
+    </item>
+    
+    <item>
+      <title>The node was low on resource: ephemeral-storage. Evicted</title>
+      <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</link>
+      <pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</guid>
+      <description>The node was low on resource: ephemeral-storage. Evicted 最近某个节点频繁出现这个问题 问题分析 解决方案 查询到的解决方案 不能让某个占用过多的资源，临时存储不允许一直占用，用超过Limi</description>
+    </item>
+    
+    <item>
+      <title>nginx 鉴权_k8s中的服务使用proxy auth鉴权</title>
+      <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-5/</link>
+      <pubDate>Fri, 01 Apr 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-5/</guid>
+      <description>nginx 鉴权_k8s中的服务使用proxy auth鉴权 需求 k8s nginx ingress除了可以对服务提供basic权限验证外，也可以使用外部的鉴权服务。我们</description>
+    </item>
+    
+    <item>
+      <title>kubernetes1.24.0, Why use docker  in production environment ?</title>
+      <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-4/</link>
+      <pubDate>Tue, 15 Mar 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-4/</guid>
+      <description>kubernetes1.24.0, Why use docker in production environment ? if you consider Mirantis and Docker have committed to maintaining a replacement adapter for Docker Engine, and to maintain that adapter even after the in-tree dockershim is removed from Kubernetes. The replacement adapter is named cri-dockerd.
+  Download the cri-dockerd binary package or compile the source code yourself
+1 2 3 4 5 6  # download file wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.2.0/cri-dockerd-v0.2.0-linux-amd64.tar.gz # unzip file tar -xvf cri-dockerd-v0.</description>
+    </item>
+    
+    <item>
+      <title>kubeadm startup Kubernetes more than v1.20.0 (centos7&#43;containerd&#43;ipvs&#43;calico)</title>
+      <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</link>
+      <pubDate>Tue, 01 Mar 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</guid>
+      <description>这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。 我绝的主要是针对D</description>
     </item>
     
   </channel>

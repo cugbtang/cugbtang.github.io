@@ -6,7 +6,25 @@
     <description>Recent content in Tags on ✌yesplease&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 15 May 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 01 Jun 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kubernetes</title>
+      <link>http://cugbtang.github.io/tags/kubernetes/</link>
+      <pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>term</title>
+      <link>http://cugbtang.github.io/tags/term/</link>
+      <pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/tags/term/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>deploy</title>
       <link>http://cugbtang.github.io/tags/deploy/</link>
@@ -26,11 +44,29 @@
     </item>
     
     <item>
-      <title>kubernetes</title>
-      <link>http://cugbtang.github.io/tags/kubernetes/</link>
-      <pubDate>Sun, 15 May 2022 16:01:23 +0800</pubDate>
+      <title>FAQ</title>
+      <link>http://cugbtang.github.io/tags/faq/</link>
+      <pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate>
       
-      <guid>http://cugbtang.github.io/tags/kubernetes/</guid>
+      <guid>http://cugbtang.github.io/tags/faq/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>auth</title>
+      <link>http://cugbtang.github.io/tags/auth/</link>
+      <pubDate>Fri, 01 Apr 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/tags/auth/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cri</title>
+      <link>http://cugbtang.github.io/tags/cri/</link>
+      <pubDate>Tue, 15 Mar 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/tags/cri/</guid>
       <description></description>
     </item>
     
@@ -55,7 +91,7 @@
     <item>
       <title>develop</title>
       <link>http://cugbtang.github.io/tags/develop/</link>
-      <pubDate>Tue, 01 Feb 2022 16:01:23 +0800</pubDate>
+      <pubDate>Tue, 15 Feb 2022 16:01:23 +0800</pubDate>
       
       <guid>http://cugbtang.github.io/tags/develop/</guid>
       <description></description>
@@ -64,16 +100,25 @@
     <item>
       <title>go</title>
       <link>http://cugbtang.github.io/tags/go/</link>
-      <pubDate>Tue, 01 Feb 2022 16:01:23 +0800</pubDate>
+      <pubDate>Tue, 15 Feb 2022 16:01:23 +0800</pubDate>
       
       <guid>http://cugbtang.github.io/tags/go/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>backup</title>
+      <link>http://cugbtang.github.io/tags/backup/</link>
+      <pubDate>Tue, 01 Feb 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/tags/backup/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>cicd</title>
       <link>http://cugbtang.github.io/tags/cicd/</link>
-      <pubDate>Sat, 15 Jan 2022 16:01:23 +0800</pubDate>
+      <pubDate>Tue, 01 Feb 2022 16:01:23 +0800</pubDate>
       
       <guid>http://cugbtang.github.io/tags/cicd/</guid>
       <description></description>
@@ -82,7 +127,7 @@
     <item>
       <title>jenkins</title>
       <link>http://cugbtang.github.io/tags/jenkins/</link>
-      <pubDate>Sat, 15 Jan 2022 16:01:23 +0800</pubDate>
+      <pubDate>Tue, 01 Feb 2022 16:01:23 +0800</pubDate>
       
       <guid>http://cugbtang.github.io/tags/jenkins/</guid>
       <description></description>

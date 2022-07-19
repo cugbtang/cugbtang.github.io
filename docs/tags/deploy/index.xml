@@ -17,21 +17,21 @@
     </item>
     
     <item>
-      <title>kubeadm startup Kubernetes more than v1.20.0 (centos7&#43;containerd&#43;ipvs&#43;calico)</title>
-      <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</link>
-      <pubDate>Sun, 15 May 2022 16:01:23 +0800</pubDate>
-      
-      <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</guid>
-      <description>这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。 我绝的主要是针对D</description>
-    </item>
-    
-    <item>
       <title>Kubernetes, how to deploy?</title>
       <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-1/</link>
       <pubDate>Sun, 01 May 2022 16:01:23 +0800</pubDate>
       
       <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-1/</guid>
       <description>汇总kubernetes部署的方案： kubernetes &amp;lt; 1.20 + centos7 + docker + iptables + flannel kubernetes &amp;lt; 1.20 + centos7 + docker + ipvs + calico 1.20 &amp;lt;kubernetes &amp;lt; 1.24 + centos7 + docker + ipvs + calico kubernetes &amp;gt; 1.24 + centos7 + containerd + ipvs + calico kubernetes &amp;gt; 1.24 + centos7 + cri-o</description>
+    </item>
+    
+    <item>
+      <title>kubeadm startup Kubernetes more than v1.20.0 (centos7&#43;containerd&#43;ipvs&#43;calico)</title>
+      <link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</link>
+      <pubDate>Tue, 01 Mar 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</guid>
+      <description>这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。 我绝的主要是针对D</description>
     </item>
     
   </channel>

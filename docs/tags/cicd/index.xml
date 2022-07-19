@@ -6,7 +6,16 @@
     <description>Recent content in cicd on ✌yesplease&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 15 Jan 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/cicd/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Feb 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/cicd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jenkins, hot backup</title>
+      <link>http://cugbtang.github.io/post/devops/series-jenkins-3/</link>
+      <pubDate>Tue, 01 Feb 2022 16:01:23 +0800</pubDate>
+      
+      <guid>http://cugbtang.github.io/post/devops/series-jenkins-3/</guid>
+      <description>jenkins 数据热备 rsync : 增量备份 inotify： 实时通知 理论 一、rsync 与传统的 cp、tar 备份方式相比，rsync 具有安全性高、备份迅速、支持增量</description>
+    </item>
+    
     <item>
       <title>Jenkins, Q&amp;A</title>
       <link>http://cugbtang.github.io/post/devops/series-jenkins-2/</link>

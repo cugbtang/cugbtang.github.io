@@ -69,7 +69,7 @@
 <meta itemprop="name" content="Jenkins, how to play?">
 <meta itemprop="description" content="how to play jenkins? 社区源码、文档1等托管在 GitHub 上。 其中基础设施部分在 jenkins-infra； 核心库以及插件在 jenkinsci2； Jenkins 中文本地化相关的"><meta itemprop="datePublished" content="2022-01-01T16:01:23+08:00" />
 <meta itemprop="dateModified" content="2022-01-01T16:01:23+08:00" />
-<meta itemprop="wordCount" content="1261">
+<meta itemprop="wordCount" content="1556">
 <meta itemprop="keywords" content="cicd,jenkins," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Jenkins, how to play?"/>
 <meta name="twitter:description" content="how to play jenkins? 社区源码、文档1等托管在 GitHub 上。 其中基础设施部分在 jenkins-infra； 核心库以及插件在 jenkinsci2； Jenkins 中文本地化相关的"/>
@@ -345,8 +345,8 @@
             <a href="http://cugbtang.github.io/categories/cloudnative/"> cloudnative </a>
             
           </div>
-        <span class="more-meta"> 1261 words </span>
-          <span class="more-meta"> 3 min read </span>
+        <span class="more-meta"> 1556 words </span>
+          <span class="more-meta"> 4 min read </span>
 
         
         
@@ -369,6 +369,13 @@
       </ul>
     </li>
     <li><a href="#都在玩儿plugin">都在玩儿plugin</a></li>
+    <li><a href="#最佳实践">最佳实践</a>
+      <ul>
+        <li><a href="#1multi-branch--library">1、multi-branch + library</a></li>
+        <li><a href="#2webhooklibrary">2、webhook+library</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考文献">参考文献</a></li>
   </ul>
 </nav>
   </div>
@@ -555,8 +562,16 @@ jcli center start -m docker --image kubespheredev/ks-jenkins --version 2.249.1 -
 </ul>
 <h2 id="都在玩儿plugin">都在玩儿plugin</h2>
 <ul>
-<li>Jenkins Configuration as Code<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup></li>
-</ul>
+<li>
+<p>插件下载问题，更改了国内镜像源，还总是下载失败？</p>
+<blockquote>
+<p>1、设置代理</p>
+<p>2、手动修改 jenkins/updates/default.json 中url &mdash;&gt; <a href="https://mirrors.tuna.tsinghua.edu.cn">https://mirrors.tuna.tsinghua.edu.cn</a></p>
+<p>3、<a href="https://github.com/jenkins-zh/jenkins-formulas">Jenkins Customize</a>  更新</p>
+</blockquote>
+</li>
+<li>
+<p>Jenkins Configuration as Code</p>
 <blockquote>
 <p>虽然新部署的 Jenkins 实例自动为我们安装了所有所需的插件，并配置好了初始化 Job 等工作，但在开始使用它之前，我们仍需要完成一系列手动工作，如配置 Jenkins 的 “Configure System” 页面</p>
 </blockquote>
@@ -568,10 +583,47 @@ jcli center start -m docker --image kubespheredev/ks-jenkins --version 2.249.1 -
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="l">云时代 这个插件用处就少些了，所有的配置都放在</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="l">云时代 这个插件用处就少些了，所有的配置都放在打包在镜像中了</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><section class="footnotes" role="doc-endnotes">
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">
+
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin">generic-webhook-trigger-plugin</a></p>
+<blockquote>
+<p>it can trigger on ant webhook</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="最佳实践">最佳实践</h2>
+<h3 id="1multi-branch--library">1、multi-branch + library</h3>
+<ul>
+<li><a href="">jenkins library + </a></li>
+</ul>
+<h3 id="2webhooklibrary">2、webhook+library</h3>
+<ul>
+<li><a href="https://github.com/cugbtang/jenkinslibrary-zeyangli">generic-webhook对接各种webhook封装到library中，打通端到端自动化</a></li>
+<li>往后就是不断积累library的日子了。。。</li>
+</ul>
+<h2 id="参考文献">参考文献</h2>
+<ul>
+<li><a href="https://github.com/jenkins-zh/jenkins-zh/wiki">【introduction not offical】</a></li>
+<li><a href="https://www.jenkins.io/">【jenkins offical】</a> ===&gt; <a href="https://github.com/jenkinsci/">【github】</a></li>
+<li><a href="https://github.com/jenkins-zh/jenkins-zh/issues">【国人都在玩】</a></li>
+<li><a href="https://github.com/jenkinsci/helm-charts">【Jenkins Community Kubernetes Helm Charts】</a></li>
+<li><a href="https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos">【plugin: Jenkins Configuration as Code】</a></li>
+<li><a href="https://github.com/cugbtang/jenkinslibrary-zeyangli">【jenkinslibrary-zeyangli】</a></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
@@ -582,9 +634,6 @@ jcli center start -m docker --image kubespheredev/ks-jenkins --version 2.249.1 -
 </li>
 <li id="fn:3" role="doc-endnote">
 <p><a href="https://github.com/jenkins-zh/jenkins-zh/issues">https://github.com/jenkins-zh/jenkins-zh/issues</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:4" role="doc-endnote">
-<p><a href="https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos">https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
