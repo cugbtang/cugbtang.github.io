@@ -450,7 +450,7 @@ fi
 
 [^1]: [CentOS7下Rsync+sersync实现数据实时同步](https://blog.51cto.com/canonind/1843994)
 
-[^2]: [[关于rsync+inotify-tools实时同步模式](https://segmentfault.com/a/1190000002558330)](https://segmentfault.com/a/1190000002558330)
+[^2]: [关于rsync+inotify-tools实时同步模式](https://segmentfault.com/a/1190000002558330)](https://segmentfault.com/a/1190000002558330)
 
 [^3]: [sersync](https://hub.fastgit.xyz/wsgzao/sersync)
 
