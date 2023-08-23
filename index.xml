@@ -1,16 +1,951 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>✌yesplease's blog</title><link>http://cugbtang.github.io/</link><description>Recent content on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 01 Jun 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>About</title><link>http://cugbtang.github.io/about/</link><pubDate>Sat, 01 Jan 2022 21:38:52 +0800</pubDate><guid>http://cugbtang.github.io/about/</guid><description>&lt;p>A new generation of migrant workers that peek technology in cloudnative!&lt;/p></description></item><item><title>namespace &amp;&amp; cgroups</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</link><pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</guid><description>&lt;h2 id="namespace">namespace&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>✌yesplease's blog</title><link>http://cugbtang.github.io/</link><description>Recent content on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 30 Jul 2023 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>About</title><link>http://cugbtang.github.io/about/</link><pubDate>Sat, 01 Jan 2022 21:38:52 +0800</pubDate><guid>http://cugbtang.github.io/about/</guid><description>&lt;p>A new generation of migrant workers that peek technology in cloudnative!&lt;/p></description></item><item><title>git 以前的许多commit中某个文件含有密钥，怎么办？</title><link>http://cugbtang.github.io/post/devops/series-git-2/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-git-2/</guid><description>&lt;h2 id="git-以前的许多commit中某个文件含有密钥怎么办">git 以前的许多commit中某个文件含有密钥，怎么办？&lt;/h2>
+&lt;h2 id="一场景描述">一、场景描述&lt;/h2>
+&lt;p>在这个项目中，代码的都是在develop分支上进行的， 现在要打tag v1.0.0进行发版。然而，从项目init开始到现在有很多commit，其中某个文件中把密钥直接写在了源码中，最近几次提交才把密钥处理了。&lt;/p>
+&lt;h2 id="二问问-gpt1">二、问问 gpt&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;/h2>
+&lt;hr>
+&lt;blockquote>
+&lt;p>git 一开始项目的很多提交中某个文件含有密钥，最近的几次commit中才把密钥隐藏掉，那么怎样清除之前的很多次commit中密钥; 我想把之前所有提交中密码不为&lt;em>&lt;strong>的都改为&lt;/strong>&lt;/em> 该怎么操作&lt;/p>
+&lt;/blockquote>
+&lt;p>要将之前所有提交中的密码更改为 &lt;code>***&lt;/code>，可以使用 &lt;code>git filter-branch&lt;/code> 命令结合自定义脚本来实现。请按照以下步骤进行操作：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>首先，在你的项目目录下打开终端，并确保你当前在所需的分支上（例如，&lt;code>master&lt;/code> 分支）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>运行以下命令来备份你的代码：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git branch backup
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>创建一个名为 &lt;code>replace_password.sh&lt;/code> 的脚本文件，并使用文本编辑器打开它。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在 &lt;code>replace_password.sh&lt;/code> 文件中，输入以下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">#!/bin/bash
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git ls-files -z | while read -d &amp;#39;&amp;#39; -r file; do
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> if [[ $file == *&amp;#34;&amp;lt;文件路径&amp;gt;&amp;#34;* ]]; then
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sed -i &amp;#39;s/密码模式/*** /g&amp;#39; &amp;#34;$file&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fi
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">done
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>将 &lt;code>&amp;lt;文件路径&amp;gt;&lt;/code> 替换为包含密码的文件的路径或文件夹的路径。这将会在指定文件中查找并替换密码。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>保存并关闭 &lt;code>replace_password.sh&lt;/code> 文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>运行以下命令来添加执行权限给脚本文件：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">chmod +x replace_password.sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>现在，运行以下命令来执行 &lt;code>git filter-branch&lt;/code> 操作，并使用脚本文件作为过滤器：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git filter-branch --tree-filter &amp;#39;/path/to/replace_password.sh&amp;#39; --prune-empty HEAD
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>将 &lt;code>/path/to/replace_password.sh&lt;/code> 替换为 &lt;code>replace_password.sh&lt;/code> 文件的实际路径。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Git 将会遍历所有的提交，并在每个提交上运行脚本文件，查找并替换指定文件中的密码。完成后，你的历史提交将被重写。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果你已经将这些提交推送到远程仓库，你需要使用 &lt;code>git push --force&lt;/code> 强制推送修改后的提交历史：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git push --force
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;p>这样，你就可以使用自定义脚本来批量替换之前所有提交中的密码。但请注意，执行 &lt;code>git filter-branch&lt;/code> 操作时，也要小心谨慎，因为它会修改提交历史。确保在操作之前备份代码，并在必要时咨询有经验的 Git 使用者或开发者。&lt;/p>
+&lt;hr>
+&lt;blockquote>
+&lt;p>git filter-branch &amp;ndash;tree-filter &amp;lsquo;/path/to/replace_password.sh&amp;rsquo; &amp;ndash;prune-empty HEAD
+解释下这个命令&lt;/p>
+&lt;/blockquote>
+&lt;p>当你运行 git filter-branch 命令时，它会遍历 Git 仓库的每个提交，并对每个提交应用指定的过滤器。在这个命令中，我们使用了 &amp;ndash;tree-filter 参数来指定一个以树形结构过滤提交的过滤器。&lt;/p>
+&lt;p>下面解释一下命令中各个部分的含义：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>git filter-branch: 这是执行过滤操作的 Git 命令。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&amp;ndash;tree-filter: 这是指定要应用的过滤器类型。&amp;ndash;tree-filter 可以在每个提交的工作目录中运行指定的命令。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&amp;lsquo;/path/to/replace_password.sh&amp;rsquo;: 这是具体的过滤器命令。在每个提交中，它运行 /path/to/replace_password.sh 命令来修改&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>HEAD: 这是指定要过滤的提交范围。在这个命令中，我们使用 HEAD 表示过滤当前分支上的所有提交。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>通过运行上述命令，Git 将会遍历每个提交，并在每个提交上执行指定的命令，移除包含密钥文件的文件。完成后，&lt;/p>
+&lt;h2 id="三小结">三、小结：&lt;/h2>
+&lt;p>简化一些：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl"> git filter-branch --tree-filter &lt;span class="s1">&amp;#39; sed -i &amp;#34;s/aaa/*** /g&amp;#34; ./initialize/config.go&amp;#39;&lt;/span> --prune-empty HEAD
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> git push -f
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>filter-branch&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>&lt;/li>
+&lt;/ul>
+&lt;h2 id="四参考">四、参考&lt;/h2>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>&lt;a href="">gpt&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2">
+&lt;p>&lt;a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E4%BD%BF%E7%94%A8-Git-%E8%B0%83%E8%AF%95">git-filter-branch&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>git 合并原理</title><link>http://cugbtang.github.io/post/devops/series-git-4/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-git-4/</guid><description>&lt;h2 id="git-合并原理">git 合并原理&lt;/h2>
+&lt;h2 id="一场景描述">一、场景描述&lt;/h2>
+&lt;p>记录一些常用操作&lt;/p>
+&lt;ul>
+&lt;li>git status: 显示工作区和暂存区的状态&lt;/li>
+&lt;li>git diff: 显示工作区和暂存区之间的差异&lt;/li>
+&lt;li>git diff &amp;ndash;cached: 显示暂存区和最新提交之间的差异&lt;/li>
+&lt;li>git diff [分支1] [分支2]: 比较两个分支之间的差异&lt;/li>
+&lt;li>git grep [关键词]: 在整个代码库中搜索指定关键词&lt;/li>
+&lt;li>git stash: 将当前修改暂存起来，切换到其他分支&lt;/li>
+&lt;li>git reset &amp;ndash;hard [提交号]: 将当前分支的 HEAD 指针指向指定的提交，并重置工作区和暂存区&lt;/li>
+&lt;li>git rm [文件]: 从版本控制中移除文件&lt;/li>
+&lt;li>git rebase [提交号]: 交互式地合并、重新排序或编辑提交历史的&lt;/li>
+&lt;li>git cherry-pick [提交号]: 选择某个提交，并将其应用到当前分支&lt;/li>
+&lt;li>git blame [文件]: 显示指定文件的每一行是谁在哪个提交中修改的&lt;/li>
+&lt;li>git blame -L [起始行号],[结束行号] [文件]: 仅显示指定行范围的文件是谁修改的&lt;/li>
+&lt;li>git revert [提交号]: 创建一个新的提交，用于撤销指定的提交&lt;/li>
+&lt;li>git bisect start: 启动二分查找来定位引入问题的提交&lt;/li>
+&lt;li>git stash apply: 恢复最近一次暂存的修改，并将其从暂存堆栈中删除&lt;/li>
+&lt;li>git reflog: 显示 HEAD 和分支的历史记录，包括已经被删除的提交&lt;/li>
+&lt;li>git log &amp;ndash;author=[作者]: 显示特定作者的提交历史&lt;/li>
+&lt;li>git tag [标签名] [提交号]: 在指定提交上创建一个标签&lt;/li>
+&lt;li>git show-branch: 显示本地分支的历史和状态&lt;/li>
+&lt;/ul>
+&lt;h2 id="二问问-gpt1">二、问问 gpt&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;/h2>
+&lt;hr>
+&lt;blockquote>
+&lt;p>解释下git show&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;code>git show&lt;/code> 是一个非常有用的 Git 命令，它用于显示提交的详细信息和更改的内容。下面是 &lt;code>git show&lt;/code> 的详细讲解：&lt;/p>
+&lt;p>基本语法：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git show [提交]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>参数：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>[提交]&lt;/code>: 可选参数，表示要查看的提交，默认为最新的提交。&lt;/li>
+&lt;/ul>
+&lt;p>使用 &lt;code>git show&lt;/code> 命令可以获取以下信息：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>提交信息：包括提交哈希值、作者、提交日期和提交消息。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>修改的文件：列出了与该提交相关的所有修改过的文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>文件更改的具体内容：展示了每个文件的具体更改内容，即新增、修改或删除的行。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>代码差异：以 diff 的形式显示当前提交与其父提交之间的代码差异。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>其他元数据：显示提交中的其他元数据，例如签名和标签。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>示例用法：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">$ git show
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这将显示最新提交的详细信息和更改的内容。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">$ git show abcdef123456
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这将显示提交哈希值为 &lt;code>abcdef123456&lt;/code> 的提交的详细信息和更改的内容。&lt;/p>
+&lt;p>&lt;code>git show&lt;/code> 命令在查看历史提交、检查代码更改、审查提交信息等方面非常有用。通过查看提交的详细信息，开发者可以更好地理解代码库的演变历史并进行必要的代码审查和调试。记住，你可以使用其他参数和选项来进一步定制 &lt;code>git show&lt;/code> 命令的输出。可以通过 &lt;code>git show --help&lt;/code> 查看详细的帮助文档。&lt;/p>
+&lt;hr>
+&lt;blockquote>
+&lt;p>解释下 git rebase -i commit&lt;/p>
+&lt;/blockquote>
+&lt;p>当你运行 &lt;code>git rebase -i commit&lt;/code> 命令时，你可以使用交互式界面对提交历史进行编辑。下面是一个示例：&lt;/p>
+&lt;p>假设你有如下的提交历史：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">commit C: Add feature C
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">commit B: Add feature B
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">commit A: Add feature A
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>现在你想要将提交 B 和提交 C 合并为一个提交，并编辑提交 A 的消息。你可以运行以下命令：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">git rebase -i commit
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Git 将会打开交互式界面，其中列出了提交历史的相关信息：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">pick abcdef1 commit A: Add feature A
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pick bcdef23 commit B: Add feature B
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pick def4567 commit C: Add feature C
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>你可以对这些操作进行修改，以实现你的目标。在本例中，你可以将提交 B 和提交 C 合并为一个提交，然后编辑提交 A 的消息。你可以修改交互式界面如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">pick abcdef1 commit A: Add feature A
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">squash bcdef23 commit B: Add feature B
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">s/commit A: Add feature A/Edit feature A/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>保存并退出编辑器。Git 将会根据你的指示执行相应的操作。此时，Git 会自动合并提交 B 到提交 A，并修改提交 A 的消息。最终的提交历史将如下所示：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">commit A: Edit feature A
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">commit BC: Add feature B and C
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>注意，在上述示例中，使用了 &lt;code>squash&lt;/code> 命令来将提交 B 合并到提交 A，并使用 &lt;code>s/commit A: Add feature A/Edit feature A/&lt;/code> 来编辑提交 A 的消息。&lt;/p>
+&lt;p>请注意，在执行类似于 &lt;code>git rebase -i&lt;/code> 这样的操作时，一定要小心审查并确认你的更改，以免不小心破坏提交历史。&lt;/p>
+&lt;hr>
+&lt;blockquote>
+&lt;p>git bisect 详细介绍下&lt;/p>
+&lt;/blockquote>
+&lt;p>git bisect 是 Git 提供的一个命令，用于帮助我们通过二分查找定位引入问题的提交。当我们在一个大型项目中发现了一个 bug，并且我们知道在之前的某个提交中出现了这个 bug，但是不知道具体是在哪个提交引入的时候，可以使用 git bisect 命令来快速定位。&lt;/p>
+&lt;p>下面是 git bisect 的详细使用步骤：&lt;/p>
+&lt;p>1、首先，进入到你的项目目录中，并确保你在一个干净的状态下（没有未提交的修改）。&lt;/p>
+&lt;p>2、执行 git bisect start 命令，表示开始二分查找。&lt;/p>
+&lt;p>3、通过 git bisect bad 命令告诉 Git 当前的代码状态是有问题的（即包含了 bug）。&lt;/p>
+&lt;p>4、使用 git bisect good [好的提交号] 或者 git bisect good [好的标签名] 命令指定一个已知的“好”（即没有问题的）的提交。&lt;/p>
+&lt;p>5、Git 会自动切换到一个中间的提交，并要求你测试这个提交是否存在 bug。根据测试结果使用 git bisect bad 或者 git bisect good 命令告诉 Git 这个中间提交是否含有 bug。&lt;/p>
+&lt;p>6、重复步骤 5，Git 会根据你的测试结果不断地切换到新的中间提交，直到找到引入问题的提交。&lt;/p>
+&lt;p>7、当 git bisect 定位到引入问题的提交时，Git 会给出相应的提示，并自动返回到该提交。&lt;/p>
+&lt;p>8、最后，执行 git bisect reset 命令结束二分查找过程，Git 会将你的 HEAD 恢复到初始状态。&lt;/p>
+&lt;p>通过以上步骤，你可以使用 git bisect 在复杂的代码历史中快速定位 bug 的引入提交。这个命令在大型项目中特别有用，可以节省定位问题的时间和精力。需要注意的是，你需要根据实际情况进行好坏提交的选择，并且在测试过程中保持良好的记录和反馈。&lt;/p>
+&lt;p>要将之前所有提交中的密码更改为 &lt;code>***&lt;/code>，可以使用 &lt;code>git filter-branch&lt;/code> 命令结合自定义脚本来实现。请按照以下步骤进行操作：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>首先，在你的项目目录下打开终端，并确保你当前在所需的分支上（例如，&lt;code>master&lt;/code> 分支）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>运行以下命令来备份你的代码：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git branch backup
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>创建一个名为 &lt;code>replace_password.sh&lt;/code> 的脚本文件，并使用文本编辑器打开它。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在 &lt;code>replace_password.sh&lt;/code> 文件中，输入以下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">#!/bin/bash
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git ls-files -z | while read -d &amp;#39;&amp;#39; -r file; do
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> if [[ $file == *&amp;#34;&amp;lt;文件路径&amp;gt;&amp;#34;* ]]; then
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sed -i &amp;#39;s/密码模式/*** /g&amp;#39; &amp;#34;$file&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fi
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">done
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>将 &lt;code>&amp;lt;文件路径&amp;gt;&lt;/code> 替换为包含密码的文件的路径或文件夹的路径。这将会在指定文件中查找并替换密码。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>保存并关闭 &lt;code>replace_password.sh&lt;/code> 文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>运行以下命令来添加执行权限给脚本文件：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">chmod +x replace_password.sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>现在，运行以下命令来执行 &lt;code>git filter-branch&lt;/code> 操作，并使用脚本文件作为过滤器：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git filter-branch --tree-filter &amp;#39;/path/to/replace_password.sh&amp;#39; --prune-empty HEAD
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>将 &lt;code>/path/to/replace_password.sh&lt;/code> 替换为 &lt;code>replace_password.sh&lt;/code> 文件的实际路径。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Git 将会遍历所有的提交，并在每个提交上运行脚本文件，查找并替换指定文件中的密码。完成后，你的历史提交将被重写。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果你已经将这些提交推送到远程仓库，你需要使用 &lt;code>git push --force&lt;/code> 强制推送修改后的提交历史：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git push --force
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;p>这样，你就可以使用自定义脚本来批量替换之前所有提交中的密码。但请注意，执行 &lt;code>git filter-branch&lt;/code> 操作时，也要小心谨慎，因为它会修改提交历史。确保在操作之前备份代码，并在必要时咨询有经验的 Git 使用者或开发者。&lt;/p>
+&lt;hr>
+&lt;blockquote>
+&lt;p>sparse-checkout 详细讲解下&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;code>sparse-checkout&lt;/code> 是 Git 的一个功能，用于部分克隆（partial clone）仓库。它允许你只检出仓库中指定目录或文件的内容，而不是完整地克隆整个仓库。这对于大型仓库或仅需要特定部分代码的情况非常有用，可以显著节省下载和存储空间。&lt;/p>
+&lt;p>下面是 &lt;code>sparse-checkout&lt;/code> 的详细讲解：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>配置 &lt;code>sparse-checkout&lt;/code>：在进行部分克隆之前，需先配置 &lt;code>sparse-checkout&lt;/code>。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ git sparse-checkout init
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>添加感兴趣的目录或文件：通过指定要检出的目录或文件，告诉 Git 哪些部分是你感兴趣的。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ git sparse-checkout &lt;span class="nb">set&lt;/span> &amp;lt;目录/文件&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>你可以多次运行该命令来添加多个目录或文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>完成部分克隆：现在你可以执行部分克隆命令，只拉取感兴趣的部分。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ git clone --filter&lt;span class="o">=&lt;/span>blob:none &amp;lt;远程仓库URL&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>注意，在使用 &lt;code>--filter=blob:none&lt;/code> 标志进行部分克隆时，仓库中的大文件将不会被下载，只有文件元数据（例如文件名和文件大小）会被获取。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>更新和同步：一旦你进行了部分克隆，你可以像常规 Git 仓库一样更新和同步。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ git pull origin &amp;lt;分支&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Git 会根据你配置的 &lt;code>sparse-checkout&lt;/code> 来更新和同步你感兴趣的部分。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>总结来说，&lt;code>sparse-checkout&lt;/code> 提供了一种灵活的方式来只检出仓库中特定目录或文件的内容。它可以实现部分克隆，节省带宽和存储空间，并提高代码仓库的下载速度。记住，部分克隆功能在 Git 2.25 及更高版本中才可用。&lt;/p>
+&lt;h2 id="三小结">三、小结：&lt;/h2>
+&lt;p>附上一些常用缩写：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git config&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gs&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git status&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">g&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">ga&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git add&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gaa&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git add -all&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gp&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git push&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git pull&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git commit&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gcm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git commit -m&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gcam&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git commit -am&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gb&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git branch&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gbr&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git branch -r&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gba&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git branch -a&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gco&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git checkout&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gcb&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git checkout -b&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git merge&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gd&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git diff&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gdw&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git diff --word-diff&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">glg&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git lg&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="四参考">四、参考&lt;/h2>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>&lt;a href="">gpt&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>git 常用操作</title><link>http://cugbtang.github.io/post/devops/series-git-3/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-git-3/</guid><description>&lt;h2 id="git-常用操作">git 常用操作&lt;/h2>
+&lt;h2 id="一场景描述">一、场景描述&lt;/h2>
+&lt;p>记录一些常用操作&lt;/p>
+&lt;ul>
+&lt;li>git status: 显示工作区和暂存区的状态&lt;/li>
+&lt;li>git diff: 显示工作区和暂存区之间的差异&lt;/li>
+&lt;li>git diff &amp;ndash;cached: 显示暂存区和最新提交之间的差异&lt;/li>
+&lt;li>git diff [分支1] [分支2]: 比较两个分支之间的差异&lt;/li>
+&lt;li>git grep [关键词]: 在整个代码库中搜索指定关键词&lt;/li>
+&lt;li>git stash: 将当前修改暂存起来，切换到其他分支&lt;/li>
+&lt;li>git reset &amp;ndash;hard [提交号]: 将当前分支的 HEAD 指针指向指定的提交，并重置工作区和暂存区&lt;/li>
+&lt;li>git rm [文件]: 从版本控制中移除文件&lt;/li>
+&lt;li>git rebase [提交号]: 交互式地合并、重新排序或编辑提交历史的&lt;/li>
+&lt;li>git cherry-pick [提交号]: 选择某个提交，并将其应用到当前分支&lt;/li>
+&lt;li>git blame [文件]: 显示指定文件的每一行是谁在哪个提交中修改的&lt;/li>
+&lt;li>git blame -L [起始行号],[结束行号] [文件]: 仅显示指定行范围的文件是谁修改的&lt;/li>
+&lt;li>git revert [提交号]: 创建一个新的提交，用于撤销指定的提交&lt;/li>
+&lt;li>git bisect start: 启动二分查找来定位引入问题的提交&lt;/li>
+&lt;li>git stash apply: 恢复最近一次暂存的修改，并将其从暂存堆栈中删除&lt;/li>
+&lt;li>git reflog: 显示 HEAD 和分支的历史记录，包括已经被删除的提交&lt;/li>
+&lt;li>git log &amp;ndash;author=[作者]: 显示特定作者的提交历史&lt;/li>
+&lt;li>git tag [标签名] [提交号]: 在指定提交上创建一个标签&lt;/li>
+&lt;li>git show-branch: 显示本地分支的历史和状态&lt;/li>
+&lt;/ul>
+&lt;h2 id="二问问-gpt1">二、问问 gpt&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;/h2>
+&lt;hr>
+&lt;blockquote>
+&lt;p>解释下git show&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;code>git show&lt;/code> 是一个非常有用的 Git 命令，它用于显示提交的详细信息和更改的内容。下面是 &lt;code>git show&lt;/code> 的详细讲解：&lt;/p>
+&lt;p>基本语法：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git show [提交]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>参数：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>[提交]&lt;/code>: 可选参数，表示要查看的提交，默认为最新的提交。&lt;/li>
+&lt;/ul>
+&lt;p>使用 &lt;code>git show&lt;/code> 命令可以获取以下信息：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>提交信息：包括提交哈希值、作者、提交日期和提交消息。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>修改的文件：列出了与该提交相关的所有修改过的文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>文件更改的具体内容：展示了每个文件的具体更改内容，即新增、修改或删除的行。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>代码差异：以 diff 的形式显示当前提交与其父提交之间的代码差异。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>其他元数据：显示提交中的其他元数据，例如签名和标签。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>示例用法：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">$ git show
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这将显示最新提交的详细信息和更改的内容。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">$ git show abcdef123456
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这将显示提交哈希值为 &lt;code>abcdef123456&lt;/code> 的提交的详细信息和更改的内容。&lt;/p>
+&lt;p>&lt;code>git show&lt;/code> 命令在查看历史提交、检查代码更改、审查提交信息等方面非常有用。通过查看提交的详细信息，开发者可以更好地理解代码库的演变历史并进行必要的代码审查和调试。记住，你可以使用其他参数和选项来进一步定制 &lt;code>git show&lt;/code> 命令的输出。可以通过 &lt;code>git show --help&lt;/code> 查看详细的帮助文档。&lt;/p>
+&lt;hr>
+&lt;blockquote>
+&lt;p>解释下 git rebase -i commit&lt;/p>
+&lt;/blockquote>
+&lt;p>当你运行 &lt;code>git rebase -i commit&lt;/code> 命令时，你可以使用交互式界面对提交历史进行编辑。下面是一个示例：&lt;/p>
+&lt;p>假设你有如下的提交历史：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">commit C: Add feature C
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">commit B: Add feature B
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">commit A: Add feature A
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>现在你想要将提交 B 和提交 C 合并为一个提交，并编辑提交 A 的消息。你可以运行以下命令：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">git rebase -i commit
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Git 将会打开交互式界面，其中列出了提交历史的相关信息：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">pick abcdef1 commit A: Add feature A
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pick bcdef23 commit B: Add feature B
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pick def4567 commit C: Add feature C
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>你可以对这些操作进行修改，以实现你的目标。在本例中，你可以将提交 B 和提交 C 合并为一个提交，然后编辑提交 A 的消息。你可以修改交互式界面如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">pick abcdef1 commit A: Add feature A
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">squash bcdef23 commit B: Add feature B
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">s/commit A: Add feature A/Edit feature A/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>保存并退出编辑器。Git 将会根据你的指示执行相应的操作。此时，Git 会自动合并提交 B 到提交 A，并修改提交 A 的消息。最终的提交历史将如下所示：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">commit A: Edit feature A
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">commit BC: Add feature B and C
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>注意，在上述示例中，使用了 &lt;code>squash&lt;/code> 命令来将提交 B 合并到提交 A，并使用 &lt;code>s/commit A: Add feature A/Edit feature A/&lt;/code> 来编辑提交 A 的消息。&lt;/p>
+&lt;p>请注意，在执行类似于 &lt;code>git rebase -i&lt;/code> 这样的操作时，一定要小心审查并确认你的更改，以免不小心破坏提交历史。&lt;/p>
+&lt;hr>
+&lt;blockquote>
+&lt;p>git bisect 详细介绍下&lt;/p>
+&lt;/blockquote>
+&lt;p>git bisect 是 Git 提供的一个命令，用于帮助我们通过二分查找定位引入问题的提交。当我们在一个大型项目中发现了一个 bug，并且我们知道在之前的某个提交中出现了这个 bug，但是不知道具体是在哪个提交引入的时候，可以使用 git bisect 命令来快速定位。&lt;/p>
+&lt;p>下面是 git bisect 的详细使用步骤：&lt;/p>
+&lt;p>1、首先，进入到你的项目目录中，并确保你在一个干净的状态下（没有未提交的修改）。&lt;/p>
+&lt;p>2、执行 git bisect start 命令，表示开始二分查找。&lt;/p>
+&lt;p>3、通过 git bisect bad 命令告诉 Git 当前的代码状态是有问题的（即包含了 bug）。&lt;/p>
+&lt;p>4、使用 git bisect good [好的提交号] 或者 git bisect good [好的标签名] 命令指定一个已知的“好”（即没有问题的）的提交。&lt;/p>
+&lt;p>5、Git 会自动切换到一个中间的提交，并要求你测试这个提交是否存在 bug。根据测试结果使用 git bisect bad 或者 git bisect good 命令告诉 Git 这个中间提交是否含有 bug。&lt;/p>
+&lt;p>6、重复步骤 5，Git 会根据你的测试结果不断地切换到新的中间提交，直到找到引入问题的提交。&lt;/p>
+&lt;p>7、当 git bisect 定位到引入问题的提交时，Git 会给出相应的提示，并自动返回到该提交。&lt;/p>
+&lt;p>8、最后，执行 git bisect reset 命令结束二分查找过程，Git 会将你的 HEAD 恢复到初始状态。&lt;/p>
+&lt;p>通过以上步骤，你可以使用 git bisect 在复杂的代码历史中快速定位 bug 的引入提交。这个命令在大型项目中特别有用，可以节省定位问题的时间和精力。需要注意的是，你需要根据实际情况进行好坏提交的选择，并且在测试过程中保持良好的记录和反馈。&lt;/p>
+&lt;p>要将之前所有提交中的密码更改为 &lt;code>***&lt;/code>，可以使用 &lt;code>git filter-branch&lt;/code> 命令结合自定义脚本来实现。请按照以下步骤进行操作：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>首先，在你的项目目录下打开终端，并确保你当前在所需的分支上（例如，&lt;code>master&lt;/code> 分支）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>运行以下命令来备份你的代码：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git branch backup
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>创建一个名为 &lt;code>replace_password.sh&lt;/code> 的脚本文件，并使用文本编辑器打开它。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在 &lt;code>replace_password.sh&lt;/code> 文件中，输入以下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">#!/bin/bash
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git ls-files -z | while read -d &amp;#39;&amp;#39; -r file; do
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> if [[ $file == *&amp;#34;&amp;lt;文件路径&amp;gt;&amp;#34;* ]]; then
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sed -i &amp;#39;s/密码模式/*** /g&amp;#39; &amp;#34;$file&amp;#34;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fi
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">done
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>将 &lt;code>&amp;lt;文件路径&amp;gt;&lt;/code> 替换为包含密码的文件的路径或文件夹的路径。这将会在指定文件中查找并替换密码。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>保存并关闭 &lt;code>replace_password.sh&lt;/code> 文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>运行以下命令来添加执行权限给脚本文件：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">chmod +x replace_password.sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>现在，运行以下命令来执行 &lt;code>git filter-branch&lt;/code> 操作，并使用脚本文件作为过滤器：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git filter-branch --tree-filter &amp;#39;/path/to/replace_password.sh&amp;#39; --prune-empty HEAD
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>将 &lt;code>/path/to/replace_password.sh&lt;/code> 替换为 &lt;code>replace_password.sh&lt;/code> 文件的实际路径。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Git 将会遍历所有的提交，并在每个提交上运行脚本文件，查找并替换指定文件中的密码。完成后，你的历史提交将被重写。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果你已经将这些提交推送到远程仓库，你需要使用 &lt;code>git push --force&lt;/code> 强制推送修改后的提交历史：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-plaintext" data-lang="plaintext">&lt;span class="line">&lt;span class="cl">git push --force
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol>
+&lt;p>这样，你就可以使用自定义脚本来批量替换之前所有提交中的密码。但请注意，执行 &lt;code>git filter-branch&lt;/code> 操作时，也要小心谨慎，因为它会修改提交历史。确保在操作之前备份代码，并在必要时咨询有经验的 Git 使用者或开发者。&lt;/p>
+&lt;hr>
+&lt;blockquote>
+&lt;p>sparse-checkout 详细讲解下&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;code>sparse-checkout&lt;/code> 是 Git 的一个功能，用于部分克隆（partial clone）仓库。它允许你只检出仓库中指定目录或文件的内容，而不是完整地克隆整个仓库。这对于大型仓库或仅需要特定部分代码的情况非常有用，可以显著节省下载和存储空间。&lt;/p>
+&lt;p>下面是 &lt;code>sparse-checkout&lt;/code> 的详细讲解：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>配置 &lt;code>sparse-checkout&lt;/code>：在进行部分克隆之前，需先配置 &lt;code>sparse-checkout&lt;/code>。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ git sparse-checkout init
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>添加感兴趣的目录或文件：通过指定要检出的目录或文件，告诉 Git 哪些部分是你感兴趣的。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ git sparse-checkout &lt;span class="nb">set&lt;/span> &amp;lt;目录/文件&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>你可以多次运行该命令来添加多个目录或文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>完成部分克隆：现在你可以执行部分克隆命令，只拉取感兴趣的部分。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ git clone --filter&lt;span class="o">=&lt;/span>blob:none &amp;lt;远程仓库URL&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>注意，在使用 &lt;code>--filter=blob:none&lt;/code> 标志进行部分克隆时，仓库中的大文件将不会被下载，只有文件元数据（例如文件名和文件大小）会被获取。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>更新和同步：一旦你进行了部分克隆，你可以像常规 Git 仓库一样更新和同步。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ git pull origin &amp;lt;分支&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>Git 会根据你配置的 &lt;code>sparse-checkout&lt;/code> 来更新和同步你感兴趣的部分。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>总结来说，&lt;code>sparse-checkout&lt;/code> 提供了一种灵活的方式来只检出仓库中特定目录或文件的内容。它可以实现部分克隆，节省带宽和存储空间，并提高代码仓库的下载速度。记住，部分克隆功能在 Git 2.25 及更高版本中才可用。&lt;/p>
+&lt;h2 id="三小结">三、小结：&lt;/h2>
+&lt;p>附上一些常用缩写：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git config&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gs&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git status&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">g&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">ga&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git add&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gaa&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git add -all&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gp&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git push&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gl&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git pull&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gc&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git commit&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gcm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git commit -m&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gcam&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git commit -am&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gb&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git branch&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gbr&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git branch -r&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gba&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git branch -a&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gco&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git checkout&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gcb&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git checkout -b&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gm&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git merge&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gd&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git diff&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">gdw&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git diff --word-diff&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">alias&lt;/span> &lt;span class="nv">glg&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;git lg&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="四参考">四、参考&lt;/h2>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>&lt;a href="">gpt&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>git 部分功能需要先上线，怎么办？</title><link>http://cugbtang.github.io/post/devops/series-git-1/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-git-1/</guid><description>&lt;h2 id="git-部分功能需要先上线怎么办">git 部分功能需要先上线，怎么办？&lt;/h2>
+&lt;h2 id="一场景描述">一、场景描述&lt;/h2>
+&lt;p>在这个项目中，代码的提交和合并都是在develop分支上进行的， 之前已经基于某个commit打了tag v1.0.0。然而，这次由于迭代过程中需要提前上线部分功能，我们需要将这部分功能的commit摘出来，并打上一个tag v1.1.0 作为标识。&lt;/p>
+&lt;h2 id="二问问-gpt1">二、问问 gpt&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>&lt;/h2>
+&lt;p>首先，我们可以使用Git命令行或者图形化界面工具来处理这个需求。假设我们当前的工作目录在develop分支上。&lt;/p>
+&lt;ul>
+&lt;li>确保你的本地develop分支是最新的，可以执行以下命令拉取最新的代码：&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">git pull origin develop
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>查看git log，找到需要提前上线的commit的哈希值或者commit消息。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>使用以下命令将指定的commit摘出来并创建一个新的分支（例如feature-branch）：&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">git checkout -b feature-branch &amp;lt;commit&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这将创建一个新的分支，并将代码库中指定的commit复制到该分支上。&lt;/p>
+&lt;ul>
+&lt;li>使用以下命令将涉及到这次提前发布需要的commit提交应用到feature-branch分支：&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">git cherry-pick &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt; &amp;lt;commit1&amp;gt; &amp;lt;commit1&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>其中，&lt;code>&amp;lt;commit&amp;gt;&lt;/code> 可以是提交的哈希值或者提交消息。&lt;/p>
+&lt;ul>
+&lt;li>接下来，我们需要打上一个tag来标识这个版本。使用以下命令创建一个tag（例如v1.1.0）：&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">git tag v1.1.0
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这将在当前commit上创建一个tag。&lt;/p>
+&lt;ul>
+&lt;li>最后，将创建的分支和tag推送到远程仓库：&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">git push origin feature-branch
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">git push origin v1.1.0
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这将把新的分支和tag推送到远程仓库中，以便团队成员可以访问和查看。&lt;/p>
+&lt;h2 id="三小结">三、小结：&lt;/h2>
+&lt;ul>
+&lt;li>基于某个commit checkout&lt;/li>
+&lt;li>cherry-pick&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>&lt;/li>
+&lt;/ul>
+&lt;h2 id="四参考">四、参考&lt;/h2>
+&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>&lt;a href="">gpt&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2">
+&lt;p>&lt;a href="https://www.git-scm.com/docs/git-cherry-pick">git-cherry-pick&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item><item><title>Container, how to play?</title><link>http://cugbtang.github.io/post/container/series-container-1/</link><pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-1/</guid><description>&lt;p>container technology become a necessary for developer during operating the linux system.&lt;/p>
+&lt;h2 id="1namespace">1、namespace&lt;/h2>
 &lt;ul>
 &lt;li>
 &lt;p>定义&lt;/p>
-&lt;blockquote>
-&lt;p>​ namespace是 Linux 内核的一项功能，该功能对内核资源进行分区，以使一组进程看到一组资源，而另一组进程看到另一组资源。namespace 的工作方式通过为一组资源和进程设置相同的 namespace 而起作用，但是这些 namespace 引用了不同的资源。资源可能存在于多个 namespace 中。这些资源可以是进程ID、主机名、用户ID、文件名、与网络访问相关的名称和进程间通信。&lt;/p>
-&lt;/blockquote>
+&lt;p>namespace是 Linux 内核的一项功能，该功能对内核资源进行分区，以使一组进程看到一组资源，而另一组进程看到另一组资源。namespace 的工作方式通过为一组资源和进程设置相同的 namespace 而起作用，但是这些 namespace 引用了不同的资源。资源可能存在于多个 namespace 中。这些资源可以是进程ID、主机名、用户ID、文件名、与网络访问相关的名称和进程间通信。&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>特征&lt;/p>
-&lt;blockquote>
-&lt;p>​ 可以实现在同一主机系统中对进程ID、主机名、用户名ID、文件名、网络和进程间通信等资源的隔离&lt;/p>
-&lt;/blockquote>
+&lt;p>可以实现在同一主机系统中对进程ID、主机名、用户名ID、文件名、网络和进程间通信等资源的隔离。&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>类型&lt;/p>
@@ -76,10 +1011,8 @@
 &lt;/tr>
 &lt;/tbody>
 &lt;/table>
-&lt;h2 id="mount-namespace">Mount Namespace&lt;/h2>
-&lt;blockquote>
+&lt;h3 id="mount-namespace">Mount Namespace&lt;/h3>
 &lt;p>使用 unshare 命令可以新建 Mount Namespace，并且在新建的 Mount Namespace 内 mount 是和外部完全隔离的。&lt;/p>
-&lt;/blockquote>
 &lt;ul>
 &lt;li>
 &lt;p>创建一个bash 进程并且新建一个 Mount Namespace&lt;/p>
@@ -224,7 +1157,7 @@
 &lt;/div>
 &lt;/div>&lt;/li>
 &lt;/ul>
-&lt;h2 id="pid-namespace">PID Namespace&lt;/h2>
+&lt;h3 id="pid-namespace">PID Namespace&lt;/h3>
 &lt;blockquote>
 &lt;p>用来隔离进程，在不同的namespace内可以拥有相同的进程号&lt;/p>
 &lt;/blockquote>
@@ -260,7 +1193,7 @@
 &lt;/div>
 &lt;/div>&lt;/li>
 &lt;/ul>
-&lt;h2 id="uts-namespace">UTS Namespace&lt;/h2>
+&lt;h3 id="uts-namespace">UTS Namespace&lt;/h3>
 &lt;blockquote>
 &lt;p>它允许每个UTS Namespace 拥有一个独立的主机名&lt;/p>
 &lt;/blockquote>
@@ -305,7 +1238,7 @@
 &lt;/div>
 &lt;/div>&lt;/li>
 &lt;/ul>
-&lt;h2 id="ipc-namespace">IPC Namespace&lt;/h2>
+&lt;h3 id="ipc-namespace">IPC Namespace&lt;/h3>
 &lt;blockquote>
 &lt;p>主要用来隔离进程间通信的。PID Namespace 和 IPC Namespace一起使用可以实现同一 IPC Namespace 内的进程彼此可以通信，不同 IPC Namespace 的进程却不能通信。&lt;/p>
 &lt;/blockquote>
@@ -388,7 +1321,7 @@
 &lt;/div>
 &lt;/div>&lt;/li>
 &lt;/ul>
-&lt;h2 id="user-namespace">User Namespace&lt;/h2>
+&lt;h3 id="user-namespace">User Namespace&lt;/h3>
 &lt;blockquote>
 &lt;p>主要用来隔离用户和用户组。可以实现进程在容器内拥有 root 权限， 而在主机上却只是普通用户。&lt;/p>
 &lt;/blockquote>
@@ -453,7 +1386,7 @@
 &lt;/div>
 &lt;/div>&lt;/li>
 &lt;/ul>
-&lt;h2 id="net-namespace">Net Namespace&lt;/h2>
+&lt;h3 id="net-namespace">Net Namespace&lt;/h3>
 &lt;blockquote>
 &lt;p>用来隔离网络设备、IP地址和端口等信息。&lt;/p>
 &lt;p>可以让每个进程拥有自己独立的IP地址，端口和网卡信息&lt;/p>
@@ -531,7 +1464,7 @@
 &lt;/div>
 &lt;/div>&lt;/li>
 &lt;/ul>
-&lt;h2 id="为什么-docker-需要-namespace">为什么 docker 需要 namespace?&lt;/h2>
+&lt;h3 id="为什么-docker-需要-namespace">为什么 docker 需要 namespace?&lt;/h3>
 &lt;p>Linux 内核从2002年2.4.19版本开始加入了 Mount Namspace&lt;/p>
 &lt;p>内核3.8版本加入了 User Namespace 为容器提供了足够的支持功能&lt;/p>
 &lt;p>当 docker 新建一个容器时&lt;/p>
@@ -2528,830 +3461,7 @@
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="ref">REF&lt;/h2>
-&lt;p>&lt;a href="https://kubernetes.io/blog/2022/02/17/dockershim-faq/">Thursday, February 17, 2022 - Updated: Dockershim Removal FAQ&lt;/a>&lt;/p></description></item><item><title>Container, how to play?</title><link>http://cugbtang.github.io/post/container/series-container-1/</link><pubDate>Tue, 01 Mar 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-1/</guid><description>&lt;p>container technology become a necessary for developer during operating the linux system.&lt;/p>
-&lt;h2 id="1namespace">1、namespace&lt;/h2>
-&lt;ul>
-&lt;li>
-&lt;p>定义&lt;/p>
-&lt;p>namespace是 Linux 内核的一项功能，该功能对内核资源进行分区，以使一组进程看到一组资源，而另一组进程看到另一组资源。namespace 的工作方式通过为一组资源和进程设置相同的 namespace 而起作用，但是这些 namespace 引用了不同的资源。资源可能存在于多个 namespace 中。这些资源可以是进程ID、主机名、用户ID、文件名、与网络访问相关的名称和进程间通信。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>特征&lt;/p>
-&lt;p>可以实现在同一主机系统中对进程ID、主机名、用户名ID、文件名、网络和进程间通信等资源的隔离。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>类型&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th style="text-align:center">namespace&lt;/th>
-&lt;th style="text-align:center">summary&lt;/th>
-&lt;th style="text-align:center">kernel&lt;/th>
-&lt;th>describe&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td style="text-align:center">Mount(mnt)&lt;/td>
-&lt;td style="text-align:center">隔离挂载点&lt;/td>
-&lt;td style="text-align:center">2.4.19&lt;/td>
-&lt;td>隔离不同的进程或进程组看到的挂载点，实现容器内只能看到自己的挂在信息，在容器内的挂载操作不会影响主机的挂载目录&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td style="text-align:center">Process ID(pid)&lt;/td>
-&lt;td style="text-align:center">隔离进程 ID&lt;/td>
-&lt;td style="text-align:center">2.6.24&lt;/td>
-&lt;td>&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td style="text-align:center">Network(net)&lt;/td>
-&lt;td style="text-align:center">隔离网络设备，端口号等&lt;/td>
-&lt;td style="text-align:center">2.6.29&lt;/td>
-&lt;td>&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td style="text-align:center">Interprocess Communication(ipc)&lt;/td>
-&lt;td style="text-align:center">隔离 System VIPC 和 POSIX message queues&lt;/td>
-&lt;td style="text-align:center">2.6.19&lt;/td>
-&lt;td>&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td style="text-align:center">UTS Namespace(uts)&lt;/td>
-&lt;td style="text-align:center">隔离主机名和域名&lt;/td>
-&lt;td style="text-align:center">2.6.19&lt;/td>
-&lt;td>&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td style="text-align:center">User Namespace(user)&lt;/td>
-&lt;td style="text-align:center">隔离用户和用户组&lt;/td>
-&lt;td style="text-align:center">3.8&lt;/td>
-&lt;td>&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td style="text-align:center">Control group(cgroup) Namespce&lt;/td>
-&lt;td style="text-align:center">隔离 Cgroups 根目录&lt;/td>
-&lt;td style="text-align:center">4.6&lt;/td>
-&lt;td>&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td style="text-align:center">Time Namespace&lt;/td>
-&lt;td style="text-align:center">隔离系统时间&lt;/td>
-&lt;td style="text-align:center">5.6&lt;/td>
-&lt;td>&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;h3 id="mount-namespace">Mount Namespace&lt;/h3>
-&lt;p>使用 unshare 命令可以新建 Mount Namespace，并且在新建的 Mount Namespace 内 mount 是和外部完全隔离的。&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>创建一个bash 进程并且新建一个 Mount Namespace&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@localhost ~&lt;span class="o">]&lt;/span>$ sudo unshare --mount --fork /bin/bash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1">#&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>验证在独立的 namespce 内挂载文件，不影响别的&lt;/p>
-&lt;p>在 /tmp 目录下创建一个目录&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># mkdir /tmp/tmpfs&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>使用 mount 命令挂载一个 tmpfs 类型的目录&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># mount -t tmpfs -o size=20m tmpfs /tmp/tmpfs&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>使用 df 命令查看已经挂载的目录信息&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># df -h&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Filesystem Size Used Avail Use% Mounted on
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/dev/sda1 40G 3.8G 37G 10% /
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">devtmpfs 457M &lt;span class="m">0&lt;/span> 457M 0% /dev
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 464M &lt;span class="m">0&lt;/span> 464M 0% /dev/shm
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 464M &lt;span class="m">0&lt;/span> 464M 0% /sys/fs/cgroup
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 464M 13M 451M 3% /run
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 93M &lt;span class="m">0&lt;/span> 93M 0% /run/user/1000
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">//172.29.0.1/vgt-2469b42ebff188de622646551002b263-6ad5fdbcbf2eaa93bd62f92333a2e6e5 466G 171G 295G 37% /vagrant
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 20M &lt;span class="m">0&lt;/span> 20M 0% /tmp/tmpfs
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>新打开一个命令窗口，执行 df 命令查看主机的挂载信息&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;span class="lnt">8
-&lt;/span>&lt;span class="lnt">9
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@localhost ~&lt;span class="o">]&lt;/span>$ df -h
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Filesystem Size Used Avail Use% Mounted on
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">devtmpfs 457M &lt;span class="m">0&lt;/span> 457M 0% /dev
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 464M &lt;span class="m">0&lt;/span> 464M 0% /dev/shm
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 464M 13M 451M 3% /run
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 464M &lt;span class="m">0&lt;/span> 464M 0% /sys/fs/cgroup
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/dev/sda1 40G 3.8G 37G 10% /
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">//172.29.0.1/vgt-2469b42ebff188de622646551002b263-6ad5fdbcbf2eaa93bd62f92333a2e6e5 466G 171G 295G 37% /vagrant
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tmpfs 93M &lt;span class="m">0&lt;/span> 93M 0% /run/user/1000
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>基本验证完毕。接着我们查看新的mount namespace 信息&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;span class="lnt">8
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># ls -l /proc/self/ns/&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">total &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:56 ipc -&amp;gt; ipc:&lt;span class="o">[&lt;/span>4026531839&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:56 mnt -&amp;gt; mnt:&lt;span class="o">[&lt;/span>4026532117&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:56 net -&amp;gt; net:&lt;span class="o">[&lt;/span>4026531956&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:56 pid -&amp;gt; pid:&lt;span class="o">[&lt;/span>4026531836&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:56 user -&amp;gt; user:&lt;span class="o">[&lt;/span>4026531837&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:56 uts -&amp;gt; uts:&lt;span class="o">[&lt;/span>4026531838&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>新打开一个命令窗口，使用相同的命令查看主机上的 namespace 信息&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;span class="lnt">8
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@localhost ~&lt;span class="o">]&lt;/span>$ ls -l /proc/self/ns/
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">total &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> vagrant vagrant &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:57 ipc -&amp;gt; ipc:&lt;span class="o">[&lt;/span>4026531839&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> vagrant vagrant &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:57 mnt -&amp;gt; mnt:&lt;span class="o">[&lt;/span>4026531840&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> vagrant vagrant &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:57 net -&amp;gt; net:&lt;span class="o">[&lt;/span>4026531956&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> vagrant vagrant &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:57 pid -&amp;gt; pid:&lt;span class="o">[&lt;/span>4026531836&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> vagrant vagrant &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:57 user -&amp;gt; user:&lt;span class="o">[&lt;/span>4026531837&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrwxrwxrwx. &lt;span class="m">1&lt;/span> vagrant vagrant &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 09:57 uts -&amp;gt; uts:&lt;span class="o">[&lt;/span>4026531838&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="pid-namespace">PID Namespace&lt;/h3>
-&lt;blockquote>
-&lt;p>用来隔离进程，在不同的namespace内可以拥有相同的进程号&lt;/p>
-&lt;/blockquote>
-&lt;ul>
-&lt;li>
-&lt;p>创建一个 bash 进程，并且新建一个 PID Namespace&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@localhost ~&lt;span class="o">]&lt;/span>$ sudo unshare --pid --fork --mount-proc /bin/bash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1">#&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>在当前的命令行窗口使用 ps aux 命令查看进程信息&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># ps aux&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">root &lt;span class="m">1&lt;/span> 0.0 0.2 &lt;span class="m">15792&lt;/span> &lt;span class="m">2616&lt;/span> pts/3 S 13:59 0:00 /bin/bash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">root &lt;span class="m">16&lt;/span> 0.0 0.1 &lt;span class="m">55192&lt;/span> &lt;span class="m">1844&lt;/span> pts/3 R+ 14:02 0:00 ps aux
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="uts-namespace">UTS Namespace&lt;/h3>
-&lt;blockquote>
-&lt;p>它允许每个UTS Namespace 拥有一个独立的主机名&lt;/p>
-&lt;/blockquote>
-&lt;ul>
-&lt;li>
-&lt;p>使用 unshare 命令创建一个 UTS Namespace&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@localhost ~&lt;span class="o">]&lt;/span>$ sudo unshare --uts --fork /bin/bash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1">#&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>使用 hostname 命令设置主机&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># hostname -b docker&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># hostname&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>新打开一个命令行窗口，使用相同的命令查看主机的hostname&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@localhost vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># localhost&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="ipc-namespace">IPC Namespace&lt;/h3>
-&lt;blockquote>
-&lt;p>主要用来隔离进程间通信的。PID Namespace 和 IPC Namespace一起使用可以实现同一 IPC Namespace 内的进程彼此可以通信，不同 IPC Namespace 的进程却不能通信。&lt;/p>
-&lt;/blockquote>
-&lt;ul>
-&lt;li>
-&lt;p>使用 unshare 命令创建一个 IPC Namespace&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ sudo unshare --ipc --fork /bin/bash
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>另起一个窗口，查看系统的通信进程&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ ipcs -q
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">------ Message Queues --------
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">key msqid owner perms used-bytes messages
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>在新的ipc namespace下新建一个进程通信队列&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># ipcmk -Q&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Message queue id: &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>查看当前ipc namespace 下的系统通信队列列表&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># ipcs -q&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">------ Message Queues --------
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">key msqid owner perms used-bytes messages
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">0x2ae315e9 &lt;span class="m">0&lt;/span> root &lt;span class="m">644&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>再次查看主机的系统通信队列&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ ipcs -q
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">------ Message Queues --------
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">key msqid owner perms used-bytes messages
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="user-namespace">User Namespace&lt;/h3>
-&lt;blockquote>
-&lt;p>主要用来隔离用户和用户组。可以实现进程在容器内拥有 root 权限， 而在主机上却只是普通用户。&lt;/p>
-&lt;/blockquote>
-&lt;ul>
-&lt;li>
-&lt;p>以普通用户的身份创建一个 User Namespace&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ unshare --user --fork /bin/bash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">unshare: unshare failed: Invalid argument
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看内核版本&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ uname -a
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Linux docker 3.10.0-1127.el7.x86_64 &lt;span class="c1">#1 SMP Tue Mar 31 23:36:51 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查阅资料&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># max_user_namespaces文件记录了允许创建的user namespace数量，我的CentOS 7.5默认是0，修改之&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="m">2147483647&lt;/span> &amp;gt; /proc/sys/user/max_user_namespaces
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 再次运行&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ unshare --user -r /bin/bash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker ~&lt;span class="o">]&lt;/span>&lt;span class="c1">#&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>执行 id 命令查看当前的用户信息&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker ~&lt;span class="o">]&lt;/span>&lt;span class="c1"># id&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">uid&lt;/span>&lt;span class="o">=&lt;/span>0&lt;span class="o">(&lt;/span>root&lt;span class="o">)&lt;/span> &lt;span class="nv">gid&lt;/span>&lt;span class="o">=&lt;/span>0&lt;span class="o">(&lt;/span>root&lt;span class="o">)&lt;/span> &lt;span class="nv">groups&lt;/span>&lt;span class="o">=&lt;/span>0&lt;span class="o">(&lt;/span>root&lt;span class="o">)&lt;/span>,65534&lt;span class="o">(&lt;/span>nfsnobody&lt;span class="o">)&lt;/span> &lt;span class="nv">context&lt;/span>&lt;span class="o">=&lt;/span>unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>在当前窗口执行 reboot 命令&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker ~&lt;span class="o">]&lt;/span>&lt;span class="c1"># reboot&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Failed to open /dev/initctl: Permission denied
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Failed to talk to init daemon.
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="net-namespace">Net Namespace&lt;/h3>
-&lt;blockquote>
-&lt;p>用来隔离网络设备、IP地址和端口等信息。&lt;/p>
-&lt;p>可以让每个进程拥有自己独立的IP地址，端口和网卡信息&lt;/p>
-&lt;/blockquote>
-&lt;ul>
-&lt;li>
-&lt;p>首先查看主机上的ip 信息&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ ip a
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu &lt;span class="m">65536&lt;/span> qdisc noqueue state UNKNOWN group default qlen &lt;span class="m">1000&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> inet 127.0.0.1/8 scope host lo
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valid_lft forever preferred_lft forever
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> inet6 ::1/128 scope host
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valid_lft forever preferred_lft forever
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2: eth0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu &lt;span class="m">1500&lt;/span> qdisc mq state UP group default qlen &lt;span class="m">1000&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> link/ether 00:15:5d:25:01:09 brd ff:ff:ff:ff:ff:ff
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> inet 172.29.5.132/20 brd 172.29.15.255 scope global noprefixroute dynamic eth0
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valid_lft 82979sec preferred_lft 82979sec
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> inet6 fe80::215:5dff:fe25:109/64 scope link
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valid_lft forever preferred_lft forever
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">3: docker0: &amp;lt;NO-CARRIER,BROADCAST,MULTICAST,UP&amp;gt; mtu &lt;span class="m">1500&lt;/span> qdisc noqueue state DOWN group default
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> link/ether 02:42:f0:82:11:e0 brd ff:ff:ff:ff:ff:ff
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valid_lft forever preferred_lft forever
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>创建 net namespace&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ sudo unshare --net --fork /bin/bash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1">#&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>使用 ip a命令查看当前namespace的网络信息&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># ip a&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">1: lo: &amp;lt;LOOPBACK&amp;gt; mtu &lt;span class="m">65536&lt;/span> qdisc noop state DOWN group default qlen &lt;span class="m">1000&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;/ul>
-&lt;h3 id="为什么-docker-需要-namespace">为什么 docker 需要 namespace?&lt;/h3>
-&lt;p>Linux 内核从2002年2.4.19版本开始加入了 Mount Namspace&lt;/p>
-&lt;p>内核3.8版本加入了 User Namespace 为容器提供了足够的支持功能&lt;/p>
-&lt;p>当 docker 新建一个容器时&lt;/p>
-&lt;p>会创建这六种 namespace， 然后将容器中的进程加入这些 namespace之中&lt;/p>
-&lt;h1 id="cgroups">Cgroups&lt;/h1>
-&lt;ul>
-&lt;li>
-&lt;p>定义&lt;/p>
-&lt;p>全程是 control groups， 是Linux 内核的一个功能。可以实现限制进程或者进程组的资源（cpu、mem、磁盘IO等）&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>特征&lt;/p>
-&lt;p>资源限制：限制资源的使用量&lt;/p>
-&lt;p>优先级控制： 不同的组可以有不用的资源使用优先级&lt;/p>
-&lt;p>审计：计算控制组的资源使用情况&lt;/p>
-&lt;p>控制： 控制进程的挂起或恢复&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>核心&lt;/p>
-&lt;p>subsystem: 一个内核的组件，代表一类资源调度控制器&lt;/p>
-&lt;p>cgroup： 表示一组进程和一组带有参数的子系统的关联关系&lt;/p>
-&lt;p>hierarchy：由一些列的控制组按照树状结构排列组成的子控制组默认拥有父控制组的属性&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="subsystem">subsystem&lt;/h2>
-&lt;ul>
-&lt;li>
-&lt;p>查看当前主机使用了哪些子系统&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>vagrant@docker ~&lt;span class="o">]&lt;/span>$ sudo mount -t cgroup
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/systemd &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,xattr,release_agent&lt;span class="o">=&lt;/span>/usr/lib/systemd/systemd-cgroups-agent,name&lt;span class="o">=&lt;/span>systemd&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/cpuset &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,cpuset&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/cpu,cpuacct &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,cpuacct,cpu&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/perf_event &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,perf_event&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/blkio &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,blkio&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/memory &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,memory&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/hugetlb &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,hugetlb&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/freezer &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,freezer&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/net_cls,net_prio &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,net_prio,net_cls&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/devices &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,devices&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup on /sys/fs/cgroup/pids &lt;span class="nb">type&lt;/span> cgroup &lt;span class="o">(&lt;/span>rw,nosuid,nodev,noexec,relatime,seclabel,pids&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>以 cpu 子系统为例，演示 cgroups 如何限制进程的 cpu使用时间&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#在cpu子系统下创建测试文件夹&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mkdir /sys/fs/cgroup/cpu/mydocker
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">#查看&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker vagrant&lt;span class="o">]&lt;/span>&lt;span class="c1"># ls /sys/fs/cgroup/cpu/mydocker -l&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">total &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cgroup.clone_children
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">--w--w--w-. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cgroup.event_control
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cgroup.procs
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-r--r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpuacct.stat
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpuacct.usage
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-r--r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpuacct.usage_percpu
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpu.cfs_period_us
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpu.cfs_quota_us
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpu.rt_period_us
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpu.rt_runtime_us
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpu.shares
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-r--r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 cpu.stat
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 notify_on_release
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">-rw-r--r--. &lt;span class="m">1&lt;/span> root root &lt;span class="m">0&lt;/span> Feb &lt;span class="m">26&lt;/span> 15:15 tasks
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 将当前shell进程加入cgroup&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1"># echo $$&amp;gt; tasks&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看tasks文件内容&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1">#&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>mem&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;span class="lnt">24
-&lt;/span>&lt;span class="lnt">25
-&lt;/span>&lt;span class="lnt">26
-&lt;/span>&lt;span class="lnt">27
-&lt;/span>&lt;span class="lnt">28
-&lt;/span>&lt;span class="lnt">29
-&lt;/span>&lt;span class="lnt">30
-&lt;/span>&lt;span class="lnt">31
-&lt;/span>&lt;span class="lnt">32
-&lt;/span>&lt;span class="lnt">33
-&lt;/span>&lt;span class="lnt">34
-&lt;/span>&lt;span class="lnt">35
-&lt;/span>&lt;span class="lnt">36
-&lt;/span>&lt;span class="lnt">37
-&lt;/span>&lt;span class="lnt">38
-&lt;/span>&lt;span class="lnt">39
-&lt;/span>&lt;span class="lnt">40
-&lt;/span>&lt;span class="lnt">41
-&lt;/span>&lt;span class="lnt">42
-&lt;/span>&lt;span class="lnt">43
-&lt;/span>&lt;span class="lnt">44
-&lt;/span>&lt;span class="lnt">45
-&lt;/span>&lt;span class="lnt">46
-&lt;/span>&lt;span class="lnt">47
-&lt;/span>&lt;span class="lnt">48
-&lt;/span>&lt;span class="lnt">49
-&lt;/span>&lt;span class="lnt">50
-&lt;/span>&lt;span class="lnt">51
-&lt;/span>&lt;span class="lnt">52
-&lt;/span>&lt;span class="lnt">53
-&lt;/span>&lt;span class="lnt">54
-&lt;/span>&lt;span class="lnt">55
-&lt;/span>&lt;span class="lnt">56
-&lt;/span>&lt;span class="lnt">57
-&lt;/span>&lt;span class="lnt">58
-&lt;/span>&lt;span class="lnt">59
-&lt;/span>&lt;span class="lnt">60
-&lt;/span>&lt;span class="lnt">61
-&lt;/span>&lt;span class="lnt">62
-&lt;/span>&lt;span class="lnt">63
-&lt;/span>&lt;span class="lnt">64
-&lt;/span>&lt;span class="lnt">65
-&lt;/span>&lt;span class="lnt">66
-&lt;/span>&lt;span class="lnt">67
-&lt;/span>&lt;span class="lnt">68
-&lt;/span>&lt;span class="lnt">69
-&lt;/span>&lt;span class="lnt">70
-&lt;/span>&lt;span class="lnt">71
-&lt;/span>&lt;span class="lnt">72
-&lt;/span>&lt;span class="lnt">73
-&lt;/span>&lt;span class="lnt">74
-&lt;/span>&lt;span class="lnt">75
-&lt;/span>&lt;span class="lnt">76
-&lt;/span>&lt;span class="lnt">77
-&lt;/span>&lt;span class="lnt">78
-&lt;/span>&lt;span class="lnt">79
-&lt;/span>&lt;span class="lnt">80
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 在memory子系统下创建cgroup&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1"># mkdir /sys/fs/cgroup/memory/mydocker&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看新建目录中的内容&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1"># ls&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup.clone_children
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup.event_control
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cgroup.procs
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.failcnt
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.force_empty
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.failcnt
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.limit_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.max_usage_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.slabinfo
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.tcp.failcnt
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.tcp.limit_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.tcp.max_usage_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.tcp.usage_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.kmem.usage_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.limit_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.max_usage_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.memsw.failcnt
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.memsw.limit_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.memsw.max_usage_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.memsw.usage_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.move_charge_at_immigrate
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.numa_stat
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.oom_control
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.pressure_level
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.soft_limit_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.stat
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.swappiness
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.usage_in_bytes
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memory.use_hierarchy
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">notify_on_release
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tasks
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 限制内存使用&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1"># echo 1073741824 &amp;gt; memory.limit_in_bytes&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 将当前shell写入tasks内&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1"># echo $$&amp;gt;tasks&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1"># cat tasks&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="m">3356&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="m">3484&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 申请内存，当达到1G时 被杀死&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1"># memtester 1500M 1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memtester version 4.3.0 &lt;span class="o">(&lt;/span>64-bit&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Copyright &lt;span class="o">(&lt;/span>C&lt;span class="o">)&lt;/span> 2001-2012 Charles Cazabon.
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Licensed under the GNU General Public License version &lt;span class="m">2&lt;/span> &lt;span class="o">(&lt;/span>only&lt;span class="o">)&lt;/span>.
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pagesize is &lt;span class="m">4096&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pagesizemask is 0xfffffffffffff000
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">want 1500MB &lt;span class="o">(&lt;/span>&lt;span class="m">1572864000&lt;/span> bytes&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">got 1500MB &lt;span class="o">(&lt;/span>&lt;span class="m">1572864000&lt;/span> bytes&lt;span class="o">)&lt;/span>, trying mlock ...Killed
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 修改申请大小，完美&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>root@docker mydocker&lt;span class="o">]&lt;/span>&lt;span class="c1"># memtester 500M 1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">memtester version 4.3.0 &lt;span class="o">(&lt;/span>64-bit&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Copyright &lt;span class="o">(&lt;/span>C&lt;span class="o">)&lt;/span> 2001-2012 Charles Cazabon.
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Licensed under the GNU General Public License version &lt;span class="m">2&lt;/span> &lt;span class="o">(&lt;/span>only&lt;span class="o">)&lt;/span>.
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pagesize is &lt;span class="m">4096&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pagesizemask is 0xfffffffffffff000
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">want 500MB &lt;span class="o">(&lt;/span>&lt;span class="m">524288000&lt;/span> bytes&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">got 500MB &lt;span class="o">(&lt;/span>&lt;span class="m">524288000&lt;/span> bytes&lt;span class="o">)&lt;/span>, trying mlock ...locked.
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Loop 1/1:
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Stuck Address : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Random Value : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compare XOR : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compare SUB : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compare MUL : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compare DIV : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compare OR : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compare AND : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Sequential Increment: ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Solid Bits : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Block Sequential : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Checkerboard : ok
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Bit Spread : ok
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>docker 是如何使用cgroups的？&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">docker run -ti -m&lt;span class="o">=&lt;/span>1g nginx
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;/ul></description></item><item><title>kubeadm startup Kubernetes more than v1.20.0 (centos7+containerd+ipvs+calico)</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</link><pubDate>Tue, 01 Mar 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</guid><description>&lt;p>这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。&lt;/p>
+&lt;p>&lt;a href="https://kubernetes.io/blog/2022/02/17/dockershim-faq/">Thursday, February 17, 2022 - Updated: Dockershim Removal FAQ&lt;/a>&lt;/p></description></item><item><title>kubeadm startup Kubernetes more than v1.20.0 (centos7+containerd+ipvs+calico)</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</link><pubDate>Tue, 01 Mar 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</guid><description>&lt;p>这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。&lt;/p>
 &lt;p>我绝的主要是针对Docker的支持问题，因为在1.24中才正式将docker-shim剔除。以下列举了较为流行的部署方案：&lt;/p>
 &lt;ul>
 &lt;li>
@@ -6454,7 +6564,7 @@
 &lt;p>&lt;a href="https://blog.51cto.com/canonind/1843994">CentOS7下Rsync+sersync实现数据实时同步&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:2">
-&lt;p>[&lt;a href="https://segmentfault.com/a/1190000002558330">关于rsync+inotify-tools实时同步模式&lt;/a>](&lt;a href="https://segmentfault.com/a/1190000002558330">https://segmentfault.com/a/1190000002558330&lt;/a>)&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;p>&lt;a href="https://segmentfault.com/a/1190000002558330">关于rsync+inotify-tools实时同步模式&lt;/a>](&lt;a href="https://segmentfault.com/a/1190000002558330">https://segmentfault.com/a/1190000002558330&lt;/a>)&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li id="fn:3">
 &lt;p>&lt;a href="https://hub.fastgit.xyz/wsgzao/sersync">sersync&lt;/a>&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
@@ -6710,12 +6820,6 @@
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="l">云时代 这个插件用处就少些了，所有的配置都放在打包在镜像中了&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
 &lt;/div>&lt;/li>
 &lt;li>
 &lt;p>&lt;a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin">generic-webhook-trigger-plugin&lt;/a>&lt;/p>
@@ -6756,4 +6860,495 @@
 &lt;p>&lt;a href="https://github.com/jenkins-zh/jenkins-zh/issues">https://github.com/jenkins-zh/jenkins-zh/issues&lt;/a>&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item></channel></rss>
+&lt;/div></description></item><item><title/><link>http://cugbtang.github.io/post/engineer/api/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://cugbtang.github.io/post/engineer/api/</guid><description>&lt;h1 id="api工程化基于proto的idl管理和文档生成">API工程化：基于Proto的IDL管理和文档生成&lt;/h1>
+&lt;p>在现代软件开发中，API工程化变得愈发重要。使用Proto作为接口定义语言（IDL），可以帮助团队更好地管理API和生成相关文档。本文将介绍一种基于Proto的IDL管理方式以及如何生成API文档。&lt;/p>
+&lt;h2 id="proto的管理方式">Proto的管理方式&lt;/h2>
+&lt;p>在管理Proto文件时，可以采用多种方式，包括代码仓库、独立仓库、集中仓库和镜像仓库。其中，集中仓库的方式被提倡，有以下优点：&lt;/p>
+&lt;ul>
+&lt;li>方便跨部门协作：将所有Proto文件放在同一个仓库中，可以方便不同团队之间的协作。&lt;/li>
+&lt;li>版本管理：使用git对Proto文件进行版本控制，确保修改和变更可追溯。&lt;/li>
+&lt;li>规范化检查：使用API lint工具对Proto文件进行规范化检查，确保符合规范和最佳实践。&lt;/li>
+&lt;li>API设计评审：通过提交变更的diff，进行API设计评审，提高代码质量和设计性能。&lt;/li>
+&lt;li>权限管理：通过设定目录的OWNERS文件，对不同团队或个人设置读写权限，保护API的安全性。&lt;/li>
+&lt;/ul>
+&lt;p>另外，可以使用Proto的git submodule方式，将Proto文件作为仓库的子模块进行管理。这种方式可以实现以下功能：&lt;/p>
+&lt;ul>
+&lt;li>将Proto文件作为代码仓库的一部分，保持其作为源数据的唯一性。&lt;/li>
+&lt;li>使用本地构建工具protoc依赖go module下的相对路径，方便在不同项目中引用Proto文件。&lt;/li>
+&lt;li>基于分支创建新的Proto文件，通过切换子模块分支生成相关代码，确保各个版本之间的兼容性。&lt;/li>
+&lt;li>维护Makefile来处理Proto文件的编译和构建工作，统一化处理流程。&lt;/li>
+&lt;li>使用声明式依赖方式，在yaml文件中指定protoc版本和Proto文件的依赖关系。&lt;/li>
+&lt;/ul>
+&lt;h2 id="idl项目结构">IDL项目结构&lt;/h2>
+&lt;p>良好的IDL项目结构能够提高团队协作和代码维护的效率。建议将目录结构和package对齐，以便更好地组织和管理Proto文件以及生成的代码。&lt;/p>
+&lt;p>典型的IDL项目结构如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">├── api/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ ├── user/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ │ └── user.proto
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ ├── order/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ │ └── order.proto
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ └── common/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ └── common.proto
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── pkg/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ ├── user/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ │ └── user.go
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ ├── order/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ │ └── order.go
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ └── common/
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">│ └── common.go
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在这个结构中，&lt;code>api/&lt;/code>目录存放所有的Proto文件，按照业务功能划分为子目录。&lt;code>pkg/&lt;/code>目录存放生成的代码，与&lt;code>api/&lt;/code>目录一一对应。通过这种结构，可以清晰地区分Proto文件和生成的代码，便于团队进行开发和维护。&lt;/p>
+&lt;h2 id="idl错误处理">IDL错误处理&lt;/h2>
+&lt;p>在编写API时，处理错误是非常重要的一部分。为了使不同的API、协议和错误上下文之间保持一致的体验，建议使用简单的协议无关错误模型。具体做法包括：&lt;/p>
+&lt;ul>
+&lt;li>使用一小组标准错误，覆盖大量资源。&lt;/li>
+&lt;li>合理传播错误：如果你的API服务依赖其他服务，不应该盲目地将这些服务的错误传播给客户端。推荐的做法包括：
+&lt;ul>
+&lt;li>隐藏实现详细信息和机密信息，避免暴露敏感数据。&lt;/li>
+&lt;li>根据错误责任方调整错误处理，对于感兴趣的翻译错误提供有意义的信息，对于不感兴趣的错误提供通用的&amp;quot;Unknown&amp;quot;错误提示。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>通过以上方式，可以统一错误处理的规范，并提供更好的错误信息给客户端，提高用户体验和调试效率。&lt;/p>
+&lt;h2 id="idl文档生成">IDL文档生成&lt;/h2>
+&lt;p>为了方便使用和理解API，生成API文档是必不可少的。可以使用基于OpenAPI插件和Proto注释的方式生成文档，具体步骤如下：&lt;/p>
+&lt;ul>
+&lt;li>在Proto文件中添加注释，描述每个接口的用途、参数和返回值等信息。&lt;/li>
+&lt;li>使用OpenAPI插件，解析Proto文件和注释，生成OpenAPI规范的yaml文件。&lt;/li>
+&lt;li>在项目的Makefile中添加生成API文档的脚本，执行&lt;code>make api&lt;/code>命令即可生成对应的OpenAPI文档。&lt;/li>
+&lt;li>可以通过GitLab或VS Code插件直接查看和编辑生成的OpenAPI文档，方便团队进行微服务治理、调试和测试等工作。&lt;/li>
+&lt;/ul>
+&lt;p>通过以上方式，团队可以轻松生成和维护API文档，提高开发效率和团队协作能力。&lt;/p>
+&lt;p>本文介绍了基于Proto的IDL管理和文档生成的方法，包括Proto的管理方式、IDL项目结构、错误处理和文档生成等内容。通过合理规划和使用这些方法，可以提高API工程化水平，推动团队的协作和开发效率。&lt;/p>
+&lt;p>总结：&lt;/p>
+&lt;p>在API工程化中，Proto的管理方式、IDL项目结构、错误处理和文档生成是非常重要的一部分。通过集中管理Proto文件、规范项目结构、统一错误处理和生成易于理解的API文档，可以提高团队的开发效率和 API的质量。同时，不断优化和改进这些方法，可以实现持续集成和交付，适应快速迭代的开发环境。希望本文对您有所启发，让您的API工程化之路更加顺利！&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://www.bilibili.com/video/BV17m4y1f7qc/?spm_id_from=333.880.my_history.page.click&amp;amp;vd_source=9573f6b9b39a65fed99157eefcfdfb74">API工程化分享 - 毛剑&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/go-kratos/kratos">https://github.com/go-kratos/kratos&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto#L112">https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto#L112&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/pkg/errors">https://github.com/pkg/errors&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://mp.weixin.qq.com/s/cBXZjg_R8MLFDJyFtpjVVQ">https://mp.weixin.qq.com/s/cBXZjg_R8MLFDJyFtpjVVQ&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title/><link>http://cugbtang.github.io/post/engineer/engineering/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://cugbtang.github.io/post/engineer/engineering/</guid><description>&lt;h2 id="mvc-vs-ddd">MVC vs DDD&lt;/h2>
+&lt;ul>
+&lt;li>MVC&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>在MVC架构中，控制器负责决定流量的传递路径，从用户请求开始，通过控制器、模型和视图之间的协作，最终将结果返回给用户。控制器作为中心协调器，负责控制整个流程的顺序和逻辑。&lt;/p>
+&lt;/blockquote>
+&lt;pre>&lt;code>1、控制器（Controller）接收到前端发送的HTTP请求。控制器主要负责解析请求参数、验证输入，并将请求转发给相应的服务。
+2、模型（Model）是应用程序中的核心部分，它包含业务逻辑和数据。控制器将请求传递给模型，并调用相应的方法来执行业务逻辑。模型可以从数据访问层获取数据，对数据进行验证和处理，并返回结果给控制器。
+&lt;/code>&lt;/pre>
+&lt;ul>
+&lt;li>DDD&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>DDD强调以业务为核心，通过将业务逻辑封装在领域模型中，并在不同层之间使用明确的边界和接口进行交互，以实现更好的可维护性和可扩展性&lt;/p>
+&lt;/blockquote>
+&lt;pre>&lt;code>1、应用服务层（Application Service）：应用服务层类似于服务层[多个DO]，在这里处理外部请求并协调领域对象的操作。它负责将请求转发给相应的应用领域服务，并处理领域对象之间的协作和交互。
+2、领域层（Domain Layer）：领域层是业务逻辑的核心，类似于业务逻辑层[一个DO,多个data接口]。它包含领域模型（Domain Model）和领域服务（Domain Service）。领域模型是用于解决特定领域问题的对象模型，其中包括实体（Entity）、值对象（Value Object）、聚合根（Aggregate Root）等概念。领域服务是没有状态的操作，用于完成跨实体或聚合根的操作。
+3、基础设施层（Infrastructure Layer）：基础设施层类似于数据访问层（data）[现实一个data接口]，它负责与外部系统进行交互，包括数据库、缓存、消息队列等。基础设施层提供对这些外部系统的访问封装，并为领域层提供必要的技术支持。
+4、应用领域服务（Application Domain Service）：应用领域服务是应用服务层和领域层之间的接口，负责协调应用服务和领域模型之间的交互。它将请求从应用服务层传递给领域模型，并根据需要执行一些额外的业务操作。
+&lt;/code>&lt;/pre>
+&lt;p>请求处理流程： 请求从应用服务层进入，经过应用领域服务的处理后传递给领域层，领域层根据领域模型和领域服务进行业务逻辑的处理，可能涉及到领域对象之间的交互和数据的访问。最终，结果通过应用领域服务返回给应用服务层，然后返回给客户端。&lt;/p></description></item><item><title/><link>http://cugbtang.github.io/post/go/compile/readme/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://cugbtang.github.io/post/go/compile/readme/</guid><description>&lt;h2 id="introduction-to-the-go-compiler">Introduction to the Go compiler&lt;/h2>
+&lt;p>&lt;code>cmd/compile&lt;/code> contains the main packages that form the Go compiler. The compiler
+may be logically split in four phases, which we will briefly describe alongside
+the list of packages that contain their code.&lt;/p>
+&lt;p>You may sometimes hear the terms &amp;ldquo;front-end&amp;rdquo; and &amp;ldquo;back-end&amp;rdquo; when referring to
+the compiler. Roughly speaking, these translate to the first two and last two
+phases we are going to list here. A third term, &amp;ldquo;middle-end&amp;rdquo;, often refers to
+much of the work that happens in the second phase.&lt;/p>
+&lt;p>Note that the &lt;code>go/*&lt;/code> family of packages, such as &lt;code>go/parser&lt;/code> and
+&lt;code>go/types&lt;/code>, are mostly unused by the compiler. Since the compiler was
+initially written in C, the &lt;code>go/*&lt;/code> packages were developed to enable
+writing tools working with Go code, such as &lt;code>gofmt&lt;/code> and &lt;code>vet&lt;/code>.
+However, over time the compiler&amp;rsquo;s internal APIs have slowly evolved to
+be more familiar to users of the &lt;code>go/*&lt;/code> packages.&lt;/p>
+&lt;p>It should be clarified that the name &amp;ldquo;gc&amp;rdquo; stands for &amp;ldquo;Go compiler&amp;rdquo;, and has
+little to do with uppercase &amp;ldquo;GC&amp;rdquo;, which stands for garbage collection.&lt;/p>
+&lt;ul>
+&lt;li>经典的编译原理flow
+&lt;img src="%E7%BB%8F%E5%85%B8%E7%9A%84%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86flow.png" alt="Alt text">&lt;/li>
+&lt;li>the go compile flow
+&lt;img src="the-go-compile-flow.png" alt="Alt text">&lt;/li>
+&lt;/ul>
+&lt;h3 id="1-parsing">1. Parsing&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>cmd/compile/internal/syntax&lt;/code> (lexer, parser, syntax tree)&lt;/li>
+&lt;/ul>
+&lt;p>In the first phase of compilation, source code is tokenized (lexical analysis, 操作符会被转换为_IncOp),
+parsed (syntax analysis,采用了标准的自上而下的递归下降（Top-Down Recursive-Descent）算法), and a syntax tree is constructed for each source
+file.&lt;/p>
+&lt;p>Each syntax tree is an exact representation of the respective source file, with
+nodes corresponding to the various elements of the source such as expressions,
+declarations, and statements. The syntax tree also includes position information
+which is used for error reporting and the creation of debugging information.&lt;/p>
+&lt;h3 id="2-type-checking">2. Type checking&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>cmd/compile/internal/types2&lt;/code> (type checking)&lt;/li>
+&lt;/ul>
+&lt;p>The types2 package is a port of &lt;code>go/types&lt;/code> to use the syntax package&amp;rsquo;s
+AST instead of &lt;code>go/ast&lt;/code>.&lt;/p>
+&lt;h3 id="3-ir-construction-noding">3. IR construction (&amp;ldquo;noding&amp;rdquo;)&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>cmd/compile/internal/types&lt;/code> (compiler types)&lt;/li>
+&lt;li>&lt;code>cmd/compile/internal/ir&lt;/code> (compiler AST)&lt;/li>
+&lt;li>&lt;code>cmd/compile/internal/typecheck&lt;/code> (AST transformations)&lt;/li>
+&lt;li>&lt;code>cmd/compile/internal/noder&lt;/code> (create compiler AST)&lt;/li>
+&lt;/ul>
+&lt;p>The compiler middle end uses its own AST definition and representation of Go
+types carried over from when it was written in C. All of its code is written in
+terms of these, so the next step after type checking is to convert the syntax
+and types2 representations to ir and types. This process is referred to as
+&amp;ldquo;noding.&amp;rdquo;&lt;/p>
+&lt;p>There are currently two noding implementations:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>irgen (aka &amp;ldquo;-G=3&amp;rdquo; or sometimes &amp;ldquo;noder2&amp;rdquo;) is the implementation used starting
+with Go 1.18, and&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Unified IR is another, in-development implementation (enabled with
+&lt;code>GOEXPERIMENT=unified&lt;/code>), which also implements import/export and inlining.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>Up through Go 1.18, there was a third noding implementation (just
+&amp;ldquo;noder&amp;rdquo; or &amp;ldquo;-G=0&amp;rdquo;), which directly converted the pre-type-checked
+syntax representation into IR and then invoked package typecheck&amp;rsquo;s
+type checker. This implementation was removed after Go 1.18, so now
+package typecheck is only used for IR transformations.&lt;/p>
+&lt;h3 id="4-middle-end">4. Middle end&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>cmd/compile/internal/deadcode&lt;/code> (dead code elimination)&lt;/li>
+&lt;li>&lt;code>cmd/compile/internal/inline&lt;/code> (function call inlining)&lt;/li>
+&lt;li>&lt;code>cmd/compile/internal/devirtualize&lt;/code> (devirtualization of known interface method calls)&lt;/li>
+&lt;li>&lt;code>cmd/compile/internal/escape&lt;/code> (escape analysis)&lt;/li>
+&lt;/ul>
+&lt;p>Several optimization passes are performed on the IR representation:
+dead code elimination, (early) devirtualization, function call
+inlining, and escape analysis.&lt;/p>
+&lt;h3 id="5-walk">5. Walk&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>cmd/compile/internal/walk&lt;/code> (order of evaluation, desugaring)&lt;/li>
+&lt;/ul>
+&lt;p>The final pass over the IR representation is &amp;ldquo;walk,&amp;rdquo; which serves two purposes:&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>It decomposes complex statements into individual, simpler statements,
+introducing temporary variables and respecting order of evaluation. This step
+is also referred to as &amp;ldquo;order.&amp;rdquo;&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>It desugars higher-level Go constructs into more primitive ones. For example,
+&lt;code>switch&lt;/code> statements are turned into binary search or jump tables, and
+operations on maps and channels are replaced with runtime calls.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="6-generic-ssa">6. Generic SSA&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>cmd/compile/internal/ssa&lt;/code> (SSA passes and rules)&lt;/li>
+&lt;li>&lt;code>cmd/compile/internal/ssagen&lt;/code> (converting IR to SSA)&lt;/li>
+&lt;/ul>
+&lt;p>In this phase, IR is converted into Static Single Assignment (SSA) form, a
+lower-level intermediate representation with specific properties that make it
+easier to implement optimizations and to eventually generate machine code from
+it.&lt;/p>
+&lt;p>During this conversion, function intrinsics are applied. These are special
+functions that the compiler has been taught to replace with heavily optimized
+code on a case-by-case basis.&lt;/p>
+&lt;p>Certain nodes are also lowered into simpler components during the AST to SSA
+conversion, so that the rest of the compiler can work with them. For instance,
+the copy builtin is replaced by memory moves, and range loops are rewritten into
+for loops. Some of these currently happen before the conversion to SSA due to
+historical reasons, but the long-term plan is to move all of them here.&lt;/p>
+&lt;p>Then, a series of machine-independent passes and rules are applied. These do not
+concern any single computer architecture, and thus run on all &lt;code>GOARCH&lt;/code> variants.
+These passes include dead code elimination, removal of
+unneeded nil checks, and removal of unused branches. The generic rewrite rules
+mainly concern expressions, such as replacing some expressions with constant
+values, and optimizing multiplications and float operations.&lt;/p>
+&lt;h3 id="7-generating-machine-code">7. Generating machine code&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>cmd/compile/internal/ssa&lt;/code> (SSA lowering and arch-specific passes)&lt;/li>
+&lt;li>&lt;code>cmd/internal/obj&lt;/code> (machine code generation)&lt;/li>
+&lt;/ul>
+&lt;p>The machine-dependent phase of the compiler begins with the &amp;ldquo;lower&amp;rdquo; pass, which
+rewrites generic values into their machine-specific variants. For example, on
+amd64 memory operands are possible, so many load-store operations may be combined.&lt;/p>
+&lt;p>Note that the lower pass runs all machine-specific rewrite rules, and thus it
+currently applies lots of optimizations too.&lt;/p>
+&lt;p>Once the SSA has been &amp;ldquo;lowered&amp;rdquo; and is more specific to the target architecture,
+the final code optimization passes are run. This includes yet another dead code
+elimination pass, moving values closer to their uses, the removal of local
+variables that are never read from, and register allocation.&lt;/p>
+&lt;p>Other important pieces of work done as part of this step include stack frame
+layout, which assigns stack offsets to local variables, and pointer liveness
+analysis, which computes which on-stack pointers are live at each GC safe point.&lt;/p>
+&lt;p>At the end of the SSA generation phase, Go functions have been transformed into
+a series of obj.Prog instructions. These are passed to the assembler
+(&lt;code>cmd/internal/obj&lt;/code>), which turns them into machine code and writes out the
+final object file. The object file will also contain reflect data, export data,
+and debugging information.&lt;/p>
+&lt;h3 id="further-reading">Further reading&lt;/h3>
+&lt;p>To dig deeper into how the SSA package works, including its passes and rules,
+head to &lt;a href="internal/ssa/README.md">cmd/compile/internal/ssa/README.md&lt;/a>.&lt;/p></description></item><item><title/><link>http://cugbtang.github.io/post/go/compile/series-parse/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>http://cugbtang.github.io/post/go/compile/series-parse/</guid><description>&lt;h1 id="parse">parse&lt;/h1>
+&lt;p>cmd/compile/internal/syntax (lexer, parser, syntax tree)&lt;/p>
+&lt;h2 id="一lexerparse">一、lexer、parse&lt;/h2>
+&lt;ul>
+&lt;li>token化&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">type&lt;/span> &lt;span class="nx">token&lt;/span> &lt;span class="kt">uint&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//go:generate stringer -type token -linecomment tokens.go
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">const&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">_&lt;/span> &lt;span class="nx">token&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="kc">iota&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">_EOF&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>其中有一句：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Make sure we have at most 64 tokens so we can use them in a set.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">const&lt;/span> &lt;span class="nx">_&lt;/span> &lt;span class="kt">uint64&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mi">1&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">tokenCount&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>该段代码的目的是确保我们最多只使用 64 个令牌（tokens），以便将它们作为位集合（bit set）使用。&lt;/p>
+&lt;p>常量 _ 被赋值为 1 &amp;laquo; (tokenCount - 1)。这里 tokenCount 可能表示用于语法分析或其他操作的令牌数量。通过将 1 左移 tokenCount - 1 位，可以得到一个只有第 tokenCount - 1 位被设置为 1 的数值。&lt;/p>
+&lt;p>这个常量的作用是创建一个具有 64 位的位集合，其中只有第 tokenCount - 1 位被设置为 1，而其他位都为 0。这样的位集合可以用来进行位运算和标记操作，例如使用按位与（bitwise AND）将特定位设置为 1，或者使用按位或（bitwise OR）从标志位中提取信息。&lt;/p>
+&lt;p>通过控制令牌数目在 64 以内，并将其表示为位集合，在编写解析器或进行其他类型的符号处理时，可以更高效地使用位运算和存储空间。在这种情况下，使用 64 个位作为位集合的大小通常是一种经验性的限制，可以满足大多数常见的情况。&lt;/p>
+&lt;ul>
+&lt;li>自上而下的递归下降（Top-Down Recursive-Descent）算法&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>自上而下的递归下降算法是根据语法规则从上到下递归地构建语法树或执行语义动作的解析方法。它之所以称为“自上而下”，是因为从整个输入开始的最高级别的非终结符出发，逐步地向下展开和解析，直到达到终结符。&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>这种算法的核心思想是先构建高层次的语法结构，然后根据具体的语法规则和当前的输入，递归地调用下一层次的解析函数。因此，解析过程自于起始符号的推导，从上到下逐步展开、深入解析，直到达到终结符。&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>另一个方面，“递归下降”表示每个非终结符的解析函数内部可以递归地调用其他非终结符的解析函数。每个非终结符对应一个解析函数，这些解析函数按照相应的规则进行递归调用，从而实现对整个语法规则的逐个解析。&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">package&lt;/span> &lt;span class="nx">main&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s">&amp;#34;strconv&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s">&amp;#34;strings&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">var&lt;/span> &lt;span class="nx">input&lt;/span> &lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">var&lt;/span> &lt;span class="nx">index&lt;/span> &lt;span class="kt">int&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">input&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="s">&amp;#34;2 + 3 * (4 - 1)&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">index&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">result&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nf">expression&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;解析结果：&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">result&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">expression&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">value&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nf">term&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="nx">index&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">input&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="sc">&amp;#39;+&amp;#39;&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="sc">&amp;#39;-&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">operator&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">index&lt;/span>&lt;span class="o">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">operand&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nf">term&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nx">operator&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="sc">&amp;#39;+&amp;#39;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">value&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="nx">operand&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">value&lt;/span> &lt;span class="o">-=&lt;/span> &lt;span class="nx">operand&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">term&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">value&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="nx">index&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">input&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="sc">&amp;#39;*&amp;#39;&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="sc">&amp;#39;/&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">operator&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">index&lt;/span>&lt;span class="o">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">operand&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nx">operator&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="sc">&amp;#39;*&amp;#39;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">value&lt;/span> &lt;span class="o">*=&lt;/span> &lt;span class="nx">operand&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">value&lt;/span> &lt;span class="o">/=&lt;/span> &lt;span class="nx">operand&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">factor&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="sc">&amp;#39;(&amp;#39;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">index&lt;/span>&lt;span class="o">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">value&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nf">expression&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="sc">&amp;#39;)&amp;#39;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">index&lt;/span>&lt;span class="o">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">value&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">panic&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;语法错误：缺少右括号&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">start&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">index&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="nx">index&lt;/span> &lt;span class="p">&amp;lt;&lt;/span> &lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">input&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nx">strings&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">ContainsRune&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;0123456789&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nb">rune&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">]))&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">index&lt;/span>&lt;span class="o">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">number&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">strconv&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Atoi&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">input&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">start&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="nx">index&lt;/span>&lt;span class="p">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="kc">nil&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">panic&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;语法错误：无效数字&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">number&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>变量捕获&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="k">go&lt;/span> &lt;span class="nx">tool&lt;/span> &lt;span class="nx">compile&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="nx">m&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">2&lt;/span> &lt;span class="nx">main&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="k">go&lt;/span> &lt;span class="p">|&lt;/span> &lt;span class="nx">grep&lt;/span> &lt;span class="nx">capturing&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>逃逸分析&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>Go 编译器在编译过程中会进行逃逸分析（Escape Analysis）来确定变量的生命周期和内存管理方式。逃逸分析的目标是尽可能地在栈上分配内存，减少对堆的使用，从而提高程序的性能和效率。&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="学习点">学习点&lt;/h2>
+&lt;ul>
+&lt;li>基于领域，定义一个赋予意义化的类型&lt;/li>
+&lt;li>领域内的常量初始化，利用iota&lt;/li>
+&lt;li>善于使用位标识，位运算&lt;/li>
+&lt;/ul></description></item></channel></rss>
