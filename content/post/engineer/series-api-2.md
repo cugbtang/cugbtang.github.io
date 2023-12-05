@@ -1,3 +1,13 @@
+---
+title: "micro, how to play api?"
+date: 2023-11-29T15:44:23+08:00
+lastmod: 2023-11-29T16:44:23+08:00
+draft: false
+tags: [ "api", "IDL"]
+categories: ["api"]
+author: "yesplease"
+---
+
 # API工程化：基于Proto的IDL管理和文档生成
 
 在现代软件开发中，API工程化变得愈发重要。使用Proto作为接口定义语言（IDL），可以帮助团队更好地管理API和生成相关文档。本文将介绍一种基于Proto的IDL管理方式以及如何生成API文档。

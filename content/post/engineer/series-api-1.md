@@ -1,3 +1,12 @@
+---
+title: "micro, how to play select engineer mode?"
+date: 2023-11-29T15:44:23+08:00
+lastmod: 2023-11-29T16:44:23+08:00
+draft: false
+tags: [ "api", "IDL"]
+categories: ["api"]
+author: "yesplease"
+---
 
 ## MVC vs DDD
 - MVC

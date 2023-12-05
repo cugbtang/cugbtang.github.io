@@ -8,11 +8,11 @@ categories: ["container", "linux"]
 author: "yesplease"
 ---
 
-container technology become a necessary for developer during operating the linux system.
+# container technology become a necessary for developer during operating the linux system.
 
 <!--more-->
 
-## 1、namespace
+## 一、namespace
 
 - 定义
 
@@ -36,7 +36,7 @@ container technology become a necessary for developer during operating the linux
 |         Time Namespace          |               隔离系统时间               |  5.6   |                                                              |
 
 
-### Mount Namespace
+### 1.1、Mount Namespace
 
 使用 unshare 命令可以新建 Mount Namespace，并且在新建的 Mount Namespace 内 mount 是和外部完全隔离的。
 
@@ -116,7 +116,7 @@ container technology become a necessary for developer during operating the linux
   lrwxrwxrwx. 1 vagrant vagrant 0 Feb 26 09:57 uts -> uts:[4026531838]
   ```
 
-### PID Namespace
+### 1.2、PID Namespace
 
 > 用来隔离进程，在不同的namespace内可以拥有相同的进程号
 
@@ -136,7 +136,7 @@ container technology become a necessary for developer during operating the linux
   root        16  0.0  0.1  55192  1844 pts/3    R+   14:02   0:00 ps aux
   ```
 
-### UTS Namespace
+### 1.3、UTS Namespace
 
 > 它允许每个UTS Namespace 拥有一个独立的主机名
 
@@ -161,7 +161,7 @@ container technology become a necessary for developer during operating the linux
   [root@localhost vagrant]# localhost
   ```
 
-### IPC Namespace
+### 1.4、IPC Namespace
 
 > 主要用来隔离进程间通信的。PID Namespace 和 IPC Namespace一起使用可以实现同一 IPC Namespace 内的进程彼此可以通信，不同 IPC Namespace 的进程却不能通信。
 
@@ -208,7 +208,7 @@ container technology become a necessary for developer during operating the linux
   key        msqid      owner      perms      used-bytes   messages
   ```
 
-### User Namespace
+### 1.5、User Namespace
 
 > 主要用来隔离用户和用户组。可以实现进程在容器内拥有 root 权限， 而在主机上却只是普通用户。
 
@@ -243,7 +243,7 @@ container technology become a necessary for developer during operating the linux
   Failed to talk to init daemon.
   ```
 
-### Net Namespace
+### 1.6、Net Namespace
 
 > 用来隔离网络设备、IP地址和端口等信息。
 >
@@ -286,7 +286,7 @@ container technology become a necessary for developer during operating the linux
       link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
   ```
 
-### 为什么 docker 需要 namespace?
+### 1.7、为什么 docker 需要 namespace?
 
 Linux 内核从2002年2.4.19版本开始加入了 Mount Namspace
 
@@ -296,7 +296,7 @@ Linux 内核从2002年2.4.19版本开始加入了 Mount Namspace
 
 会创建这六种 namespace， 然后将容器中的进程加入这些 namespace之中
 
-# Cgroups
+## 二、Cgroups
 
 - 定义
 
@@ -320,7 +320,7 @@ Linux 内核从2002年2.4.19版本开始加入了 Mount Namspace
 
   hierarchy：由一些列的控制组按照树状结构排列组成的子控制组默认拥有父控制组的属性
 
-## subsystem
+### 2.1、subsystem
 
 - 查看当前主机使用了哪些子系统
 
@@ -458,4 +458,4 @@ Linux 内核从2002年2.4.19版本开始加入了 Mount Namspace
   docker run -ti -m=1g nginx
   ```
 
-  
+## 三、联合文件系统
