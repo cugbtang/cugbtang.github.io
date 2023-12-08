@@ -15,7 +15,7 @@
 &lt;/div>
 &lt;/div>&lt;h2 id="如果你的docker主机可以访问互联网你会发现容器创建后默认也可以访问互联网-why">如果你的docker主机可以访问互联网，你会发现，容器创建后，默认也可以访问互联网, why?&lt;/h2>
 &lt;p>docker会借助iptables，对docker0的IP段进行SNAT&lt;/p>
-&lt;p>&lt;img src="image-3.png" alt="Alt text">&lt;/p>
+&lt;p>&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208154856.png" alt="">&lt;/p>
 &lt;h2 id="容器获取的ip是动态的先来后到先到先得容器与ip并没有绑定死">容器获取的IP是动态的，先来后到，先到先得，容器与IP并没有绑定死&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -60,15 +60,15 @@
 原因就是，docker会生成对应的iptables规则，阻断了默认网络和自定义桥网络之间的通讯。&lt;/p>
 &lt;/blockquote>
 &lt;p>删除STAGE-2中的前两条规则，即可让docker0中的容器和test_bridge中的容器进行通讯了&lt;/p>
-&lt;p>&lt;img src="image-4.png" alt="Alt text">&lt;/p>
-&lt;p>但是，如果先将filter表中STAGE-2链中的规则删除，确保docker0和test_bridge能够互相通讯的情况下，会发现，即使是docker0和test_bridge之间的通讯，也是会被SNAT的（从docker0去往test_bridge，被SNAT成172.18.0.1，从test_bridge去往docker0，被SNAT成172.17.0.1），这是因为它们之间的通讯也是符合nat表中的两条SNAT规则的。造成这种情况的原因是，这两条SNAT规则没有指定固定的宿主机出口网卡（即没有使用-o指定宿主机网卡，而是使用！-o的方式把自己所在的网络内的网口排除在外）
-&lt;img src="image-5.png" alt="Alt text">&lt;/p>
+&lt;p>&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208154944.png" alt="">&lt;/p>
+&lt;p>但是，如果先将filter表中STAGE-2链中的规则删除，确保docker0和test_bridge能够互相通讯的情况下，会发现，即使是docker0和test_bridge之间的通讯，也是会被SNAT的（从docker0去往test_bridge，被SNAT成172.18.0.1，从test_bridge去往docker0，被SNAT成172.17.0.1），这是因为它们之间的通讯也是符合nat表中的两条SNAT规则的。造成这种情况的原因是，这两条SNAT规则没有指定固定的宿主机出口网卡（即没有使用-o指定宿主机网卡，而是使用！-o的方式把自己所在的网络内的网口排除在外）&lt;/p>
+&lt;p>&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208155011.png" alt="">&lt;/p>
 &lt;h2 id="参考">参考&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a href="https://www.zsythink.net/archives/4409">docker(7): 网络初探&lt;/a>&lt;/li>
 &lt;li>&lt;a href="https://blog.51cto.com/u_16099349/6896881">Docker与iptables docker与iptables详解&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>docker桥接网络模式下开启端口映射，流量是如何绕过防火墙的</title><link>http://cugbtang.github.io/post/container/series-container-2/</link><pubDate>Fri, 01 Dec 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-2/</guid><description>&lt;h2 id="一iptables">一、iptables&lt;/h2>
-&lt;p>&lt;img src="image.png" alt="Alt text">&lt;/p>
+&lt;p>&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208165600.png" alt="">&lt;/p>
 &lt;ul>
 &lt;li>
 &lt;p>五条链&lt;/p>
@@ -120,11 +120,9 @@ raw(OUTPUT)&amp;mdash;-&amp;gt;mangle(OUTPUT)&amp;mdash;-nat(OUTPUT)&amp;mdash;-
 &lt;h3 id="11查看某个表中有哪些链和规则">1.1、查看某个表中有哪些链和规则&lt;/h3>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">iptables -t nat -nvL --line-numbers
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="二查看docker网桥模式下端口映射的规则变化">二、查看docker网桥模式下，端口映射的规则变化&lt;/h2>
 &lt;ul>
@@ -141,7 +139,7 @@ raw(OUTPUT)&amp;mdash;-&amp;gt;mangle(OUTPUT)&amp;mdash;-nat(OUTPUT)&amp;mdash;-
 &lt;/div>&lt;ul>
 &lt;li>
 &lt;p>查看nat表&lt;/p>
-&lt;p>&lt;img src="image-1.png" alt="Alt text">&lt;/p>
+&lt;p>&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208171939.png" alt="">&lt;/p>
 &lt;ul>
 &lt;li>访问192.168.1.2:8888&lt;/li>
 &lt;li>数据包首先被nat表中的PREROUTING链命中&lt;/li>
@@ -150,7 +148,7 @@ raw(OUTPUT)&amp;mdash;-&amp;gt;mangle(OUTPUT)&amp;mdash;-nat(OUTPUT)&amp;mdash;-
 &lt;li>经过路由处理，转向FORWARD链&lt;/li>
 &lt;li>命中FORWARD链中的第4条规则，最终访问被响应，也就可以从外部访问端口映射的服务了&lt;/li>
 &lt;li>由于PREROUTING对包进行了目标地址的修改，于是路由决策会将该包路由到FORWARD链。所有表中的linput链将直接忽略。
-&lt;img src="image-2.png" alt="Alt text">&lt;/li>
+&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208172613.png" alt="">&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
