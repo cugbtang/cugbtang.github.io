@@ -1499,7 +1499,402 @@ The Go Micro philosophy is sane defaults with a pluggable architecture. We provi
 &lt;p>&lt;a href="https://www.git-scm.com/docs/git-cherry-pick">git-cherry-pick&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
 &lt;/li>
 &lt;/ol>
-&lt;/div></description></item><item><title>Container, how to play?</title><link>http://cugbtang.github.io/post/container/series-container-1/</link><pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-1/</guid><description>&lt;h1 id="container-technology-become-a-necessary-for-developer-during-operating-the-linux-system">container technology become a necessary for developer during operating the linux system.&lt;/h1>
+&lt;/div></description></item><item><title>flannel vxlan, check sum</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</link><pubDate>Wed, 07 Dec 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</guid><description>&lt;p>集群内pod无法dig mysql.middleware
+修改主机dns nameserver为集群core dns地址，主机上可以dig mysql.middleware&lt;/p>
+&lt;h2 id="一问题分析">一、问题分析&lt;/h2>
+&lt;p>从pod内发出的请求数据包到flannel网卡时出现问题&lt;/p>
+&lt;h2 id="二抓包分析">二、抓包分析&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>环境&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>类型&lt;/th>
+&lt;th>地址&lt;/th>
+&lt;th>网卡&lt;/th>
+&lt;th>flannel地址&lt;/th>
+&lt;th>docker0地址&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>宿主机&lt;/td>
+&lt;td>192.168.189.5&lt;/td>
+&lt;td>eth0&lt;/td>
+&lt;td>172.30.17.0/32&lt;/td>
+&lt;td>172.30.17.0/24&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>宿主机&lt;/td>
+&lt;td>192.168.189.3&lt;/td>
+&lt;td>eth0&lt;/td>
+&lt;td>172.30.44.0/32&lt;/td>
+&lt;td>172.30.44.0/24&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;/li>
+&lt;li>
+&lt;p>修改192.168.189.5主机的nameserver，主机上，dig mysql.middleware.svc.cluster.local&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在192.168.189.3的eth0上抓包&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i eth0 -nnvvS udp and host 192.168.189.5 and host 192.168.189.3&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:00:45.171729 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 25021, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.37578 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 56488, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 103&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.6570 &amp;gt; 172.30.44.4.53: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> 30379+ &lt;span class="o">[&lt;/span>1au&lt;span class="o">]&lt;/span> A? mysql.middleware.svc.cluster.local. ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">4096&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 8dd7b1a036b9e96b&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>75&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:00:45.172148 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 11850, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 203&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.39446 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x7427 -&amp;gt; 0x6287!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 61091, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.6570: &lt;span class="o">[&lt;/span>bad udp cksum 0x95d7 -&amp;gt; 0x8437!&lt;span class="o">]&lt;/span> 30379*- q: A? mysql.middleware.svc.cluster.local. 1/0/1 mysql.middleware.svc.cluster.local. A 10.254.83.174 ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">2048&lt;/span> DO &lt;span class="o">[&lt;/span>COOKIE 8dd7b1a036b9e96b&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>125&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>在192.168.189.3的flannel.1上抓包&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i flannel.1 -nnvvS host 172.30.44.4 or 172.30.44.0 and host 172.30.17.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">172.30.17.0.28706 &amp;gt; 172.30.44.4.53: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> 20554+ &lt;span class="o">[&lt;/span>1au&lt;span class="o">]&lt;/span> A? mysql.middleware.svc.cluster.local. ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">4096&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 02885f0fcec139cb&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>75&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:14:09.100234 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 25272, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.28706: &lt;span class="o">[&lt;/span>bad udp cksum 0x95d7 -&amp;gt; 0xcda2!&lt;span class="o">]&lt;/span> 20554*- q: A? mysql.middleware.svc.cluster.local. 1/0/1 mysql.middleware.svc.cluster.local. A 10.254.83.174 ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">4096&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 02885f0fcec139cb&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>125&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>注意：请求来的时候sum ok，回的时候 bad&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>在192.168.189.5的一个pod内，dig mysql.middleware.svc.cluster.local&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在192.168.189.3的eth0上抓包&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i eth0 -nnvvS udp and host 192.168.189.5 and host 192.168.189.3&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:11.021851 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 18100, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.54947 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x694b -&amp;gt; 0x37cc!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 29991, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 103&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.42230 &amp;gt; 172.30.44.4.53: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> 38007+ &lt;span class="o">[&lt;/span>1au&lt;span class="o">]&lt;/span> A? mysql.middleware.svc.cluster.local. ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">1232&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 8313fa6ef3e826cf&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>75&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:16.026185 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 22564, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.29594 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x3c0a -&amp;gt; 0x9ad5!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 1772, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 103&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.60334 &amp;gt; 172.30.44.4.53: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> 38007+ &lt;span class="o">[&lt;/span>1au&lt;span class="o">]&lt;/span> A? mysql.middleware.svc.cluster.local. ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">1232&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 8313fa6ef3e826cf&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>75&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:16.115807 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 22619, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 78&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.58541 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:17.139797 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 22876, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 78&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.58541 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:18.163773 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 23179, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 78&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.58541 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>在192.168.189.3的flannel.1上抓包&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i flannel.1 -nnvvS host 172.30.44.4 or 172.30.44.0 and host 172.30.17.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:16.115829 ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:17.139812 ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:18.163795 ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>注意：dig的udp请求来的时候sum bad了，似乎被内核网络丢弃了
+pod内发送的udp数据包不能正常到达&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>在192.168.189.5的一个pod内，curl 172.30.44.4:53&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在192.168.189.3的eth0上抓包&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i eth0 -nnvvS udp and host 192.168.189.5 and host 192.168.189.3&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561653 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 27101, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 110&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.60121 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57662, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 60&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>S&lt;span class="o">]&lt;/span>, cksum 0x3e44 &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049522, win 64860, options &lt;span class="o">[&lt;/span>mss 1410,sackOK,TS val &lt;span class="m">115443102&lt;/span> ecr 0,nop,wscale 7&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561757 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 10781, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 110&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.50170 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x4a95 -&amp;gt; 0x80d1!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 0, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 60&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>S.&lt;span class="o">]&lt;/span>, cksum 0x956f &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xcbab&lt;span class="o">)&lt;/span>, seq 2031558188, ack 1333049523, win 64308, options &lt;span class="o">[&lt;/span>mss 1410,sackOK,TS val &lt;span class="m">3396801268&lt;/span> ecr 115443102,nop,wscale 7&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561993 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 27102, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.60121 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57663, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0xf37e &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049523, ack 2031558189, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115443103&lt;/span> ecr 3396801268&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.562083 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 27103, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 179&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.60121 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57664, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 129&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>P.&lt;span class="o">]&lt;/span>, cksum 0x9dd2 &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049523:1333049600, ack 2031558189, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115443103&lt;/span> ecr 3396801268&lt;span class="o">]&lt;/span>, length &lt;span class="m">77&lt;/span> &lt;span class="o">[&lt;/span>prefix length&lt;span class="o">(&lt;/span>18245&lt;span class="o">)&lt;/span> !&lt;span class="o">=&lt;/span> length&lt;span class="o">(&lt;/span>75&lt;span class="o">)]&lt;/span> &lt;span class="o">(&lt;/span>invalid&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.562109 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 10782, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.50170 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x4a9d -&amp;gt; 0xa86b!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4244, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xf335&lt;span class="o">)&lt;/span>, seq 2031558189, ack 1333049600, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396801269&lt;/span> ecr 115443103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562312 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 12090, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.50170 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x4a9d -&amp;gt; 0xa09a!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4245, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>F.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xeb64&lt;span class="o">)&lt;/span>, seq 2031558189, ack 1333049600, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396803269&lt;/span> ecr 115443103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562435 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 28447, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.60121 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57665, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>F.&lt;span class="o">]&lt;/span>, cksum 0xe38e &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049600, ack 2031558190, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115445103&lt;/span> ecr 3396803269&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562519 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 12091, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.50170 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x4a9d -&amp;gt; 0x98c9!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4246, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xe393&lt;span class="o">)&lt;/span>, seq 2031558190, ack 1333049601, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396803269&lt;/span> ecr 115445103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>在192.168.189.3的flannel.1上抓包&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i flannel.1 -nnvvS host 172.30.44.4 or 172.30.44.0 and host 172.30.17.0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">三次握手
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561678 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57662, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 60&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>S&lt;span class="o">]&lt;/span>, cksum 0x3e44 &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049522, win 64860, options &lt;span class="o">[&lt;/span>mss 1410,sackOK,TS val &lt;span class="m">115443102&lt;/span> ecr 0,nop,wscale 7&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561744 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 0, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 60&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>S.&lt;span class="o">]&lt;/span>, cksum 0x956f &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xcbab&lt;span class="o">)&lt;/span>, seq 2031558188, ack 1333049523, win 64308, options &lt;span class="o">[&lt;/span>mss 1410,sackOK,TS val &lt;span class="m">3396801268&lt;/span> ecr 115443102,nop,wscale 7&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561998 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57663, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0xf37e &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049523, ack 2031558189, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115443103&lt;/span> ecr 3396801268&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">四次挥手
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.562088 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57664, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 129&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>P.&lt;span class="o">]&lt;/span>, cksum 0x9dd2 &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049523:1333049600, ack 2031558189, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115443103&lt;/span> ecr 3396801268&lt;span class="o">]&lt;/span>, length &lt;span class="m">77&lt;/span> &lt;span class="o">[&lt;/span>prefix length&lt;span class="o">(&lt;/span>18245&lt;span class="o">)&lt;/span> !&lt;span class="o">=&lt;/span> length&lt;span class="o">(&lt;/span>75&lt;span class="o">)]&lt;/span> &lt;span class="o">(&lt;/span>invalid&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.562105 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4244, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xf335&lt;span class="o">)&lt;/span>, seq 2031558189, ack 1333049600, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396801269&lt;/span> ecr 115443103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562279 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4245, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>F.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xeb64&lt;span class="o">)&lt;/span>, seq 2031558189, ack 1333049600, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396803269&lt;/span> ecr 115443103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562447 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57665, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>F.&lt;span class="o">]&lt;/span>, cksum 0xe38e &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049600, ack 2031558190, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115445103&lt;/span> ecr 3396803269&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562512 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4246, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xe393&lt;span class="o">)&lt;/span>, seq 2031558190, ack 1333049601, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396803269&lt;/span> ecr 115445103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>pod内发送的tcp数据包可以正常发送&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="三解决方案关闭外层udp数据包检测">三、解决方案，关闭外层udp数据包检测&lt;/h2>
+&lt;p>要在Linux中设置网卡或内核参数以允许数据包不进行校验和计算，可以使用ethtool工具或sysctl进行配置。&lt;/p>
+&lt;h3 id="21使用ethtool工具推荐">2.1、使用ethtool工具（推荐）&lt;/h3>
+&lt;ol>
+&lt;li>
+&lt;p>首先，确保你已经安装了ethtool工具。如果没有安装，可以通过包管理器进行安装，比如在Ubuntu上可以使用以下命令：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo apt-get install ethtool
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>然后，使用ethtool来设置网卡参数。例如，要禁用网卡的校验和计算，可以使用以下命令：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo ethtool -K eth0 tx off rx off
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这将禁用eth0网卡的发送和接收校验和计算。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="22使用sysctl设置内核参数测试了这种方式似乎不生效">2.2、使用sysctl设置内核参数（测试了这种方式似乎不生效）&lt;/h3>
+&lt;ol>
+&lt;li>
+&lt;p>打开文件&lt;code>/etc/sysctl.conf&lt;/code>：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nano /etc/sysctl.conf
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>在文件末尾添加以下行以禁用校验和：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">net.ipv4.tcp_checksum &lt;span class="o">=&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>保存并关闭文件后，执行以下命令使更改生效：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo sysctl -p
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ol></description></item><item><title>Container, how to play?</title><link>http://cugbtang.github.io/post/container/series-container-1/</link><pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-1/</guid><description>&lt;h1 id="container-technology-become-a-necessary-for-developer-during-operating-the-linux-system">container technology become a necessary for developer during operating the linux system.&lt;/h1>
 &lt;h2 id="一namespace">一、namespace&lt;/h2>
 &lt;ul>
 &lt;li>
@@ -3736,396 +4131,7 @@ The Go Micro philosophy is sane defaults with a pluggable architecture. We provi
 &lt;li>
 &lt;p>kubernetes &amp;gt; 1.24 + centos7 + cri-dockerd + docker + ipvs + calico&lt;/p>
 &lt;/li>
-&lt;/ul></description></item><item><title>flannel vxlan, check sum</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-8/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-8/</guid><description>&lt;p>集群内pod无法dig mysql.middleware
-修改主机dns nameserver为集群core dns地址，主机上可以dig mysql.middleware&lt;/p>
-&lt;h2 id="问题分析">问题分析&lt;/h2>
-&lt;p>从pod内发出的请求数据包到flannel网卡时出现问题&lt;/p>
-&lt;h2 id="抓包分析">抓包分析&lt;/h2>
-&lt;ul>
-&lt;li>环境&lt;/li>
-&lt;/ul>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>类型&lt;/th>
-&lt;th>地址&lt;/th>
-&lt;th>网卡&lt;/th>
-&lt;th>flannel地址&lt;/th>
-&lt;th>docker0地址&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>宿主机&lt;/td>
-&lt;td>192.168.189.5&lt;/td>
-&lt;td>eth0&lt;/td>
-&lt;td>172.30.17.0/32&lt;/td>
-&lt;td>172.30.17.0/24&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>宿主机&lt;/td>
-&lt;td>192.168.189.3&lt;/td>
-&lt;td>eth0&lt;/td>
-&lt;td>172.30.44.0/32&lt;/td>
-&lt;td>172.30.44.0/24&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;ul>
-&lt;li>
-&lt;p>修改192.168.189.5主机的nameserver，主机上，dig mysql.middleware.svc.cluster.local&lt;/p>
-&lt;ul>
-&lt;li>在192.168.189.3的eth0上抓包&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i eth0 -nnvvS udp and host 192.168.189.5 and host 192.168.189.3&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:00:45.171729 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 25021, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.37578 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 56488, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 103&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.6570 &amp;gt; 172.30.44.4.53: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> 30379+ &lt;span class="o">[&lt;/span>1au&lt;span class="o">]&lt;/span> A? mysql.middleware.svc.cluster.local. ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">4096&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 8dd7b1a036b9e96b&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>75&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:00:45.172148 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 11850, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 203&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.39446 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x7427 -&amp;gt; 0x6287!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 61091, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.6570: &lt;span class="o">[&lt;/span>bad udp cksum 0x95d7 -&amp;gt; 0x8437!&lt;span class="o">]&lt;/span> 30379*- q: A? mysql.middleware.svc.cluster.local. 1/0/1 mysql.middleware.svc.cluster.local. A 10.254.83.174 ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">2048&lt;/span> DO &lt;span class="o">[&lt;/span>COOKIE 8dd7b1a036b9e96b&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>125&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>在192.168.189.3的flannel.1上抓包&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i flannel.1 -nnvvS host 172.30.44.4 or 172.30.44.0 and host 172.30.17.0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">172.30.17.0.28706 &amp;gt; 172.30.44.4.53: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> 20554+ &lt;span class="o">[&lt;/span>1au&lt;span class="o">]&lt;/span> A? mysql.middleware.svc.cluster.local. ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">4096&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 02885f0fcec139cb&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>75&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:14:09.100234 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 25272, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.28706: &lt;span class="o">[&lt;/span>bad udp cksum 0x95d7 -&amp;gt; 0xcda2!&lt;span class="o">]&lt;/span> 20554*- q: A? mysql.middleware.svc.cluster.local. 1/0/1 mysql.middleware.svc.cluster.local. A 10.254.83.174 ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">4096&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 02885f0fcec139cb&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>125&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>注意：请求来的时候sum ok，回的时候 bad&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>在192.168.189.5的一个pod内，dig mysql.middleware.svc.cluster.local&lt;/p>
-&lt;ul>
-&lt;li>在192.168.189.3的eth0上抓包&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i eth0 -nnvvS udp and host 192.168.189.5 and host 192.168.189.3&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:11.021851 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 18100, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.54947 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x694b -&amp;gt; 0x37cc!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 29991, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 103&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.42230 &amp;gt; 172.30.44.4.53: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> 38007+ &lt;span class="o">[&lt;/span>1au&lt;span class="o">]&lt;/span> A? mysql.middleware.svc.cluster.local. ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">1232&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 8313fa6ef3e826cf&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>75&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:16.026185 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 22564, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 153&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.29594 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x3c0a -&amp;gt; 0x9ad5!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 1772, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 103&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.60334 &amp;gt; 172.30.44.4.53: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> 38007+ &lt;span class="o">[&lt;/span>1au&lt;span class="o">]&lt;/span> A? mysql.middleware.svc.cluster.local. ar: . OPT &lt;span class="nv">UDPsize&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">1232&lt;/span> &lt;span class="o">[&lt;/span>COOKIE 8313fa6ef3e826cf&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>75&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:16.115807 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 22619, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 78&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.58541 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:17.139797 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 22876, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 78&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.58541 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:18.163773 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 23179, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 78&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.58541 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>在192.168.189.3的flannel.1上抓包&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i flannel.1 -nnvvS host 172.30.44.4 or 172.30.44.0 and host 172.30.17.0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:16.115829 ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:17.139812 ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:20:18.163795 ARP, Ethernet &lt;span class="o">(&lt;/span>len 6&lt;span class="o">)&lt;/span>, IPv4 &lt;span class="o">(&lt;/span>len 4&lt;span class="o">)&lt;/span>, Request who-has 172.30.44.4 tell 172.30.17.0, length &lt;span class="m">28&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>注意：dig的udp请求来的时候sum bad了，似乎被内核网络丢弃了
-pod内发送的udp数据包不能正常到达&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>在192.168.189.5的一个pod内，curl 172.30.44.4:53&lt;/p>
-&lt;ul>
-&lt;li>在192.168.189.3的eth0上抓包&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;span class="lnt">24
-&lt;/span>&lt;span class="lnt">25
-&lt;/span>&lt;span class="lnt">26
-&lt;/span>&lt;span class="lnt">27
-&lt;/span>&lt;span class="lnt">28
-&lt;/span>&lt;span class="lnt">29
-&lt;/span>&lt;span class="lnt">30
-&lt;/span>&lt;span class="lnt">31
-&lt;/span>&lt;span class="lnt">32
-&lt;/span>&lt;span class="lnt">33
-&lt;/span>&lt;span class="lnt">34
-&lt;/span>&lt;span class="lnt">35
-&lt;/span>&lt;span class="lnt">36
-&lt;/span>&lt;span class="lnt">37
-&lt;/span>&lt;span class="lnt">38
-&lt;/span>&lt;span class="lnt">39
-&lt;/span>&lt;span class="lnt">40
-&lt;/span>&lt;span class="lnt">41
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i eth0 -nnvvS udp and host 192.168.189.5 and host 192.168.189.3&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561653 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 27101, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 110&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.60121 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57662, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 60&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>S&lt;span class="o">]&lt;/span>, cksum 0x3e44 &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049522, win 64860, options &lt;span class="o">[&lt;/span>mss 1410,sackOK,TS val &lt;span class="m">115443102&lt;/span> ecr 0,nop,wscale 7&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561757 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 10781, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 110&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.50170 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x4a95 -&amp;gt; 0x80d1!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 0, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 60&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>S.&lt;span class="o">]&lt;/span>, cksum 0x956f &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xcbab&lt;span class="o">)&lt;/span>, seq 2031558188, ack 1333049523, win 64308, options &lt;span class="o">[&lt;/span>mss 1410,sackOK,TS val &lt;span class="m">3396801268&lt;/span> ecr 115443102,nop,wscale 7&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561993 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 27102, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.60121 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57663, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0xf37e &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049523, ack 2031558189, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115443103&lt;/span> ecr 3396801268&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.562083 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 27103, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 179&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.60121 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57664, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 129&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>P.&lt;span class="o">]&lt;/span>, cksum 0x9dd2 &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049523:1333049600, ack 2031558189, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115443103&lt;/span> ecr 3396801268&lt;span class="o">]&lt;/span>, length &lt;span class="m">77&lt;/span> &lt;span class="o">[&lt;/span>prefix length&lt;span class="o">(&lt;/span>18245&lt;span class="o">)&lt;/span> !&lt;span class="o">=&lt;/span> length&lt;span class="o">(&lt;/span>75&lt;span class="o">)]&lt;/span> &lt;span class="o">(&lt;/span>invalid&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.562109 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 10782, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.50170 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x4a9d -&amp;gt; 0xa86b!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4244, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xf335&lt;span class="o">)&lt;/span>, seq 2031558189, ack 1333049600, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396801269&lt;/span> ecr 115443103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562312 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 12090, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.50170 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x4a9d -&amp;gt; 0xa09a!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4245, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>F.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xeb64&lt;span class="o">)&lt;/span>, seq 2031558189, ack 1333049600, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396803269&lt;/span> ecr 115443103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562435 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 28447, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.5.60121 &amp;gt; 192.168.189.3.8472: &lt;span class="o">[&lt;/span>udp sum ok&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57665, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>F.&lt;span class="o">]&lt;/span>, cksum 0xe38e &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049600, ack 2031558190, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115445103&lt;/span> ecr 3396803269&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562519 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 64, id 12091, offset 0, flags &lt;span class="o">[&lt;/span>none&lt;span class="o">]&lt;/span>, proto UDP &lt;span class="o">(&lt;/span>17&lt;span class="o">)&lt;/span>, length 102&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 192.168.189.3.50170 &amp;gt; 192.168.189.5.8472: &lt;span class="o">[&lt;/span>bad udp cksum 0x4a9d -&amp;gt; 0x98c9!&lt;span class="o">]&lt;/span> OTV, flags &lt;span class="o">[&lt;/span>I&lt;span class="o">]&lt;/span> &lt;span class="o">(&lt;/span>0x08&lt;span class="o">)&lt;/span>, overlay 0, instance &lt;span class="m">1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4246, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xe393&lt;span class="o">)&lt;/span>, seq 2031558190, ack 1333049601, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396803269&lt;/span> ecr 115445103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>在192.168.189.3的flannel.1上抓包&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># tcpdump -i flannel.1 -nnvvS host 172.30.44.4 or 172.30.44.0 and host 172.30.17.0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">三次握手
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561678 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57662, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 60&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>S&lt;span class="o">]&lt;/span>, cksum 0x3e44 &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049522, win 64860, options &lt;span class="o">[&lt;/span>mss 1410,sackOK,TS val &lt;span class="m">115443102&lt;/span> ecr 0,nop,wscale 7&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561744 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 0, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 60&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>S.&lt;span class="o">]&lt;/span>, cksum 0x956f &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xcbab&lt;span class="o">)&lt;/span>, seq 2031558188, ack 1333049523, win 64308, options &lt;span class="o">[&lt;/span>mss 1410,sackOK,TS val &lt;span class="m">3396801268&lt;/span> ecr 115443102,nop,wscale 7&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.561998 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57663, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0xf37e &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049523, ack 2031558189, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115443103&lt;/span> ecr 3396801268&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">四次挥手
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.562088 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57664, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 129&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>P.&lt;span class="o">]&lt;/span>, cksum 0x9dd2 &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049523:1333049600, ack 2031558189, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115443103&lt;/span> ecr 3396801268&lt;span class="o">]&lt;/span>, length &lt;span class="m">77&lt;/span> &lt;span class="o">[&lt;/span>prefix length&lt;span class="o">(&lt;/span>18245&lt;span class="o">)&lt;/span> !&lt;span class="o">=&lt;/span> length&lt;span class="o">(&lt;/span>75&lt;span class="o">)]&lt;/span> &lt;span class="o">(&lt;/span>invalid&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:36.562105 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4244, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xf335&lt;span class="o">)&lt;/span>, seq 2031558189, ack 1333049600, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396801269&lt;/span> ecr 115443103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562279 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4245, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>F.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xeb64&lt;span class="o">)&lt;/span>, seq 2031558189, ack 1333049600, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396803269&lt;/span> ecr 115443103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562447 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 57665, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.17.0.57972 &amp;gt; 172.30.44.4.53: Flags &lt;span class="o">[&lt;/span>F.&lt;span class="o">]&lt;/span>, cksum 0xe38e &lt;span class="o">(&lt;/span>correct&lt;span class="o">)&lt;/span>, seq 1333049600, ack 2031558190, win 507, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">115445103&lt;/span> ecr 3396803269&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">10:25:38.562512 IP &lt;span class="o">(&lt;/span>tos 0x0, ttl 63, id 4246, offset 0, flags &lt;span class="o">[&lt;/span>DF&lt;span class="o">]&lt;/span>, proto TCP &lt;span class="o">(&lt;/span>6&lt;span class="o">)&lt;/span>, length 52&lt;span class="o">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 172.30.44.4.53 &amp;gt; 172.30.17.0.57972: Flags &lt;span class="o">[&lt;/span>.&lt;span class="o">]&lt;/span>, cksum 0x9567 &lt;span class="o">(&lt;/span>incorrect -&amp;gt; 0xe393&lt;span class="o">)&lt;/span>, seq 2031558190, ack 1333049601, win 502, options &lt;span class="o">[&lt;/span>nop,nop,TS val &lt;span class="m">3396803269&lt;/span> ecr 115445103&lt;span class="o">]&lt;/span>, length &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>pod内发送的tcp数据包可以正常发送&lt;/li>
-&lt;/ul>
-&lt;h2 id="解决方案关闭外层udp数据包检测">解决方案，关闭外层udp数据包检测&lt;/h2>
-&lt;p>要在Linux中设置网卡或内核参数以允许数据包不进行校验和计算，可以使用ethtool工具或sysctl进行配置。&lt;/p>
-&lt;h3 id="使用ethtool工具">使用ethtool工具&lt;/h3>
-&lt;ol>
-&lt;li>
-&lt;p>首先，确保你已经安装了ethtool工具。如果没有安装，可以通过包管理器进行安装，比如在Ubuntu上可以使用以下命令：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo apt-get install ethtool
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>然后，使用ethtool来设置网卡参数。例如，要禁用网卡的校验和计算，可以使用以下命令：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo ethtool -K eth0 tx off rx off
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>这将禁用eth0网卡的发送和接收校验和计算。&lt;/p>
-&lt;/li>
-&lt;/ol>
-&lt;h3 id="使用sysctl设置内核参数">使用sysctl设置内核参数&lt;/h3>
-&lt;ol>
-&lt;li>
-&lt;p>打开文件&lt;code>/etc/sysctl.conf&lt;/code>：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo nano /etc/sysctl.conf
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>在文件末尾添加以下行以禁用校验和：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">net.ipv4.tcp_checksum &lt;span class="o">=&lt;/span> &lt;span class="m">0&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;li>
-&lt;p>保存并关闭文件后，执行以下命令使更改生效：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo sysctl -p
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;/li>
-&lt;/ol></description></item><item><title>The node was low on resource: ephemeral-storage. Evicted</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</guid><description>&lt;h2 id="the-node-was-low-on-resource-ephemeral-storage-evicted">The node was low on resource: ephemeral-storage. Evicted&lt;/h2>
+&lt;/ul></description></item><item><title>The node was low on resource: ephemeral-storage. Evicted</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</guid><description>&lt;h2 id="the-node-was-low-on-resource-ephemeral-storage-evicted">The node was low on resource: ephemeral-storage. Evicted&lt;/h2>
 &lt;p>最近某个节点频繁出现这个问题&lt;/p>
 &lt;h2 id="问题分析">问题分析&lt;/h2>
 &lt;h2 id="解决方案">解决方案&lt;/h2>
