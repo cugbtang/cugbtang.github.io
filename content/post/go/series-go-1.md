@@ -1,5 +1,5 @@
 ---
-title: "Go, how to play?"
+title: "Go io, how to play?"
 date: 2022-02-15T16:01:23+08:00
 lastmod: 2022-02-15T16:01:23+08:00
 draft: false
