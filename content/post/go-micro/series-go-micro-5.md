@@ -1,5 +1,5 @@
 ---
-title: "micro, how to play quick?"
+title: "micro quick, how to play?"
 date: 2023-11-30T15:44:23+08:00
 lastmod: 2023-11-30T16:44:23+08:00
 draft: false

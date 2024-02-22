@@ -8,7 +8,7 @@ categories: ["go"]
 author: "yesplease"
 ---
 
-#go 测试
+# go 测试
 
 go test 后面接着的应该是一个包名
 go test 可以生成覆盖率的profile文件，这个文件可以被go tool cover工具解析(go tool cover -func=cover.out/go tool cover -html=cover.out)

@@ -8,6 +8,8 @@ categories: ["go"]
 author: "yesplease"
 ---
 
+> 需要牢记这些谚语，在使用过程中感受谚语带来的变化
+
 - Don't communicate by sharing memory, share memory by communicating.
 ```go
 package main

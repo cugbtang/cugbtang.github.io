@@ -1,5 +1,5 @@
 ---
-title: "Go-micro, how to play engineering?"
+title: "Go-micro engineering, how to play?"
 date: 2023-09-15T15:44:23+08:00
 lastmod: 2023-09-15T16:44:23+08:00
 draft: false

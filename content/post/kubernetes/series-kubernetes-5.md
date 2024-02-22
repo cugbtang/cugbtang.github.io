@@ -2,7 +2,7 @@
 title: "nginx 鉴权_k8s中的服务使用proxy auth鉴权"
 date: 2022-04-01T16:01:23+08:00
 lastmod: 2022-04-01T16:01:23+08:00
-draft: false
+draft: true
 tags: ["kubernetes", "auth"]
 categories: ["kubernetes", "cloudnative"]
 author: "yesplease"

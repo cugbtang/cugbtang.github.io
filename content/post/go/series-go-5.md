@@ -241,5 +241,3 @@ Effective Go是Go语言官方提供的一份指南，旨在帮助开发人员写
 9、develop modules
 - test
 - profile
-
-以上是针对Effective Go中的观点给出的代码举例。这些准则旨在帮助开发人员编写出更加清晰、高效和可读性强的Go代码。

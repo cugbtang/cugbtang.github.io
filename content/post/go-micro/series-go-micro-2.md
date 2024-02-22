@@ -1,5 +1,5 @@
 ---
-title: "Go-micro, how to play cli?"
+title: "Go-micro cli, how to play?"
 date: 2023-09-15T15:44:23+08:00
 lastmod: 2023-09-15T16:44:23+08:00
 draft: false
