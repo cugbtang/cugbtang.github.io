@@ -1,4 +1,729 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>✌yesplease's blog</title><link>http://cugbtang.github.io/</link><description>Recent content on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 06 Jan 2024 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>About</title><link>http://cugbtang.github.io/about/</link><pubDate>Sat, 01 Jan 2022 21:38:52 +0800</pubDate><guid>http://cugbtang.github.io/about/</guid><description>&lt;p>A new generation of migrant workers that peek technology in cloudnative!&lt;/p></description></item><item><title>Go Web App, how to play?</title><link>http://cugbtang.github.io/post/go/series-go-6/</link><pubDate>Sat, 06 Jan 2024 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/go/series-go-6/</guid><description>&lt;h2 id="优雅重启http服务">优雅重启HTTP服务&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>✌yesplease's blog</title><link>http://cugbtang.github.io/</link><description>Recent content on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 28 Mar 2024 15:28:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>About</title><link>http://cugbtang.github.io/about/</link><pubDate>Sat, 01 Jan 2022 21:38:52 +0800</pubDate><guid>http://cugbtang.github.io/about/</guid><description>&lt;p>A new generation of migrant workers that peek technology in cloudnative!&lt;/p></description></item><item><title>etcd authentication, how to deploy?</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-11/</link><pubDate>Thu, 28 Mar 2024 15:28:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-11/</guid><description>&lt;h2 id="一加载启动参数">一、加载启动参数&lt;/h2>
+&lt;h3 id="1-配置文件configuration-file">1. 配置文件（Configuration file）&lt;/h3>
+&lt;p>如果您提供了一个配置文件，那么配置文件中的设置将具有最高优先级。这意味着配置文件中的配置项将覆盖通过命令行标志和环境变量设置的所有配置。&lt;/p>
+&lt;h3 id="2-命令行标志command-line-flags">2. 命令行标志（Command-line flags）&lt;/h3>
+&lt;p>当启动etcd时，通过命令行传递的标志具有较高的优先级。如果命令行标志被设置，它们将覆盖环境变量中的相应配置。&lt;/p>
+&lt;h3 id="3-环境变量environment-variables">3. 环境变量（Environment variables）&lt;/h3>
+&lt;p>每个命令行标志都有一个对应的环境变量。如果命令行中没有提供相应的标志，环境变量中的设置将被应用。环境变量的名称以&lt;code>ETCD_&lt;/code>为前缀，并使用全大写字母和蛇形命名法。&lt;/p>
+&lt;h3 id="优先级规则">优先级规则&lt;/h3>
+&lt;ul>
+&lt;li>如果提供了配置文件，配置文件中的配置项将覆盖命令行标志和环境变量中的设置。&lt;/li>
+&lt;li>如果没有提供配置文件，命令行标志的设置将覆盖环境变量中的设置。&lt;/li>
+&lt;li>如果命令行标志和环境变量都没有设置，etcd将使用默认值。&lt;/li>
+&lt;/ul>
+&lt;p>原文描述：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">Caution&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">If you mix-and-match configuration options, then the following rules apply.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="l">、Command-line flags take precedence over environment variables.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="m">2&lt;/span>&lt;span class="l">、If you provide a configuration file all command-line flags and environment variables are ignored.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="二加密传输">二、加密传输&lt;/h2>
+&lt;h3 id="已有证书">已有证书&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">$ etcd --name infra0 --data-dir infra0 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --cert-file&lt;span class="o">=&lt;/span>/path/to/server.crt --key-file&lt;span class="o">=&lt;/span>/path/to/server.key &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --advertise-client-urls&lt;span class="o">=&lt;/span>https://127.0.0.1:2379 --listen-client-urls&lt;span class="o">=&lt;/span>https://127.0.0.1:2379
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ curl --cacert /path/to/ca.crt https://127.0.0.1:2379/v2/keys/foo -XPUT -d &lt;span class="nv">value&lt;/span>&lt;span class="o">=&lt;/span>bar -v
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="自动生成证书">自动生成证书&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="nv">DISCOVERY_URL&lt;/span>&lt;span class="o">=&lt;/span>... &lt;span class="c1"># from https://discovery.etcd.io/new&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># member1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ etcd --name infra1 --data-dir infra1 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --auto-tls --peer-auto-tls &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --initial-advertise-peer-urls&lt;span class="o">=&lt;/span>https://10.0.1.10:2380 --listen-peer-urls&lt;span class="o">=&lt;/span>https://10.0.1.10:2380 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --discovery &lt;span class="si">${&lt;/span>&lt;span class="nv">DISCOVERY_URL&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># member2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ etcd --name infra2 --data-dir infra2 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --auto-tls --peer-auto-tls &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --initial-advertise-peer-urls&lt;span class="o">=&lt;/span>https://10.0.1.11:2380 --listen-peer-urls&lt;span class="o">=&lt;/span>https://10.0.1.11:2380 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --discovery &lt;span class="si">${&lt;/span>&lt;span class="nv">DISCOVERY_URL&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="三rbac">三、RBAC&lt;/h2>
+&lt;h3 id="特殊用户和角色">特殊用户和角色&lt;/h3>
+&lt;ul>
+&lt;li>存在一个特殊用户&lt;code>root&lt;/code>和特殊角色&lt;code>root&lt;/code>。&lt;/li>
+&lt;li>&lt;code>root&lt;/code>用户拥有对etcd的完全访问权限，必须在激活身份验证之前创建。&lt;/li>
+&lt;li>&lt;code>root&lt;/code>角色可以授予任何用户，包括root用户本身。拥有&lt;code>root&lt;/code>角色的用户具有全局读写访问权限，并且可以更新集群的身份验证配置。&lt;/li>
+&lt;/ul>
+&lt;h3 id="管理用户">管理用户&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>etcdctl&lt;/code>的&lt;code>user&lt;/code>子命令用于处理与用户账户相关的所有操作。&lt;/li>
+&lt;li>列出用户、创建用户、删除用户、更改用户密码等操作都可以通过&lt;code>etcdctl&lt;/code>命令完成。&lt;/li>
+&lt;li>创建用户时，可以设置密码或不设置密码。没有密码的用户可以通过TLS通用名称（Common Name, CN）进行身份验证。&lt;/li>
+&lt;/ul>
+&lt;h3 id="管理角色">管理角色&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>etcdctl&lt;/code>的&lt;code>role&lt;/code>子命令用于处理特定角色的访问控制。&lt;/li>
+&lt;li>列出角色、创建新角色、删除角色等操作都可以通过&lt;code>etcdctl&lt;/code>命令完成。&lt;/li>
+&lt;li>角色可以被授予对单个键或键范围的访问权限，权限可以是只读、只写或读写。&lt;/li>
+&lt;li>角色的权限可以通过&lt;code>etcdctl&lt;/code>命令授予和撤销。&lt;/li>
+&lt;/ul>
+&lt;h3 id="启用身份验证">启用身份验证&lt;/h3>
+&lt;ul>
+&lt;li>启用身份验证的最小步骤包括创建root用户和启用身份验证。&lt;/li>
+&lt;li>启用身份验证后，etcd将运行在启用身份验证的状态下。如果需要禁用身份验证，可以使用相应的命令。&lt;/li>
+&lt;/ul>
+&lt;h3 id="使用etcdctl进行身份验证">使用&lt;code>etcdctl&lt;/code>进行身份验证&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>etcdctl&lt;/code>支持类似于&lt;code>curl&lt;/code>的身份验证标志。&lt;/li>
+&lt;li>用户可以使用用户名和密码进行身份验证，也可以从提示中获取密码或从命令行标志中提供密码。&lt;/li>
+&lt;/ul>
+&lt;h3 id="使用tls通用名称">使用TLS通用名称&lt;/h3>
+&lt;ul>
+&lt;li>从etcd v3.2版本开始，如果etcd服务器以&lt;code>--client-cert-auth=true&lt;/code>选项启动，客户端TLS证书中的通用名称（CN）字段将被用作etcd用户。&lt;/li>
+&lt;li>在这种情况下，通用名称用于身份验证用户，客户端不需要密码。&lt;/li>
+&lt;li>如果客户端同时提供了&lt;code>--client-cert-auth=true&lt;/code>和CN，以及用户名和密码，那么基于用户名和密码的身份验证将被优先考虑。&lt;/li>
+&lt;li>此功能不能与gRPC-proxy和gRPC-gateway一起使用，因为这些工具在处理TLS连接时存在限制。&lt;/li>
+&lt;/ul>
+&lt;h3 id="关于密码强度的注意事项">关于密码强度的注意事项&lt;/h3>
+&lt;ul>
+&lt;li>&lt;code>etcdctl&lt;/code>和etcd API在创建用户或更新用户密码时不会强制执行特定密码长度。&lt;/li>
+&lt;li>管理员有责任执行这些要求。&lt;/li>
+&lt;li>为了避免与密码强度相关的安全风险，可以使用基于TLS通用名称的身份验证，以及使用&lt;code>--no-password&lt;/code>选项创建的用户。&lt;/li>
+&lt;/ul>
+&lt;h2 id="四加认证">四、加认证&lt;/h2>
+&lt;h3 id="配置证书认证启动">配置证书认证启动&lt;/h3>
+&lt;p>单纯的证书认证模式，默认有所有权限，其实是没有开启认证（即没有执行etcdtl auth enable）
+看下原文描述：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="l">As of version v3.2 if an etcd server is launched with the option --client-cert-auth=true, the field of Common Name (CN) in the client’s TLS cert will be used as an etcd user. In this case, the common name authenticates the user and the client does not need a password. Note that if both of 1. --client-cert-auth=true is passed and CN is provided by the client, and 2. username and password are provided by the client, the username and password based authentication is prioritized. Note that this feature cannot be used with gRPC-proxy and gRPC-gateway. This is because gRPC-proxy terminates TLS from its client so all the clients share a cert of the proxy. gRPC-gateway uses a TLS connection internally for transforming HTTP request to gRPC request so it shares the same limitation. Therefore the clients cannot provide their CN to the server correctly. gRPC-proxy will cause an error and stop if a given cert has non empty CN. gRPC-proxy returns an error which indicates that the client has an non empty CN in its cert.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">$ etcd --name infra0 --data-dir infra0 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --client-cert-auth --trusted-ca-file&lt;span class="o">=&lt;/span>/path/to/ca.crt --cert-file&lt;span class="o">=&lt;/span>/path/to/server.crt --key-file&lt;span class="o">=&lt;/span>/path/to/server.key &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --advertise-client-urls https://127.0.0.1:2379 --listen-client-urls https://127.0.0.1:2379
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ curl --cacert /path/to/ca.crt --cert /path/to/client.crt --key /path/to/client.key &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -L https://127.0.0.1:2379/v2/keys/foo -XPUT -d &lt;span class="nv">value&lt;/span>&lt;span class="o">=&lt;/span>bar -v
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>根据证书设置RBAC&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">ETCDCTL_API&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">3&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="o">=&lt;/span>localhost:2379
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> role add root
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> role get root
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> user add root
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> user grant-role root root
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> user get root
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> role add role0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> role grant-permission role0 readwrite foo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> user add user0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> user grant-role user0 role0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> auth &lt;span class="nb">enable&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># now all client requests go through auth&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> --user&lt;span class="o">=&lt;/span>user0:123 put foo bar
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> get foo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># permission denied, user name is empty because the request does not issue an authentication request&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> --user&lt;span class="o">=&lt;/span>user0:123 get foo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># user0 can read the key foo&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">etcdctl --endpoints&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ENDPOINTS&lt;/span>&lt;span class="si">}&lt;/span> --user&lt;span class="o">=&lt;/span>user0:123 get foo1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="配置账号密码启动即只开启rbac">配置账号密码启动,即只开启RBAC&lt;/h3>
+&lt;p>使用 &lt;code>bitnami/etcd:3.5.4&lt;/code> 的镜像&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">apiVersion: apps/v1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kind: StatefulSet
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">metadata:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> labels:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> app: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">spec:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> replicas: &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> revisionHistoryLimit: &lt;span class="m">10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> selector:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> matchLabels:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> app: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> serviceName: etcd-headless
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> template:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> metadata:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> labels:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> app: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> spec:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> containers:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - env:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_AUTO_COMPACTION_MODE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;revision&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_AUTO_COMPACTION_RETENTION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;1000&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_QUOTA_BACKEND_BYTES
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;10240000000&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_ROOT_PASSWORD
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: xxx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: MY_POD_NAME
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valueFrom:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fieldRef:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> apiVersion: v1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fieldPath: metadata.name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: CLUSTER_NAMESPACE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valueFrom:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fieldRef:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> apiVersion: v1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fieldPath: metadata.namespace
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: SERVICE_NAME
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: etcd-headless
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> image: bitnami/etcd:3.5.4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> imagePullPolicy: IfNotPresent
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ports:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - containerPort: &lt;span class="m">2380&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: peer
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> protocol: TCP
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - containerPort: &lt;span class="m">2379&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: client
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> protocol: TCP
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> resources:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> limits:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> cpu: 500m
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> memory: 1Gi
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> requests:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> cpu: 500m
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> memory: 1Gi
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> terminationMessagePath: /dev/termination-log
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> terminationMessagePolicy: File
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> volumeMounts:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - mountPath: /etc/certs
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd-tls
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - mountPath: /bitnami/etcd/data
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd-pvc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> dnsPolicy: ClusterFirst
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> restartPolicy: Always
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> schedulerName: default-scheduler
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> securityContext: &lt;span class="o">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> terminationGracePeriodSeconds: &lt;span class="m">30&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> volumes:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: etcd-tls
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> secret:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> secretName: etcd-secret
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: etcd-pvc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> emptyDir: &lt;span class="o">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="配置证书认证开启rbac">配置证书认证+开启RBAC&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;span class="lnt">76
+&lt;/span>&lt;span class="lnt">77
+&lt;/span>&lt;span class="lnt">78
+&lt;/span>&lt;span class="lnt">79
+&lt;/span>&lt;span class="lnt">80
+&lt;/span>&lt;span class="lnt">81
+&lt;/span>&lt;span class="lnt">82
+&lt;/span>&lt;span class="lnt">83
+&lt;/span>&lt;span class="lnt">84
+&lt;/span>&lt;span class="lnt">85
+&lt;/span>&lt;span class="lnt">86
+&lt;/span>&lt;span class="lnt">87
+&lt;/span>&lt;span class="lnt">88
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">apiVersion: apps/v1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kind: StatefulSet
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">metadata:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> labels:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> app: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">spec:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> replicas: &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> revisionHistoryLimit: &lt;span class="m">10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> selector:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> matchLabels:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> app: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> serviceName: etcd-headless
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> template:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> metadata:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> labels:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> app: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> spec:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> containers:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - env:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_CLIENT_CERT_AUTH
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;true&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_TRUSTED_CA_FILE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;/etc/certs/ca.pem&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_CERT_FILE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;/etc/certs/etcd.pem&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_KEY_FILE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;/etc/certs/etcd-key.pem&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_AUTO_COMPACTION_MODE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;revision&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_AUTO_COMPACTION_RETENTION
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;1000&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_QUOTA_BACKEND_BYTES
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;10240000000&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_ROOT_PASSWORD
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: xxx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_LISTEN_CLIENT_URLS
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;https://0.0.0.0:2379&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: ETCD_ADVERTISE_CLIENT_URLS
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: &lt;span class="s2">&amp;#34;https://0.0.0.0:2379&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: MY_POD_NAME
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valueFrom:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fieldRef:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> apiVersion: v1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fieldPath: metadata.name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: CLUSTER_NAMESPACE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> valueFrom:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fieldRef:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> apiVersion: v1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> fieldPath: metadata.namespace
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: SERVICE_NAME
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> value: etcd-headless
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> image: bitnami/etcd:3.5.4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> imagePullPolicy: IfNotPresent
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ports:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - containerPort: &lt;span class="m">2380&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: peer
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> protocol: TCP
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - containerPort: &lt;span class="m">2379&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: client
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> protocol: TCP
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> resources:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> limits:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> cpu: 500m
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> memory: 1Gi
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> requests:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> cpu: 500m
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> memory: 1Gi
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> terminationMessagePath: /dev/termination-log
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> terminationMessagePolicy: File
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> volumeMounts:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - mountPath: /etc/certs
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd-tls
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - mountPath: /bitnami/etcd/data
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> name: etcd-pvc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> dnsPolicy: ClusterFirst
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> restartPolicy: Always
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> schedulerName: default-scheduler
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> securityContext: &lt;span class="o">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> terminationGracePeriodSeconds: &lt;span class="m">30&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> volumes:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: etcd-tls
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> secret:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> secretName: etcd-secret
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - name: etcd-pvc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> emptyDir: &lt;span class="o">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="五引用">五、引用&lt;/h2>
+&lt;p>&lt;a href="https://etcd.io/docs/v3.6/op-guide/configuration/">etcd&lt;/a>&lt;/p></description></item><item><title>cfssh, Q&amp;A</title><link>http://cugbtang.github.io/post/devops/series-cfssh-1/</link><pubDate>Thu, 28 Mar 2024 13:28:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-cfssh-1/</guid><description>&lt;p>为了使用&lt;code>cfssl&lt;/code>工具自签发证书，并设置不同的有效期，你需要创建JSON配置文件来指定证书的属性，包括有效期。以下是生成根证书、服务端证书和客户端证书的具体命令和示例配置文件。&lt;/p>
+&lt;h3 id="1-生成根证书ca">1. 生成根证书（CA）&lt;/h3>
+&lt;p>首先，创建一个根证书的配置文件（例如&lt;code>ca-config.json&lt;/code>）：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;signing&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;profiles&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;root&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;usages&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;cert sign&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;crl sign&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;key encipherment&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;server auth&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;client auth&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;expiry&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;10000m&amp;#34;&lt;/span> &lt;span class="c1">// 100年，这里使用月份表示法
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;default&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;expiry&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;10000m&amp;#34;&lt;/span> &lt;span class="c1">// 默认有效期也为100年
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>然后，使用以下命令生成根证书：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">cfssl gencert -initca ca-csr.json &lt;span class="p">|&lt;/span> cfssljson -bare ca
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这里假设你已经有了一个名为&lt;code>ca-csr.json&lt;/code>的证书签名请求（CSR）配置文件。&lt;/p>
+&lt;h3 id="2-生成服务端证书">2. 生成服务端证书&lt;/h3>
+&lt;p>创建一个服务端证书的配置文件（例如&lt;code>server-csr.json&lt;/code>）：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;hosts&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;example.com&amp;#34;&lt;/span> &lt;span class="c1">// 服务端的域名
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;CN&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;example.com&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 通用名称，通常与域名相同
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nt">&amp;#34;key&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;algo&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;rsa&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;size&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">2048&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;names&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;C&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;US&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;ST&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;State&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;L&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Locality&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;O&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Organization&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;OU&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Unit&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;ca&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;/etc/cfssl/ca.pem&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 根证书文件路径
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nt">&amp;#34;ca_key&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;/etc/cfssl/ca-key.pem&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 根证书密钥文件路径
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nt">&amp;#34;expiry&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;10y&amp;#34;&lt;/span> &lt;span class="c1">// 服务端证书有效期10年
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用以下命令生成服务端证书：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">cfssl gencert -ca&lt;span class="o">=&lt;/span>ca.pem -ca-key&lt;span class="o">=&lt;/span>ca-key.pem -config&lt;span class="o">=&lt;/span>ca-config.json -profile&lt;span class="o">=&lt;/span>root server-csr.json &lt;span class="p">|&lt;/span> cfssljson -bare server
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="3-生成客户端证书">3. 生成客户端证书&lt;/h3>
+&lt;p>创建一个客户端证书的配置文件（例如&lt;code>client-csr.json&lt;/code>）：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;hosts&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;CN&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;client&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 客户端的名称或ID
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nt">&amp;#34;key&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;algo&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;rsa&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;size&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="mi">2048&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;names&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;C&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;US&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;ST&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;State&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;L&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Locality&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;O&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Organization&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;OU&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;Unit&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;ca&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;/etc/cfssl/ca.pem&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 根证书文件路径
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nt">&amp;#34;ca_key&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;/etc/cfssl/ca-key.pem&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 根证书密钥文件路径
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nt">&amp;#34;expiry&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;1y&amp;#34;&lt;/span> &lt;span class="c1">// 客户端证书有效期1年
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用以下命令生成客户端证书：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">cfssl gencert -ca&lt;span class="o">=&lt;/span>ca.pem -ca-key&lt;span class="o">=&lt;/span>ca-key.pem -config&lt;span class="o">=&lt;/span>ca-config.json -profile&lt;span class="o">=&lt;/span>root client-csr.json &lt;span class="p">|&lt;/span> cfssljson -bare client
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在上述命令中，&lt;code>ca.pem&lt;/code>和&lt;code>ca-key.pem&lt;/code>是由&lt;code>cfssl gencert&lt;/code>命令生成的根证书和密钥文件。&lt;code>server-csr.json&lt;/code>和&lt;code>client-csr.json&lt;/code>是服务端和客户端证书的CSR配置文件，你需要根据实际情况调整其中的域名、国家代码、州/省、城市/地区、组织名称和组织单位等信息。&lt;/p>
+&lt;p>请注意，有效期可以通过字符串表示法来设置，例如&lt;code>&amp;quot;10y&amp;quot;&lt;/code>表示10年，&lt;code>&amp;quot;1y&amp;quot;&lt;/code>表示1年。确保在执行命令之前，你已经创建了相应的配置文件，并且文件路径正确指向了你的根证书和密钥。&lt;/p></description></item><item><title>Go Web App, how to play?</title><link>http://cugbtang.github.io/post/go/series-go-6/</link><pubDate>Sat, 06 Jan 2024 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/go/series-go-6/</guid><description>&lt;h2 id="优雅重启http服务">优雅重启HTTP服务&lt;/h2>
 &lt;ul>
 &lt;li>
 &lt;p>目的
@@ -4361,147 +5086,4 @@ Encoding：支持 Accept 和 Content-Type 进行自动选择内容编码；&lt;/
 &lt;h2 id="插件化原理">插件化原理&lt;/h2>
 &lt;p>强定义的接口&lt;/p>
 &lt;h2 id="扩展性">扩展性&lt;/h2>
-&lt;p>基于Wrapper（中间件）&lt;/p></description></item><item><title>Go-micro cli, how to play?</title><link>http://cugbtang.github.io/post/go-micro/series-go-micro-2/</link><pubDate>Fri, 15 Sep 2023 15:44:23 +0800</pubDate><guid>http://cugbtang.github.io/post/go-micro/series-go-micro-2/</guid><description>&lt;h1 id="go-micro-简介">Go-micro 简介&lt;/h1>
-&lt;h2 id="一句话介绍">一句话介绍&lt;/h2>
-&lt;p>Go Micro CLI is the command line interface for developing Go Micro projects.&lt;/p>
-&lt;h2 id="开始表演">开始表演&lt;/h2>
-&lt;ul>
-&lt;li>安装&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">go install github.com/go-micro/cli/cmd/go-micro@latest
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>创建测试项目（执行命令，后续根据命令提示操作）&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">go-micro new service helloworld
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>创建工程化项目（执行命令，后续根据命令提示操作）&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">go-micro new service --jaeger --health --grpc --advanced
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>注：
-1、 Since Kubernetes 1.24, probes can make use of the gRPC Health Protocol. This allows you to directly probe the go-micro service in a Kubernetes container if it implements the health protocol.
-2、By default, go-micro uses an JSON/HTTP RPC server. Many microservice use cases require a gRPC server or client, therefore, go-micro offers a gRPC server built in. gRPC默认使用HTTP/2作为其传输协议，并使用Protocol Buffers（protobuf）作为默认的消息序列化和接口定义语言&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>添加工程化插件
-1、consul 配置和服务发现中心&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>本地测试接口&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>测试非流&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">$ go-micro call helloworld Helloworld.Call &lt;span class="s1">&amp;#39;{&amp;#34;name&amp;#34;: &amp;#34;John&amp;#34;}&amp;#39;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;msg&amp;#34;&lt;/span>:&lt;span class="s2">&amp;#34;Hello John&amp;#34;&lt;/span>&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>测试单流&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">$ go-micro stream server helloworld Helloworld.ServerStream &lt;span class="s1">&amp;#39;{&amp;#34;count&amp;#34;: 10}&amp;#39;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:0&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:1&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:2&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:3&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:4&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:5&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:6&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:7&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:8&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;count&amp;#34;&lt;/span>:9&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>测试双向流&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">$ go-micro stream bidi helloworld Helloworld.BidiStream &lt;span class="s1">&amp;#39;{&amp;#34;stroke&amp;#34;: 1}&amp;#39;&lt;/span> &lt;span class="s1">&amp;#39;{&amp;#34;stroke&amp;#34;: 2}&amp;#39;&lt;/span> &lt;span class="s1">&amp;#39;{&amp;#34;stroke&amp;#34;: 3}&amp;#39;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;stroke&amp;#34;&lt;/span>:1&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;stroke&amp;#34;&lt;/span>:2&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">{&lt;/span>&lt;span class="s2">&amp;#34;stroke&amp;#34;&lt;/span>:3&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>或者 curl&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">curl -XPOST &lt;span class="se">\
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -H &lt;span class="s1">&amp;#39;Content-Type: application/json&amp;#39;&lt;/span> &lt;span class="se">\
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -H &lt;span class="s1">&amp;#39;Micro-Endpoint: Helloworld.Call&amp;#39;&lt;/span> &lt;span class="se">\
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s1">&amp;#39;{&amp;#34;name&amp;#34;: &amp;#34;alice&amp;#34;}&amp;#39;&lt;/span> &lt;span class="se">\
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> http://localhost:8080
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h2 id="探索">探索&lt;/h2>
-&lt;ul>
-&lt;li>阅读 examples&lt;/li>
-&lt;li>尝试 plugins&lt;/li>
-&lt;/ul></description></item><item><title>Go-micro engineering, how to play?</title><link>http://cugbtang.github.io/post/go-micro/series-go-micro-4/</link><pubDate>Fri, 15 Sep 2023 15:44:23 +0800</pubDate><guid>http://cugbtang.github.io/post/go-micro/series-go-micro-4/</guid><description>&lt;h1 id="工程化">工程化&lt;/h1>
-&lt;p>1、尽可能的附属到IDL
-2、IDL统一仓库管理&lt;/p>
-&lt;h2 id="统一服务端回复信息格式">统一服务端回复信息格式&lt;/h2>
-&lt;pre>&lt;code>- rpc的正确返回，状态码是200，附加正确的数据信息
-- rpc的错误返回（1），状态码希望复用grpc的，外加对应的错误描述
-- rpc的错误返回（2），状态码是200，附加自定义proto格式的错误模型（IDL定义模型）
-&lt;/code>&lt;/pre>
-&lt;h2 id="使用中间件withxxxhandlerwrapxxxhandler">使用中间件，withXxxHandler/wrapXxxHandler&lt;/h2>
-&lt;pre>&lt;code>- 自带的log不行
-- 缺少metric
-- 微服务间的鉴权
-- 缺少限流和熔断
-- 使用中间件，withXxxHandler/wrapXxxHandler
-&lt;/code>&lt;/pre>
-&lt;h2 id="api管理">API管理&lt;/h2>
-&lt;pre>&lt;code>- IDL，即声明=代码=文档
-- 原信息，用于服务治理
-&lt;/code>&lt;/pre></description></item></channel></rss>
+&lt;p>基于Wrapper（中间件）&lt;/p></description></item></channel></rss>
