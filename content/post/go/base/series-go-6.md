@@ -8,7 +8,7 @@ categories: ["go"]
 author: "yesplease"
 ---
 
-## introduction
+## Introduction
 
 首先，让我们来理解一下 goroutine。Goroutine 是一种轻量级的线程，由 Go 运行时环境管理。在 Go 语言中，你可以通过关键字 go 来启动一个新的 goroutine，而不需要手动创建线程。这意味着你可以很容易地并发地执行多个任务，而不必担心线程管理的复杂性。
 
