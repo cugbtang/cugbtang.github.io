@@ -1,1 +1,164 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Concurrent on ✌yesplease's blog</title><link>http://cugbtang.github.io/tags/concurrent/</link><description>Recent content in Concurrent on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 05 Jan 2024 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/concurrent/index.xml" rel="self" type="application/rss+xml"/><item><title>Go concurrent, how to play?</title><link>http://cugbtang.github.io/post/go/series-go-9/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/go/series-go-9/</guid><description>introduction 首先，让我们来理解一下 goroutine。Goroutine 是一种轻量级的线程，由 Go 运行时环境管理。在 Go 语言中，你可以通过关键字 go 来启动一</description></item><item><title>Go function option vs builder, how to play?</title><link>http://cugbtang.github.io/post/go/series-go-12/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/go/series-go-12/</guid><description>Go 构建对象模式 Function Option 是一种通过函数选项来配置函数参数的方式。通过在函数中定义多个接受选项参数的函数，可以根据需要选择性地传递这些选项，而不是像</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Concurrent on ✌yesplease's blog</title><link>http://localhost:1313/tags/concurrent/</link><description>Recent content in Concurrent on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Fri, 05 Jan 2024 16:01:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/concurrent/index.xml" rel="self" type="application/rss+xml"/><item><title>Go concurrent, how to play?</title><link>http://localhost:1313/post/go/base/series-go-6/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/base/series-go-6/</guid><description>&lt;h2 id="introduction"&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;首先，让我们来理解一下 goroutine。Goroutine 是一种轻量级的线程，由 Go 运行时环境管理。在 Go 语言中，你可以通过关键字 go 来启动一个新的 goroutine，而不需要手动创建线程。这意味着你可以很容易地并发地执行多个任务，而不必担心线程管理的复杂性。&lt;/p&gt;
+&lt;p&gt;其次，Go 语言还引入了 channel 的概念，用于在不同的 goroutine 之间进行通信和数据交换。Channel 可以被用来发送和接收数值，这样不同的 goroutine 就可以安全地共享数据，而无需担心竞态条件和锁的问题。&lt;/p&gt;
+&lt;p&gt;通过使用 goroutine 和 channel，你可以很方便地编写并发程序，实现并行执行任务、协作处理数据等操作。这种并发模型使得 Go 语言在处理大规模并发任务时表现出色，并且相对容易理解和维护。&lt;/p&gt;
+&lt;h2 id="concurrent"&gt;concurrent&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;goroutine&lt;/li&gt;
+&lt;li&gt;channel&lt;/li&gt;
+&lt;li&gt;select&lt;/li&gt;
+&lt;li&gt;sync&lt;/li&gt;
+&lt;li&gt;atomic&lt;/li&gt;
+&lt;li&gt;context&lt;/li&gt;
+&lt;li&gt;sync/atomic&lt;/li&gt;
+&lt;li&gt;sync/pool&lt;/li&gt;
+&lt;li&gt;sync/waitgroup&lt;/li&gt;
+&lt;li&gt;sync/map&lt;/li&gt;
+&lt;li&gt;sync/once&lt;/li&gt;
+&lt;li&gt;sync/cond&lt;/li&gt;
+&lt;li&gt;sync/&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="安全并发"&gt;安全并发&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;package&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;import&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;sync&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;cond&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sync&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Cond&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;wg&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;sync&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;WaitGroup&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;wg&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Add&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 初始化 sync.Cond&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cond&lt;/span&gt; = &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;sync&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;NewCond&lt;/span&gt;(&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;sync&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Mutex&lt;/span&gt;{})
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;go&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;defer&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;wg&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Done&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 等待条件变量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cond&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;L&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Lock&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cond&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Wait&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cond&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;L&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Unlock&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Goroutine 1: Condition received&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;go&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;defer&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;wg&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Done&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;time&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Sleep&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;time&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Second&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 发送信号通知其他协程&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cond&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;L&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Lock&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cond&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Signal&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;cond&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;L&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Unlock&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Println&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;Goroutine 2: Condition sent&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;wg&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Wait&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item><item><title>Go function option vs builder, how to play?</title><link>http://localhost:1313/post/go/deep/series-go-3/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/deep/series-go-3/</guid><description>&lt;h2 id="go-构建对象模式"&gt;Go 构建对象模式&lt;/h2&gt;
+&lt;p&gt;Function Option 是一种通过函数选项来配置函数参数的方式。通过在函数中定义多个接受选项参数的函数，可以根据需要选择性地传递这些选项，而不是像传统方式那样传递一长串参数。这样可以使函数调用更清晰易读，避免参数传递顺序混乱的问题。&lt;/p&gt;
+&lt;p&gt;Builder 模式则是一种用于构建复杂对象的设计模式。在 Go 中，Builder 通常通过链式调用一系列方法来构建对象，并在最后通过一个构建方法返回所需的对象实例。这种方式可以让我们以一种流畅的方式来构建对象，同时也可以灵活地添加或修改构建过程中的步骤。&lt;/p&gt;
+&lt;p&gt;Function Option 更适合于需要配置多个参数的函数，而 Builder 更适合于需要构建复杂对象的情况。两者都能提高代码的可读性和灵活性，使得代码更易于维护和扩展。&lt;/p&gt;
+&lt;h3 id="简单的构造函数"&gt;简单的构造函数&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;A&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;B&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;C&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;newOption&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;amp&lt;/span&gt;;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;A&lt;/span&gt;: &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;B&lt;/span&gt;: &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;C&lt;/span&gt;: &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="function-option"&gt;function option&lt;/h3&gt;
+&lt;p&gt;场景：
+1、我们可能需要为Option的字段指定默认值
+2、Option的字段成员可能会发生变更&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;OptionFunc&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;WithA&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;OptionFunc&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;o&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;o&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;A&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;WithB&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;OptionFunc&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;o&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;o&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;B&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;WithC&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;OptionFunc&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;o&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;o&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;C&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;defaultOption&lt;/span&gt; = &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;amp&lt;/span&gt;;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;A&lt;/span&gt;: &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;quot&lt;/span&gt;;&lt;span style="color:#a6e22e"&gt;A&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;quot&lt;/span&gt;;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;B&lt;/span&gt;: &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;quot&lt;/span&gt;;&lt;span style="color:#a6e22e"&gt;B&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;quot&lt;/span&gt;;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;C&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;newOption&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;opts&lt;/span&gt; &lt;span style="color:#f92672"&gt;...&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;OptionFunc&lt;/span&gt;) (&lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;defaultOption&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;_&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;o&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;range&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;opts&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;o&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="builder"&gt;builder&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;NewBuilder&lt;/span&gt;() &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt;: &lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt;{},
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;WithA&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;A&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;WithB&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;b2&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;B&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;b2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;WithC&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;c&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;) &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;C&lt;/span&gt; = &lt;span style="color:#a6e22e"&gt;c&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;b&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Builder&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;Build&lt;/span&gt;() &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;Option&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;b&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;opt&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;builder&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;NewBuilder&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;option&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;builder&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;WithA&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;new A&amp;#34;&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;WithB&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;new B&amp;#34;&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;WithC&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;200&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;Build&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;fmt&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Printf&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;%+v\n&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;option&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

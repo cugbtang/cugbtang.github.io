@@ -1,1 +1,310 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Etcd on ✌yesplease's blog</title><link>http://cugbtang.github.io/tags/etcd/</link><description>Recent content in Etcd on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 28 Mar 2024 15:28:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/etcd/index.xml" rel="self" type="application/rss+xml"/><item><title>etcd authentication, how to deploy?</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-11/</link><pubDate>Thu, 28 Mar 2024 15:28:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-11/</guid><description>一、加载启动参数 1. 配置文件（Configuration file） 如果您提供了一个配置文件，那么配置文件中的设置将具有最高优先级。这意味着配置</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Etcd on ✌yesplease's blog</title><link>http://localhost:1313/tags/etcd/</link><description>Recent content in Etcd on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Thu, 28 Mar 2024 15:28:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/etcd/index.xml" rel="self" type="application/rss+xml"/><item><title>etcd authentication, how to deploy?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-11/</link><pubDate>Thu, 28 Mar 2024 15:28:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-11/</guid><description>&lt;h2 id="一加载启动参数"&gt;一、加载启动参数&lt;/h2&gt;
+&lt;h3 id="1-配置文件configuration-file"&gt;1. 配置文件（Configuration file）&lt;/h3&gt;
+&lt;p&gt;如果您提供了一个配置文件，那么配置文件中的设置将具有最高优先级。这意味着配置文件中的配置项将覆盖通过命令行标志和环境变量设置的所有配置。&lt;/p&gt;
+&lt;h3 id="2-命令行标志command-line-flags"&gt;2. 命令行标志（Command-line flags）&lt;/h3&gt;
+&lt;p&gt;当启动etcd时，通过命令行传递的标志具有较高的优先级。如果命令行标志被设置，它们将覆盖环境变量中的相应配置。&lt;/p&gt;
+&lt;h3 id="3-环境变量environment-variables"&gt;3. 环境变量（Environment variables）&lt;/h3&gt;
+&lt;p&gt;每个命令行标志都有一个对应的环境变量。如果命令行中没有提供相应的标志，环境变量中的设置将被应用。环境变量的名称以&lt;code&gt;ETCD_&lt;/code&gt;为前缀，并使用全大写字母和蛇形命名法。&lt;/p&gt;
+&lt;h3 id="优先级规则"&gt;优先级规则&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果提供了配置文件，配置文件中的配置项将覆盖命令行标志和环境变量中的设置。&lt;/li&gt;
+&lt;li&gt;如果没有提供配置文件，命令行标志的设置将覆盖环境变量中的设置。&lt;/li&gt;
+&lt;li&gt;如果命令行标志和环境变量都没有设置，etcd将使用默认值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;原文描述：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;Caution&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;If you mix-and-match configuration options, then the following rules apply.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;、Command-line flags take precedence over environment variables.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;、If you provide a configuration file all command-line flags and environment variables are ignored.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="二加密传输"&gt;二、加密传输&lt;/h2&gt;
+&lt;h3 id="已有证书"&gt;已有证书&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ etcd --name infra0 --data-dir infra0 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --cert-file&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/path/to/server.crt --key-file&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/path/to/server.key &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --advertise-client-urls&lt;span style="color:#f92672"&gt;=&lt;/span&gt;https://127.0.0.1:2379 --listen-client-urls&lt;span style="color:#f92672"&gt;=&lt;/span&gt;https://127.0.0.1:2379
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ curl --cacert /path/to/ca.crt https://127.0.0.1:2379/v2/keys/foo -XPUT -d value&lt;span style="color:#f92672"&gt;=&lt;/span&gt;bar -v&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="自动生成证书"&gt;自动生成证书&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;DISCOVERY_URL&lt;span style="color:#f92672"&gt;=&lt;/span&gt;... &lt;span style="color:#75715e"&gt;# from https://discovery.etcd.io/new&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# member1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ etcd --name infra1 --data-dir infra1 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --auto-tls --peer-auto-tls &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --initial-advertise-peer-urls&lt;span style="color:#f92672"&gt;=&lt;/span&gt;https://10.0.1.10:2380 --listen-peer-urls&lt;span style="color:#f92672"&gt;=&lt;/span&gt;https://10.0.1.10:2380 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --discovery &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;DISCOVERY_URL&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# member2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ etcd --name infra2 --data-dir infra2 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --auto-tls --peer-auto-tls &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --initial-advertise-peer-urls&lt;span style="color:#f92672"&gt;=&lt;/span&gt;https://10.0.1.11:2380 --listen-peer-urls&lt;span style="color:#f92672"&gt;=&lt;/span&gt;https://10.0.1.11:2380 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --discovery &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;DISCOVERY_URL&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="三rbac"&gt;三、RBAC&lt;/h2&gt;
+&lt;h3 id="特殊用户和角色"&gt;特殊用户和角色&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;存在一个特殊用户&lt;code&gt;root&lt;/code&gt;和特殊角色&lt;code&gt;root&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;root&lt;/code&gt;用户拥有对etcd的完全访问权限，必须在激活身份验证之前创建。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;root&lt;/code&gt;角色可以授予任何用户，包括root用户本身。拥有&lt;code&gt;root&lt;/code&gt;角色的用户具有全局读写访问权限，并且可以更新集群的身份验证配置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="管理用户"&gt;管理用户&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;etcdctl&lt;/code&gt;的&lt;code&gt;user&lt;/code&gt;子命令用于处理与用户账户相关的所有操作。&lt;/li&gt;
+&lt;li&gt;列出用户、创建用户、删除用户、更改用户密码等操作都可以通过&lt;code&gt;etcdctl&lt;/code&gt;命令完成。&lt;/li&gt;
+&lt;li&gt;创建用户时，可以设置密码或不设置密码。没有密码的用户可以通过TLS通用名称（Common Name, CN）进行身份验证。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="管理角色"&gt;管理角色&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;etcdctl&lt;/code&gt;的&lt;code&gt;role&lt;/code&gt;子命令用于处理特定角色的访问控制。&lt;/li&gt;
+&lt;li&gt;列出角色、创建新角色、删除角色等操作都可以通过&lt;code&gt;etcdctl&lt;/code&gt;命令完成。&lt;/li&gt;
+&lt;li&gt;角色可以被授予对单个键或键范围的访问权限，权限可以是只读、只写或读写。&lt;/li&gt;
+&lt;li&gt;角色的权限可以通过&lt;code&gt;etcdctl&lt;/code&gt;命令授予和撤销。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="启用身份验证"&gt;启用身份验证&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;启用身份验证的最小步骤包括创建root用户和启用身份验证。&lt;/li&gt;
+&lt;li&gt;启用身份验证后，etcd将运行在启用身份验证的状态下。如果需要禁用身份验证，可以使用相应的命令。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="使用etcdctl进行身份验证"&gt;使用&lt;code&gt;etcdctl&lt;/code&gt;进行身份验证&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;etcdctl&lt;/code&gt;支持类似于&lt;code&gt;curl&lt;/code&gt;的身份验证标志。&lt;/li&gt;
+&lt;li&gt;用户可以使用用户名和密码进行身份验证，也可以从提示中获取密码或从命令行标志中提供密码。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="使用tls通用名称"&gt;使用TLS通用名称&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;从etcd v3.2版本开始，如果etcd服务器以&lt;code&gt;--client-cert-auth=true&lt;/code&gt;选项启动，客户端TLS证书中的通用名称（CN）字段将被用作etcd用户。&lt;/li&gt;
+&lt;li&gt;在这种情况下，通用名称用于身份验证用户，客户端不需要密码。&lt;/li&gt;
+&lt;li&gt;如果客户端同时提供了&lt;code&gt;--client-cert-auth=true&lt;/code&gt;和CN，以及用户名和密码，那么基于用户名和密码的身份验证将被优先考虑。&lt;/li&gt;
+&lt;li&gt;此功能不能与gRPC-proxy和gRPC-gateway一起使用，因为这些工具在处理TLS连接时存在限制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="关于密码强度的注意事项"&gt;关于密码强度的注意事项&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;etcdctl&lt;/code&gt;和etcd API在创建用户或更新用户密码时不会强制执行特定密码长度。&lt;/li&gt;
+&lt;li&gt;管理员有责任执行这些要求。&lt;/li&gt;
+&lt;li&gt;为了避免与密码强度相关的安全风险，可以使用基于TLS通用名称的身份验证，以及使用&lt;code&gt;--no-password&lt;/code&gt;选项创建的用户。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="四加认证"&gt;四、加认证&lt;/h2&gt;
+&lt;h3 id="配置证书认证启动"&gt;配置证书认证启动&lt;/h3&gt;
+&lt;p&gt;单纯的证书认证模式，默认有所有权限，其实是没有开启认证（即没有执行etcdtl auth enable）
+看下原文描述：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;As of version v3.2 if an etcd server is launched with the option --client-cert-auth=true, the field of Common Name (CN) in the client’s TLS cert will be used as an etcd user. In this case, the common name authenticates the user and the client does not need a password. Note that if both of 1. --client-cert-auth=true is passed and CN is provided by the client, and 2. username and password are provided by the client, the username and password based authentication is prioritized. Note that this feature cannot be used with gRPC-proxy and gRPC-gateway. This is because gRPC-proxy terminates TLS from its client so all the clients share a cert of the proxy. gRPC-gateway uses a TLS connection internally for transforming HTTP request to gRPC request so it shares the same limitation. Therefore the clients cannot provide their CN to the server correctly. gRPC-proxy will cause an error and stop if a given cert has non empty CN. gRPC-proxy returns an error which indicates that the client has an non empty CN in its cert.&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ etcd --name infra0 --data-dir infra0 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --client-cert-auth --trusted-ca-file&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/path/to/ca.crt --cert-file&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/path/to/server.crt --key-file&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/path/to/server.key &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --advertise-client-urls https://127.0.0.1:2379 --listen-client-urls https://127.0.0.1:2379
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ curl --cacert /path/to/ca.crt --cert /path/to/client.crt --key /path/to/client.key &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -L https://127.0.0.1:2379/v2/keys/foo -XPUT -d value&lt;span style="color:#f92672"&gt;=&lt;/span&gt;bar -v&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;根据证书设置RBAC&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;export ETCDCTL_API&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ENDPOINTS&lt;span style="color:#f92672"&gt;=&lt;/span&gt;localhost:2379
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; role add root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; role get root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; user add root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; user grant-role root root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; user get root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; role add role0
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; role grant-permission role0 readwrite foo
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; user add user0
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; user grant-role user0 role0
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; auth enable
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# now all client requests go through auth&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; --user&lt;span style="color:#f92672"&gt;=&lt;/span&gt;user0:123 put foo bar
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; get foo
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# permission denied, user name is empty because the request does not issue an authentication request&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; --user&lt;span style="color:#f92672"&gt;=&lt;/span&gt;user0:123 get foo
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# user0 can read the key foo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;etcdctl --endpoints&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;ENDPOINTS&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; --user&lt;span style="color:#f92672"&gt;=&lt;/span&gt;user0:123 get foo1&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="配置账号密码启动即只开启rbac"&gt;配置账号密码启动,即只开启RBAC&lt;/h3&gt;
+&lt;p&gt;使用 &lt;code&gt;bitnami/etcd:3.5.4&lt;/code&gt; 的镜像&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;apiVersion: apps/v1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kind: StatefulSet
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; labels:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; app: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;spec:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; replicas: &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; revisionHistoryLimit: &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; selector:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; matchLabels:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; app: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; serviceName: etcd-headless
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; template:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; labels:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; app: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; spec:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; containers:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - env:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_AUTO_COMPACTION_MODE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;revision&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_AUTO_COMPACTION_RETENTION
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;1000&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_QUOTA_BACKEND_BYTES
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;10240000000&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_ROOT_PASSWORD
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: xxx
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: MY_POD_NAME
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valueFrom:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fieldRef:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; apiVersion: v1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fieldPath: metadata.name
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: CLUSTER_NAMESPACE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valueFrom:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fieldRef:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; apiVersion: v1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fieldPath: metadata.namespace
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: SERVICE_NAME
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: etcd-headless
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; image: bitnami/etcd:3.5.4
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; imagePullPolicy: IfNotPresent
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ports:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - containerPort: &lt;span style="color:#ae81ff"&gt;2380&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: peer
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; protocol: TCP
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - containerPort: &lt;span style="color:#ae81ff"&gt;2379&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: client
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; protocol: TCP
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; resources:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; limits:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cpu: 500m
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; memory: 1Gi
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; requests:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cpu: 500m
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; memory: 1Gi
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; terminationMessagePath: /dev/termination-log
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; terminationMessagePolicy: File
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; volumeMounts:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - mountPath: /etc/certs
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd-tls
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - mountPath: /bitnami/etcd/data
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd-pvc
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dnsPolicy: ClusterFirst
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; restartPolicy: Always
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; schedulerName: default-scheduler
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; securityContext: &lt;span style="color:#f92672"&gt;{}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; terminationGracePeriodSeconds: &lt;span style="color:#ae81ff"&gt;30&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; volumes:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: etcd-tls
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; secret:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; secretName: etcd-secret
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: etcd-pvc
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; emptyDir: &lt;span style="color:#f92672"&gt;{}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="配置证书认证开启rbac"&gt;配置证书认证+开启RBAC&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;apiVersion: apps/v1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kind: StatefulSet
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; labels:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; app: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;spec:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; replicas: &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; revisionHistoryLimit: &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; selector:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; matchLabels:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; app: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; serviceName: etcd-headless
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; template:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; labels:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; app: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; spec:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; containers:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - env:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_CLIENT_CERT_AUTH
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;true&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_TRUSTED_CA_FILE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;/etc/certs/ca.pem&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_CERT_FILE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;/etc/certs/etcd.pem&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_KEY_FILE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;/etc/certs/etcd-key.pem&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_AUTO_COMPACTION_MODE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;revision&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_AUTO_COMPACTION_RETENTION
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;1000&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_QUOTA_BACKEND_BYTES
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;10240000000&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_ROOT_PASSWORD
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: xxx
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_LISTEN_CLIENT_URLS
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;https://0.0.0.0:2379&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: ETCD_ADVERTISE_CLIENT_URLS
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: &lt;span style="color:#e6db74"&gt;&amp;#34;https://0.0.0.0:2379&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: MY_POD_NAME
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valueFrom:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fieldRef:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; apiVersion: v1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fieldPath: metadata.name
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: CLUSTER_NAMESPACE
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valueFrom:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fieldRef:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; apiVersion: v1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fieldPath: metadata.namespace
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: SERVICE_NAME
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; value: etcd-headless
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; image: bitnami/etcd:3.5.4
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; imagePullPolicy: IfNotPresent
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ports:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - containerPort: &lt;span style="color:#ae81ff"&gt;2380&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: peer
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; protocol: TCP
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - containerPort: &lt;span style="color:#ae81ff"&gt;2379&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: client
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; protocol: TCP
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; resources:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; limits:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cpu: 500m
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; memory: 1Gi
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; requests:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; cpu: 500m
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; memory: 1Gi
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; terminationMessagePath: /dev/termination-log
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; terminationMessagePolicy: File
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; volumeMounts:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - mountPath: /etc/certs
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd-tls
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - mountPath: /bitnami/etcd/data
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; name: etcd-pvc
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; dnsPolicy: ClusterFirst
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; restartPolicy: Always
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; schedulerName: default-scheduler
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; securityContext: &lt;span style="color:#f92672"&gt;{}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; terminationGracePeriodSeconds: &lt;span style="color:#ae81ff"&gt;30&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; volumes:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: etcd-tls
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; secret:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; secretName: etcd-secret
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; - name: etcd-pvc
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; emptyDir: &lt;span style="color:#f92672"&gt;{}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="五引用"&gt;五、引用&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://etcd.io/docs/v3.6/op-guide/configuration/"&gt;etcd&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

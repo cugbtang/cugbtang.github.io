@@ -1,1 +1,1431 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Devops on ✌yesplease's blog</title><link>http://cugbtang.github.io/categories/devops/</link><description>Recent content in Devops on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 28 Mar 2024 13:28:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/categories/devops/index.xml" rel="self" type="application/rss+xml"/><item><title>cfssh, Q&amp;A</title><link>http://cugbtang.github.io/post/devops/series-cfssh-1/</link><pubDate>Thu, 28 Mar 2024 13:28:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-cfssh-1/</guid><description>为了使用cfssl工具自签发证书，并设置不同的有效期，你需要创建JSON配置文件来指定证书的属性，包括有效期。以下是生成根证书、服务端证书和</description></item><item><title>git 以前的许多commit中某个文件含有密钥，怎么办？</title><link>http://cugbtang.github.io/post/devops/series-git-2/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-git-2/</guid><description>git 以前的许多commit中某个文件含有密钥，怎么办？ 一、场景描述 在这个项目中，代码的都是在develop分支上进行的， 现在要打tag v1.0</description></item><item><title>git 合并原理</title><link>http://cugbtang.github.io/post/devops/series-git-4/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-git-4/</guid><description>git 合并原理 一、场景描述 记录一些常用操作 git status: 显示工作区和暂存区的状态 git diff: 显示工作区和暂存区之间的差异 git diff &amp;ndash;cached: 显示暂存区和最新提交之间的差异 git diff [</description></item><item><title>git 常用操作</title><link>http://cugbtang.github.io/post/devops/series-git-3/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-git-3/</guid><description>git 常用操作 一、场景描述 记录一些常用操作 git status: 显示工作区和暂存区的状态 git diff: 显示工作区和暂存区之间的差异 git diff &amp;ndash;cached: 显示暂存区和最新提交之间的差异 git diff [</description></item><item><title>git 部分功能需要先上线，怎么办？</title><link>http://cugbtang.github.io/post/devops/series-git-1/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-git-1/</guid><description>git 部分功能需要先上线，怎么办？ 一、场景描述 在这个项目中，代码的提交和合并都是在develop分支上进行的， 之前已经基于某个commit打了t</description></item><item><title>Jenkins, hot backup</title><link>http://cugbtang.github.io/post/devops/series-jenkins-3/</link><pubDate>Tue, 01 Feb 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-jenkins-3/</guid><description>jenkins 数据热备 rsync : 增量备份 inotify： 实时通知 理论 一、rsync 与传统的 cp、tar 备份方式相比，rsync 具有安全性高、备份迅速、支持增量</description></item><item><title>Jenkins, Q&amp;A</title><link>http://cugbtang.github.io/post/devops/series-jenkins-2/</link><pubDate>Sat, 15 Jan 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-jenkins-2/</guid><description>1、镜像选择 jenkinsci/blueocean , why? 安装blue ocean插件前 安装blue ocean插件后 2、启动参数都表示什么？ 1 2 3 4 5 6 7 8 docker run \ --rm \ -u root \ -p 8080:8080 \ -v jenkins-data:/var/jenkins_home</description></item><item><title>Jenkins, how to play?</title><link>http://cugbtang.github.io/post/devops/series-jenkins-1/</link><pubDate>Sat, 01 Jan 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/devops/series-jenkins-1/</guid><description>how to play jenkins? 社区源码、文档1等托管在 GitHub 上。 其中基础设施部分在 jenkins-infra； 核心库以及插件在 jenkinsci2； Jenkins 中文本地化相关的</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Devops on ✌yesplease's blog</title><link>http://localhost:1313/categories/devops/</link><description>Recent content in Devops on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Thu, 28 Mar 2024 13:28:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/devops/index.xml" rel="self" type="application/rss+xml"/><item><title>cfssh, Q&amp;A</title><link>http://localhost:1313/post/devops/series-cfssh-1/</link><pubDate>Thu, 28 Mar 2024 13:28:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/devops/series-cfssh-1/</guid><description>&lt;p&gt;为了使用&lt;code&gt;cfssl&lt;/code&gt;工具自签发证书，并设置不同的有效期，你需要创建JSON配置文件来指定证书的属性，包括有效期。以下是生成根证书、服务端证书和客户端证书的具体命令和示例配置文件。&lt;/p&gt;
+&lt;h3 id="1-生成根证书ca"&gt;1. 生成根证书（CA）&lt;/h3&gt;
+&lt;p&gt;首先，创建一个根证书的配置文件（例如&lt;code&gt;ca-config.json&lt;/code&gt;）：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;signing&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;profiles&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;root&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;usages&amp;#34;&lt;/span&gt;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;cert sign&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;crl sign&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;key encipherment&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;server auth&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;client auth&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;expiry&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;10000m&amp;#34;&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 100年，这里使用月份表示法
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;default&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;expiry&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;10000m&amp;#34;&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 默认有效期也为100年
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;然后，使用以下命令生成根证书：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cfssl gencert -initca ca-csr.json | cfssljson -bare ca&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这里假设你已经有了一个名为&lt;code&gt;ca-csr.json&lt;/code&gt;的证书签名请求（CSR）配置文件。&lt;/p&gt;
+&lt;h3 id="2-生成服务端证书"&gt;2. 生成服务端证书&lt;/h3&gt;
+&lt;p&gt;创建一个服务端证书的配置文件（例如&lt;code&gt;server-csr.json&lt;/code&gt;）：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;hosts&amp;#34;&lt;/span&gt;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;example.com&amp;#34;&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 服务端的域名
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; ],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;CN&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;example.com&amp;#34;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 通用名称，通常与域名相同
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;key&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;algo&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;rsa&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;size&amp;#34;&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;2048&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;names&amp;#34;&lt;/span&gt;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;C&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;US&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;ST&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;State&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;L&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;Locality&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;O&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;Organization&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;OU&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;Unit&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;ca&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;/etc/cfssl/ca.pem&amp;#34;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 根证书文件路径
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;ca_key&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;/etc/cfssl/ca-key.pem&amp;#34;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 根证书密钥文件路径
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;expiry&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;10y&amp;#34;&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 服务端证书有效期10年
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;使用以下命令生成服务端证书：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cfssl gencert -ca&lt;span style="color:#f92672"&gt;=&lt;/span&gt;ca.pem -ca-key&lt;span style="color:#f92672"&gt;=&lt;/span&gt;ca-key.pem -config&lt;span style="color:#f92672"&gt;=&lt;/span&gt;ca-config.json -profile&lt;span style="color:#f92672"&gt;=&lt;/span&gt;root server-csr.json | cfssljson -bare server&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="3-生成客户端证书"&gt;3. 生成客户端证书&lt;/h3&gt;
+&lt;p&gt;创建一个客户端证书的配置文件（例如&lt;code&gt;client-csr.json&lt;/code&gt;）：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;hosts&amp;#34;&lt;/span&gt;: [],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;CN&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;client&amp;#34;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 客户端的名称或ID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;key&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;algo&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;rsa&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;size&amp;#34;&lt;/span&gt;: &lt;span style="color:#ae81ff"&gt;2048&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;names&amp;#34;&lt;/span&gt;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;C&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;US&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;ST&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;State&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;L&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;Locality&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;O&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;Organization&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;OU&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;Unit&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ],
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;ca&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;/etc/cfssl/ca.pem&amp;#34;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 根证书文件路径
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;ca_key&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;/etc/cfssl/ca-key.pem&amp;#34;&lt;/span&gt;, &lt;span style="color:#75715e"&gt;// 根证书密钥文件路径
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;expiry&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;1y&amp;#34;&lt;/span&gt; &lt;span style="color:#75715e"&gt;// 客户端证书有效期1年
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;使用以下命令生成客户端证书：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cfssl gencert -ca&lt;span style="color:#f92672"&gt;=&lt;/span&gt;ca.pem -ca-key&lt;span style="color:#f92672"&gt;=&lt;/span&gt;ca-key.pem -config&lt;span style="color:#f92672"&gt;=&lt;/span&gt;ca-config.json -profile&lt;span style="color:#f92672"&gt;=&lt;/span&gt;root client-csr.json | cfssljson -bare client&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;在上述命令中，&lt;code&gt;ca.pem&lt;/code&gt;和&lt;code&gt;ca-key.pem&lt;/code&gt;是由&lt;code&gt;cfssl gencert&lt;/code&gt;命令生成的根证书和密钥文件。&lt;code&gt;server-csr.json&lt;/code&gt;和&lt;code&gt;client-csr.json&lt;/code&gt;是服务端和客户端证书的CSR配置文件，你需要根据实际情况调整其中的域名、国家代码、州/省、城市/地区、组织名称和组织单位等信息。&lt;/p&gt;
+&lt;p&gt;请注意，有效期可以通过字符串表示法来设置，例如&lt;code&gt;&amp;quot;10y&amp;quot;&lt;/code&gt;表示10年，&lt;code&gt;&amp;quot;1y&amp;quot;&lt;/code&gt;表示1年。确保在执行命令之前，你已经创建了相应的配置文件，并且文件路径正确指向了你的根证书和密钥。&lt;/p&gt;</description></item><item><title>git 以前的许多commit中某个文件含有密钥，怎么办？</title><link>http://localhost:1313/post/devops/series-git-2/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/devops/series-git-2/</guid><description>&lt;h2 id="git-以前的许多commit中某个文件含有密钥怎么办"&gt;git 以前的许多commit中某个文件含有密钥，怎么办？&lt;/h2&gt;
+&lt;h2 id="一场景描述"&gt;一、场景描述&lt;/h2&gt;
+&lt;p&gt;在这个项目中，代码的都是在develop分支上进行的， 现在要打tag v1.0.0进行发版。然而，从项目init开始到现在有很多commit，其中某个文件中把密钥直接写在了源码中，最近几次提交才把密钥处理了。&lt;/p&gt;
+&lt;h2 id="二问问-gpt"&gt;二、问问 gpt&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git 一开始项目的很多提交中某个文件含有密钥，最近的几次commit中才把密钥隐藏掉，那么怎样清除之前的很多次commit中密钥; 我想把之前所有提交中密码不为&lt;em&gt;&lt;strong&gt;的都改为&lt;/strong&gt;&lt;/em&gt; 该怎么操作&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;要将之前所有提交中的密码更改为 &lt;code&gt;***&lt;/code&gt;，可以使用 &lt;code&gt;git filter-branch&lt;/code&gt; 命令结合自定义脚本来实现。请按照以下步骤进行操作：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;首先，在你的项目目录下打开终端，并确保你当前在所需的分支上（例如，&lt;code&gt;master&lt;/code&gt; 分支）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行以下命令来备份你的代码：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git branch backup&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个名为 &lt;code&gt;replace_password.sh&lt;/code&gt; 的脚本文件，并使用文本编辑器打开它。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件中，输入以下内容：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git ls-files -z | while read -d &amp;#39;&amp;#39; -r file; do
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; if [[ $file == *&amp;#34;&amp;lt;文件路径&amp;gt;&amp;#34;* ]]; then
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; sed -i &amp;#39;s/密码模式/*** /g&amp;#39; &amp;#34;$file&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fi
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;done&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;将 &lt;code&gt;&amp;lt;文件路径&amp;gt;&lt;/code&gt; 替换为包含密码的文件的路径或文件夹的路径。这将会在指定文件中查找并替换密码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;保存并关闭 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行以下命令来添加执行权限给脚本文件：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;chmod +x replace_password.sh&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;现在，运行以下命令来执行 &lt;code&gt;git filter-branch&lt;/code&gt; 操作，并使用脚本文件作为过滤器：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git filter-branch --tree-filter &amp;#39;/path/to/replace_password.sh&amp;#39; --prune-empty HEAD&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;将 &lt;code&gt;/path/to/replace_password.sh&lt;/code&gt; 替换为 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件的实际路径。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Git 将会遍历所有的提交，并在每个提交上运行脚本文件，查找并替换指定文件中的密码。完成后，你的历史提交将被重写。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果你已经将这些提交推送到远程仓库，你需要使用 &lt;code&gt;git push --force&lt;/code&gt; 强制推送修改后的提交历史：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push --force&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这样，你就可以使用自定义脚本来批量替换之前所有提交中的密码。但请注意，执行 &lt;code&gt;git filter-branch&lt;/code&gt; 操作时，也要小心谨慎，因为它会修改提交历史。确保在操作之前备份代码，并在必要时咨询有经验的 Git 使用者或开发者。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git filter-branch &amp;ndash;tree-filter &amp;lsquo;/path/to/replace_password.sh&amp;rsquo; &amp;ndash;prune-empty HEAD
+解释下这个命令&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;当你运行 git filter-branch 命令时，它会遍历 Git 仓库的每个提交，并对每个提交应用指定的过滤器。在这个命令中，我们使用了 &amp;ndash;tree-filter 参数来指定一个以树形结构过滤提交的过滤器。&lt;/p&gt;
+&lt;p&gt;下面解释一下命令中各个部分的含义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;git filter-branch: 这是执行过滤操作的 Git 命令。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;ndash;tree-filter: 这是指定要应用的过滤器类型。&amp;ndash;tree-filter 可以在每个提交的工作目录中运行指定的命令。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;lsquo;/path/to/replace_password.sh&amp;rsquo;: 这是具体的过滤器命令。在每个提交中，它运行 /path/to/replace_password.sh 命令来修改&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;HEAD: 这是指定要过滤的提交范围。在这个命令中，我们使用 HEAD 表示过滤当前分支上的所有提交。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通过运行上述命令，Git 将会遍历每个提交，并在每个提交上执行指定的命令，移除包含密钥文件的文件。完成后，&lt;/p&gt;
+&lt;h2 id="三小结"&gt;三、小结：&lt;/h2&gt;
+&lt;p&gt;简化一些：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; git filter-branch --tree-filter &lt;span style="color:#e6db74"&gt;&amp;#39; sed -i &amp;#34;s/aaa/*** /g&amp;#34; ./initialize/config.go&amp;#39;&lt;/span&gt; --prune-empty HEAD
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; git push -f&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;filter-branch&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="四参考"&gt;四、参考&lt;/h2&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href=""&gt;gpt&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E4%BD%BF%E7%94%A8-Git-%E8%B0%83%E8%AF%95"&gt;git-filter-branch&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>git 合并原理</title><link>http://localhost:1313/post/devops/series-git-4/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/devops/series-git-4/</guid><description>&lt;h2 id="git-合并原理"&gt;git 合并原理&lt;/h2&gt;
+&lt;h2 id="一场景描述"&gt;一、场景描述&lt;/h2&gt;
+&lt;p&gt;记录一些常用操作&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;git status: 显示工作区和暂存区的状态&lt;/li&gt;
+&lt;li&gt;git diff: 显示工作区和暂存区之间的差异&lt;/li&gt;
+&lt;li&gt;git diff &amp;ndash;cached: 显示暂存区和最新提交之间的差异&lt;/li&gt;
+&lt;li&gt;git diff [分支1] [分支2]: 比较两个分支之间的差异&lt;/li&gt;
+&lt;li&gt;git grep [关键词]: 在整个代码库中搜索指定关键词&lt;/li&gt;
+&lt;li&gt;git stash: 将当前修改暂存起来，切换到其他分支&lt;/li&gt;
+&lt;li&gt;git reset &amp;ndash;hard [提交号]: 将当前分支的 HEAD 指针指向指定的提交，并重置工作区和暂存区&lt;/li&gt;
+&lt;li&gt;git rm [文件]: 从版本控制中移除文件&lt;/li&gt;
+&lt;li&gt;git rebase [提交号]: 交互式地合并、重新排序或编辑提交历史的&lt;/li&gt;
+&lt;li&gt;git cherry-pick [提交号]: 选择某个提交，并将其应用到当前分支&lt;/li&gt;
+&lt;li&gt;git blame [文件]: 显示指定文件的每一行是谁在哪个提交中修改的&lt;/li&gt;
+&lt;li&gt;git blame -L [起始行号],[结束行号] [文件]: 仅显示指定行范围的文件是谁修改的&lt;/li&gt;
+&lt;li&gt;git revert [提交号]: 创建一个新的提交，用于撤销指定的提交&lt;/li&gt;
+&lt;li&gt;git bisect start: 启动二分查找来定位引入问题的提交&lt;/li&gt;
+&lt;li&gt;git stash apply: 恢复最近一次暂存的修改，并将其从暂存堆栈中删除&lt;/li&gt;
+&lt;li&gt;git reflog: 显示 HEAD 和分支的历史记录，包括已经被删除的提交&lt;/li&gt;
+&lt;li&gt;git log &amp;ndash;author=[作者]: 显示特定作者的提交历史&lt;/li&gt;
+&lt;li&gt;git tag [标签名] [提交号]: 在指定提交上创建一个标签&lt;/li&gt;
+&lt;li&gt;git show-branch: 显示本地分支的历史和状态&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="二问问-gpt"&gt;二、问问 gpt&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;解释下git show&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;git show&lt;/code&gt; 是一个非常有用的 Git 命令，它用于显示提交的详细信息和更改的内容。下面是 &lt;code&gt;git show&lt;/code&gt; 的详细讲解：&lt;/p&gt;
+&lt;p&gt;基本语法：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git show [提交]&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[提交]&lt;/code&gt;: 可选参数，表示要查看的提交，默认为最新的提交。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用 &lt;code&gt;git show&lt;/code&gt; 命令可以获取以下信息：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;提交信息：包括提交哈希值、作者、提交日期和提交消息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;修改的文件：列出了与该提交相关的所有修改过的文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;文件更改的具体内容：展示了每个文件的具体更改内容，即新增、修改或删除的行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;代码差异：以 diff 的形式显示当前提交与其父提交之间的代码差异。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;其他元数据：显示提交中的其他元数据，例如签名和标签。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;示例用法：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git show&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这将显示最新提交的详细信息和更改的内容。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git show abcdef123456&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这将显示提交哈希值为 &lt;code&gt;abcdef123456&lt;/code&gt; 的提交的详细信息和更改的内容。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git show&lt;/code&gt; 命令在查看历史提交、检查代码更改、审查提交信息等方面非常有用。通过查看提交的详细信息，开发者可以更好地理解代码库的演变历史并进行必要的代码审查和调试。记住，你可以使用其他参数和选项来进一步定制 &lt;code&gt;git show&lt;/code&gt; 命令的输出。可以通过 &lt;code&gt;git show --help&lt;/code&gt; 查看详细的帮助文档。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;解释下 git rebase -i commit&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;当你运行 &lt;code&gt;git rebase -i commit&lt;/code&gt; 命令时，你可以使用交互式界面对提交历史进行编辑。下面是一个示例：&lt;/p&gt;
+&lt;p&gt;假设你有如下的提交历史：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;commit C: Add feature C
+commit B: Add feature B
+commit A: Add feature A&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;现在你想要将提交 B 和提交 C 合并为一个提交，并编辑提交 A 的消息。你可以运行以下命令：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;git rebase -i commit&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Git 将会打开交互式界面，其中列出了提交历史的相关信息：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;pick abcdef1 commit A: Add feature A
+pick bcdef23 commit B: Add feature B
+pick def4567 commit C: Add feature C&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;你可以对这些操作进行修改，以实现你的目标。在本例中，你可以将提交 B 和提交 C 合并为一个提交，然后编辑提交 A 的消息。你可以修改交互式界面如下：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;pick abcdef1 commit A: Add feature A
+squash bcdef23 commit B: Add feature B
+s/commit A: Add feature A/Edit feature A/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;保存并退出编辑器。Git 将会根据你的指示执行相应的操作。此时，Git 会自动合并提交 B 到提交 A，并修改提交 A 的消息。最终的提交历史将如下所示：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;commit A: Edit feature A
+commit BC: Add feature B and C&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;注意，在上述示例中，使用了 &lt;code&gt;squash&lt;/code&gt; 命令来将提交 B 合并到提交 A，并使用 &lt;code&gt;s/commit A: Add feature A/Edit feature A/&lt;/code&gt; 来编辑提交 A 的消息。&lt;/p&gt;
+&lt;p&gt;请注意，在执行类似于 &lt;code&gt;git rebase -i&lt;/code&gt; 这样的操作时，一定要小心审查并确认你的更改，以免不小心破坏提交历史。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git bisect 详细介绍下&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;git bisect 是 Git 提供的一个命令，用于帮助我们通过二分查找定位引入问题的提交。当我们在一个大型项目中发现了一个 bug，并且我们知道在之前的某个提交中出现了这个 bug，但是不知道具体是在哪个提交引入的时候，可以使用 git bisect 命令来快速定位。&lt;/p&gt;
+&lt;p&gt;下面是 git bisect 的详细使用步骤：&lt;/p&gt;
+&lt;p&gt;1、首先，进入到你的项目目录中，并确保你在一个干净的状态下（没有未提交的修改）。&lt;/p&gt;
+&lt;p&gt;2、执行 git bisect start 命令，表示开始二分查找。&lt;/p&gt;
+&lt;p&gt;3、通过 git bisect bad 命令告诉 Git 当前的代码状态是有问题的（即包含了 bug）。&lt;/p&gt;
+&lt;p&gt;4、使用 git bisect good [好的提交号] 或者 git bisect good [好的标签名] 命令指定一个已知的“好”（即没有问题的）的提交。&lt;/p&gt;
+&lt;p&gt;5、Git 会自动切换到一个中间的提交，并要求你测试这个提交是否存在 bug。根据测试结果使用 git bisect bad 或者 git bisect good 命令告诉 Git 这个中间提交是否含有 bug。&lt;/p&gt;
+&lt;p&gt;6、重复步骤 5，Git 会根据你的测试结果不断地切换到新的中间提交，直到找到引入问题的提交。&lt;/p&gt;
+&lt;p&gt;7、当 git bisect 定位到引入问题的提交时，Git 会给出相应的提示，并自动返回到该提交。&lt;/p&gt;
+&lt;p&gt;8、最后，执行 git bisect reset 命令结束二分查找过程，Git 会将你的 HEAD 恢复到初始状态。&lt;/p&gt;
+&lt;p&gt;通过以上步骤，你可以使用 git bisect 在复杂的代码历史中快速定位 bug 的引入提交。这个命令在大型项目中特别有用，可以节省定位问题的时间和精力。需要注意的是，你需要根据实际情况进行好坏提交的选择，并且在测试过程中保持良好的记录和反馈。&lt;/p&gt;
+&lt;p&gt;要将之前所有提交中的密码更改为 &lt;code&gt;***&lt;/code&gt;，可以使用 &lt;code&gt;git filter-branch&lt;/code&gt; 命令结合自定义脚本来实现。请按照以下步骤进行操作：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;首先，在你的项目目录下打开终端，并确保你当前在所需的分支上（例如，&lt;code&gt;master&lt;/code&gt; 分支）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行以下命令来备份你的代码：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git branch backup&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个名为 &lt;code&gt;replace_password.sh&lt;/code&gt; 的脚本文件，并使用文本编辑器打开它。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件中，输入以下内容：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git ls-files -z | while read -d &amp;#39;&amp;#39; -r file; do
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; if [[ $file == *&amp;#34;&amp;lt;文件路径&amp;gt;&amp;#34;* ]]; then
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; sed -i &amp;#39;s/密码模式/*** /g&amp;#39; &amp;#34;$file&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fi
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;done&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;将 &lt;code&gt;&amp;lt;文件路径&amp;gt;&lt;/code&gt; 替换为包含密码的文件的路径或文件夹的路径。这将会在指定文件中查找并替换密码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;保存并关闭 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行以下命令来添加执行权限给脚本文件：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;chmod +x replace_password.sh&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;现在，运行以下命令来执行 &lt;code&gt;git filter-branch&lt;/code&gt; 操作，并使用脚本文件作为过滤器：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git filter-branch --tree-filter &amp;#39;/path/to/replace_password.sh&amp;#39; --prune-empty HEAD&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;将 &lt;code&gt;/path/to/replace_password.sh&lt;/code&gt; 替换为 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件的实际路径。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Git 将会遍历所有的提交，并在每个提交上运行脚本文件，查找并替换指定文件中的密码。完成后，你的历史提交将被重写。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果你已经将这些提交推送到远程仓库，你需要使用 &lt;code&gt;git push --force&lt;/code&gt; 强制推送修改后的提交历史：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push --force&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这样，你就可以使用自定义脚本来批量替换之前所有提交中的密码。但请注意，执行 &lt;code&gt;git filter-branch&lt;/code&gt; 操作时，也要小心谨慎，因为它会修改提交历史。确保在操作之前备份代码，并在必要时咨询有经验的 Git 使用者或开发者。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;sparse-checkout 详细讲解下&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;sparse-checkout&lt;/code&gt; 是 Git 的一个功能，用于部分克隆（partial clone）仓库。它允许你只检出仓库中指定目录或文件的内容，而不是完整地克隆整个仓库。这对于大型仓库或仅需要特定部分代码的情况非常有用，可以显著节省下载和存储空间。&lt;/p&gt;
+&lt;p&gt;下面是 &lt;code&gt;sparse-checkout&lt;/code&gt; 的详细讲解：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;配置 &lt;code&gt;sparse-checkout&lt;/code&gt;：在进行部分克隆之前，需先配置 &lt;code&gt;sparse-checkout&lt;/code&gt;。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git sparse-checkout init&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;添加感兴趣的目录或文件：通过指定要检出的目录或文件，告诉 Git 哪些部分是你感兴趣的。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git sparse-checkout set &amp;lt;目录/文件&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;你可以多次运行该命令来添加多个目录或文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;完成部分克隆：现在你可以执行部分克隆命令，只拉取感兴趣的部分。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git clone --filter&lt;span style="color:#f92672"&gt;=&lt;/span&gt;blob:none &amp;lt;远程仓库URL&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注意，在使用 &lt;code&gt;--filter=blob:none&lt;/code&gt; 标志进行部分克隆时，仓库中的大文件将不会被下载，只有文件元数据（例如文件名和文件大小）会被获取。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;更新和同步：一旦你进行了部分克隆，你可以像常规 Git 仓库一样更新和同步。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git pull origin &amp;lt;分支&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Git 会根据你配置的 &lt;code&gt;sparse-checkout&lt;/code&gt; 来更新和同步你感兴趣的部分。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;总结来说，&lt;code&gt;sparse-checkout&lt;/code&gt; 提供了一种灵活的方式来只检出仓库中特定目录或文件的内容。它可以实现部分克隆，节省带宽和存储空间，并提高代码仓库的下载速度。记住，部分克隆功能在 Git 2.25 及更高版本中才可用。&lt;/p&gt;
+&lt;h2 id="三小结"&gt;三、小结：&lt;/h2&gt;
+&lt;p&gt;附上一些常用缩写：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gc&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git config&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gs&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git status&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias g&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias ga&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git add&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gaa&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git add -all&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gp&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git push&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gl&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git pull&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gc&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git commit&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gcm&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git commit -m&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gcam&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git commit -am&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gb&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git branch&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gbr&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git branch -r&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gba&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git branch -a&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gco&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git checkout&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gcb&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git checkout -b&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gm&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git merge&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gd&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git diff&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gdw&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git diff --word-diff&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias glg&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git lg&amp;#39;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="四参考"&gt;四、参考&lt;/h2&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href=""&gt;gpt&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>git 常用操作</title><link>http://localhost:1313/post/devops/series-git-3/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/devops/series-git-3/</guid><description>&lt;h2 id="git-常用操作"&gt;git 常用操作&lt;/h2&gt;
+&lt;h2 id="一场景描述"&gt;一、场景描述&lt;/h2&gt;
+&lt;p&gt;记录一些常用操作&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;git status: 显示工作区和暂存区的状态&lt;/li&gt;
+&lt;li&gt;git diff: 显示工作区和暂存区之间的差异&lt;/li&gt;
+&lt;li&gt;git diff &amp;ndash;cached: 显示暂存区和最新提交之间的差异&lt;/li&gt;
+&lt;li&gt;git diff [分支1] [分支2]: 比较两个分支之间的差异&lt;/li&gt;
+&lt;li&gt;git grep [关键词]: 在整个代码库中搜索指定关键词&lt;/li&gt;
+&lt;li&gt;git stash: 将当前修改暂存起来，切换到其他分支&lt;/li&gt;
+&lt;li&gt;git reset &amp;ndash;hard [提交号]: 将当前分支的 HEAD 指针指向指定的提交，并重置工作区和暂存区&lt;/li&gt;
+&lt;li&gt;git rm [文件]: 从版本控制中移除文件&lt;/li&gt;
+&lt;li&gt;git rebase [提交号]: 交互式地合并、重新排序或编辑提交历史的&lt;/li&gt;
+&lt;li&gt;git cherry-pick [提交号]: 选择某个提交，并将其应用到当前分支&lt;/li&gt;
+&lt;li&gt;git blame [文件]: 显示指定文件的每一行是谁在哪个提交中修改的&lt;/li&gt;
+&lt;li&gt;git blame -L [起始行号],[结束行号] [文件]: 仅显示指定行范围的文件是谁修改的&lt;/li&gt;
+&lt;li&gt;git revert [提交号]: 创建一个新的提交，用于撤销指定的提交&lt;/li&gt;
+&lt;li&gt;git bisect start: 启动二分查找来定位引入问题的提交&lt;/li&gt;
+&lt;li&gt;git stash apply: 恢复最近一次暂存的修改，并将其从暂存堆栈中删除&lt;/li&gt;
+&lt;li&gt;git reflog: 显示 HEAD 和分支的历史记录，包括已经被删除的提交&lt;/li&gt;
+&lt;li&gt;git log &amp;ndash;author=[作者]: 显示特定作者的提交历史&lt;/li&gt;
+&lt;li&gt;git tag [标签名] [提交号]: 在指定提交上创建一个标签&lt;/li&gt;
+&lt;li&gt;git show-branch: 显示本地分支的历史和状态&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="二问问-gpt"&gt;二、问问 gpt&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;解释下git show&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;git show&lt;/code&gt; 是一个非常有用的 Git 命令，它用于显示提交的详细信息和更改的内容。下面是 &lt;code&gt;git show&lt;/code&gt; 的详细讲解：&lt;/p&gt;
+&lt;p&gt;基本语法：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git show [提交]&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;参数：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[提交]&lt;/code&gt;: 可选参数，表示要查看的提交，默认为最新的提交。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用 &lt;code&gt;git show&lt;/code&gt; 命令可以获取以下信息：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;提交信息：包括提交哈希值、作者、提交日期和提交消息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;修改的文件：列出了与该提交相关的所有修改过的文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;文件更改的具体内容：展示了每个文件的具体更改内容，即新增、修改或删除的行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;代码差异：以 diff 的形式显示当前提交与其父提交之间的代码差异。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;其他元数据：显示提交中的其他元数据，例如签名和标签。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;示例用法：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git show&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这将显示最新提交的详细信息和更改的内容。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git show abcdef123456&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这将显示提交哈希值为 &lt;code&gt;abcdef123456&lt;/code&gt; 的提交的详细信息和更改的内容。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git show&lt;/code&gt; 命令在查看历史提交、检查代码更改、审查提交信息等方面非常有用。通过查看提交的详细信息，开发者可以更好地理解代码库的演变历史并进行必要的代码审查和调试。记住，你可以使用其他参数和选项来进一步定制 &lt;code&gt;git show&lt;/code&gt; 命令的输出。可以通过 &lt;code&gt;git show --help&lt;/code&gt; 查看详细的帮助文档。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;解释下 git rebase -i commit&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;当你运行 &lt;code&gt;git rebase -i commit&lt;/code&gt; 命令时，你可以使用交互式界面对提交历史进行编辑。下面是一个示例：&lt;/p&gt;
+&lt;p&gt;假设你有如下的提交历史：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;commit C: Add feature C
+commit B: Add feature B
+commit A: Add feature A&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;现在你想要将提交 B 和提交 C 合并为一个提交，并编辑提交 A 的消息。你可以运行以下命令：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;git rebase -i commit&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Git 将会打开交互式界面，其中列出了提交历史的相关信息：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;pick abcdef1 commit A: Add feature A
+pick bcdef23 commit B: Add feature B
+pick def4567 commit C: Add feature C&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;你可以对这些操作进行修改，以实现你的目标。在本例中，你可以将提交 B 和提交 C 合并为一个提交，然后编辑提交 A 的消息。你可以修改交互式界面如下：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;pick abcdef1 commit A: Add feature A
+squash bcdef23 commit B: Add feature B
+s/commit A: Add feature A/Edit feature A/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;保存并退出编辑器。Git 将会根据你的指示执行相应的操作。此时，Git 会自动合并提交 B 到提交 A，并修改提交 A 的消息。最终的提交历史将如下所示：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;commit A: Edit feature A
+commit BC: Add feature B and C&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;注意，在上述示例中，使用了 &lt;code&gt;squash&lt;/code&gt; 命令来将提交 B 合并到提交 A，并使用 &lt;code&gt;s/commit A: Add feature A/Edit feature A/&lt;/code&gt; 来编辑提交 A 的消息。&lt;/p&gt;
+&lt;p&gt;请注意，在执行类似于 &lt;code&gt;git rebase -i&lt;/code&gt; 这样的操作时，一定要小心审查并确认你的更改，以免不小心破坏提交历史。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git bisect 详细介绍下&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;git bisect 是 Git 提供的一个命令，用于帮助我们通过二分查找定位引入问题的提交。当我们在一个大型项目中发现了一个 bug，并且我们知道在之前的某个提交中出现了这个 bug，但是不知道具体是在哪个提交引入的时候，可以使用 git bisect 命令来快速定位。&lt;/p&gt;
+&lt;p&gt;下面是 git bisect 的详细使用步骤：&lt;/p&gt;
+&lt;p&gt;1、首先，进入到你的项目目录中，并确保你在一个干净的状态下（没有未提交的修改）。&lt;/p&gt;
+&lt;p&gt;2、执行 git bisect start 命令，表示开始二分查找。&lt;/p&gt;
+&lt;p&gt;3、通过 git bisect bad 命令告诉 Git 当前的代码状态是有问题的（即包含了 bug）。&lt;/p&gt;
+&lt;p&gt;4、使用 git bisect good [好的提交号] 或者 git bisect good [好的标签名] 命令指定一个已知的“好”（即没有问题的）的提交。&lt;/p&gt;
+&lt;p&gt;5、Git 会自动切换到一个中间的提交，并要求你测试这个提交是否存在 bug。根据测试结果使用 git bisect bad 或者 git bisect good 命令告诉 Git 这个中间提交是否含有 bug。&lt;/p&gt;
+&lt;p&gt;6、重复步骤 5，Git 会根据你的测试结果不断地切换到新的中间提交，直到找到引入问题的提交。&lt;/p&gt;
+&lt;p&gt;7、当 git bisect 定位到引入问题的提交时，Git 会给出相应的提示，并自动返回到该提交。&lt;/p&gt;
+&lt;p&gt;8、最后，执行 git bisect reset 命令结束二分查找过程，Git 会将你的 HEAD 恢复到初始状态。&lt;/p&gt;
+&lt;p&gt;通过以上步骤，你可以使用 git bisect 在复杂的代码历史中快速定位 bug 的引入提交。这个命令在大型项目中特别有用，可以节省定位问题的时间和精力。需要注意的是，你需要根据实际情况进行好坏提交的选择，并且在测试过程中保持良好的记录和反馈。&lt;/p&gt;
+&lt;p&gt;要将之前所有提交中的密码更改为 &lt;code&gt;***&lt;/code&gt;，可以使用 &lt;code&gt;git filter-branch&lt;/code&gt; 命令结合自定义脚本来实现。请按照以下步骤进行操作：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;首先，在你的项目目录下打开终端，并确保你当前在所需的分支上（例如，&lt;code&gt;master&lt;/code&gt; 分支）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行以下命令来备份你的代码：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git branch backup&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个名为 &lt;code&gt;replace_password.sh&lt;/code&gt; 的脚本文件，并使用文本编辑器打开它。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件中，输入以下内容：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git ls-files -z | while read -d &amp;#39;&amp;#39; -r file; do
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; if [[ $file == *&amp;#34;&amp;lt;文件路径&amp;gt;&amp;#34;* ]]; then
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; sed -i &amp;#39;s/密码模式/*** /g&amp;#39; &amp;#34;$file&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; fi
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;done&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;将 &lt;code&gt;&amp;lt;文件路径&amp;gt;&lt;/code&gt; 替换为包含密码的文件的路径或文件夹的路径。这将会在指定文件中查找并替换密码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;保存并关闭 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;运行以下命令来添加执行权限给脚本文件：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;chmod +x replace_password.sh&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;现在，运行以下命令来执行 &lt;code&gt;git filter-branch&lt;/code&gt; 操作，并使用脚本文件作为过滤器：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git filter-branch --tree-filter &amp;#39;/path/to/replace_password.sh&amp;#39; --prune-empty HEAD&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;将 &lt;code&gt;/path/to/replace_password.sh&lt;/code&gt; 替换为 &lt;code&gt;replace_password.sh&lt;/code&gt; 文件的实际路径。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Git 将会遍历所有的提交，并在每个提交上运行脚本文件，查找并替换指定文件中的密码。完成后，你的历史提交将被重写。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果你已经将这些提交推送到远程仓库，你需要使用 &lt;code&gt;git push --force&lt;/code&gt; 强制推送修改后的提交历史：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-plaintext" data-lang="plaintext"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push --force&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这样，你就可以使用自定义脚本来批量替换之前所有提交中的密码。但请注意，执行 &lt;code&gt;git filter-branch&lt;/code&gt; 操作时，也要小心谨慎，因为它会修改提交历史。确保在操作之前备份代码，并在必要时咨询有经验的 Git 使用者或开发者。&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;sparse-checkout 详细讲解下&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;sparse-checkout&lt;/code&gt; 是 Git 的一个功能，用于部分克隆（partial clone）仓库。它允许你只检出仓库中指定目录或文件的内容，而不是完整地克隆整个仓库。这对于大型仓库或仅需要特定部分代码的情况非常有用，可以显著节省下载和存储空间。&lt;/p&gt;
+&lt;p&gt;下面是 &lt;code&gt;sparse-checkout&lt;/code&gt; 的详细讲解：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;配置 &lt;code&gt;sparse-checkout&lt;/code&gt;：在进行部分克隆之前，需先配置 &lt;code&gt;sparse-checkout&lt;/code&gt;。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git sparse-checkout init&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;添加感兴趣的目录或文件：通过指定要检出的目录或文件，告诉 Git 哪些部分是你感兴趣的。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git sparse-checkout set &amp;lt;目录/文件&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;你可以多次运行该命令来添加多个目录或文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;完成部分克隆：现在你可以执行部分克隆命令，只拉取感兴趣的部分。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git clone --filter&lt;span style="color:#f92672"&gt;=&lt;/span&gt;blob:none &amp;lt;远程仓库URL&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注意，在使用 &lt;code&gt;--filter=blob:none&lt;/code&gt; 标志进行部分克隆时，仓库中的大文件将不会被下载，只有文件元数据（例如文件名和文件大小）会被获取。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;更新和同步：一旦你进行了部分克隆，你可以像常规 Git 仓库一样更新和同步。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$ git pull origin &amp;lt;分支&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Git 会根据你配置的 &lt;code&gt;sparse-checkout&lt;/code&gt; 来更新和同步你感兴趣的部分。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;总结来说，&lt;code&gt;sparse-checkout&lt;/code&gt; 提供了一种灵活的方式来只检出仓库中特定目录或文件的内容。它可以实现部分克隆，节省带宽和存储空间，并提高代码仓库的下载速度。记住，部分克隆功能在 Git 2.25 及更高版本中才可用。&lt;/p&gt;
+&lt;h2 id="三小结"&gt;三、小结：&lt;/h2&gt;
+&lt;p&gt;附上一些常用缩写：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gc&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git config&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gs&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git status&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias g&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias ga&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git add&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gaa&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git add -all&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gp&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git push&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gl&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git pull&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gc&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git commit&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gcm&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git commit -m&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gcam&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git commit -am&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gb&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git branch&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gbr&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git branch -r&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gba&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git branch -a&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gco&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git checkout&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gcb&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git checkout -b&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gm&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git merge&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gd&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git diff&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias gdw&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git diff --word-diff&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;alias glg&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;git lg&amp;#39;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="四参考"&gt;四、参考&lt;/h2&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href=""&gt;gpt&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>git 部分功能需要先上线，怎么办？</title><link>http://localhost:1313/post/devops/series-git-1/</link><pubDate>Sun, 30 Jul 2023 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/devops/series-git-1/</guid><description>&lt;h2 id="git-部分功能需要先上线怎么办"&gt;git 部分功能需要先上线，怎么办？&lt;/h2&gt;
+&lt;h2 id="一场景描述"&gt;一、场景描述&lt;/h2&gt;
+&lt;p&gt;在这个项目中，代码的提交和合并都是在develop分支上进行的， 之前已经基于某个commit打了tag v1.0.0。然而，这次由于迭代过程中需要提前上线部分功能，我们需要将这部分功能的commit摘出来，并打上一个tag v1.1.0 作为标识。&lt;/p&gt;
+&lt;h2 id="二问问-gpt"&gt;二、问问 gpt&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/h2&gt;
+&lt;p&gt;首先，我们可以使用Git命令行或者图形化界面工具来处理这个需求。假设我们当前的工作目录在develop分支上。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;确保你的本地develop分支是最新的，可以执行以下命令拉取最新的代码：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git pull origin develop&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;查看git log，找到需要提前上线的commit的哈希值或者commit消息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用以下命令将指定的commit摘出来并创建一个新的分支（例如feature-branch）：&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git checkout -b feature-branch &amp;lt;commit&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这将创建一个新的分支，并将代码库中指定的commit复制到该分支上。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用以下命令将涉及到这次提前发布需要的commit提交应用到feature-branch分支：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git cherry-pick &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt; &amp;lt;commit1&amp;gt; &amp;lt;commit1&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;其中，&lt;code&gt;&amp;lt;commit&amp;gt;&lt;/code&gt; 可以是提交的哈希值或者提交消息。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;接下来，我们需要打上一个tag来标识这个版本。使用以下命令创建一个tag（例如v1.1.0）：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git tag v1.1.0&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这将在当前commit上创建一个tag。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最后，将创建的分支和tag推送到远程仓库：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push origin feature-branch
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;git push origin v1.1.0&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这将把新的分支和tag推送到远程仓库中，以便团队成员可以访问和查看。&lt;/p&gt;
+&lt;h2 id="三小结"&gt;三、小结：&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;基于某个commit checkout&lt;/li&gt;
+&lt;li&gt;cherry-pick&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="四参考"&gt;四、参考&lt;/h2&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href=""&gt;gpt&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://www.git-scm.com/docs/git-cherry-pick"&gt;git-cherry-pick&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>Jenkins, hot backup</title><link>http://localhost:1313/post/devops/series-jenkins-3/</link><pubDate>Tue, 01 Feb 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/devops/series-jenkins-3/</guid><description>&lt;h2 id="jenkins-数据热备"&gt;jenkins 数据热备&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;rsync : 增量备份&lt;/p&gt;
+&lt;p&gt;inotify： 实时通知&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="理论"&gt;理论&lt;/h2&gt;
+&lt;h3 id="一rsync"&gt;一、rsync&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;与传统的 cp、tar 备份方式相比，rsync 具有安全性高、备份迅速、支持&lt;strong&gt;增量备份&lt;/strong&gt;等优点，通过 rsync 可以解决对实时性要求不高的数据备份需求，例如定期的备份文件服务器数据到远端服务器，对本地磁盘定期做数据镜像等，随着应用系统规模的不断扩大，对数据的安全性和可靠性也提出的更好的要求。&lt;/p&gt;
+&lt;p&gt;rsync 在高端业务系统中也逐渐暴露出了很多不足：&lt;/p&gt;
+&lt;p&gt;​ 首先，rsync 同步数据时，需要扫描所有文件后进行比对，进行差量传输。如果&lt;strong&gt;文件数量&lt;/strong&gt;达到了百万甚至千万量级，扫描所有文件将是非常耗时的。而且正在发生变化的往往是其中很少的一部分，这是非常低效的方式。&lt;/p&gt;
+&lt;p&gt;​ 其次，rsync &lt;strong&gt;不能实时&lt;/strong&gt;的去监测、同步数据，虽然它可以通过 linux 守护进程的方式进行触发同步，但是两次触发动作一定会有时间差，这样就导致了服务端和客户端数据可能出现不一致，无法在应用故障时完全的恢复数据。基于以上原因，rsync+inotify 组合出现了！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="二rsyncinotify"&gt;二、rsync+inotify&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Inotify 是一种强大的、细粒度的、异步的文件系统&lt;strong&gt;事件监控&lt;/strong&gt;机制，linux 内核从 2.6.13 起，加入了 Inotify支持，通过 Inotify 可以监控文件系统中添加、删除，修改、移动等各种细微事件，利用这个内核接口，第三方软件就可以监控文件系统下文件的各种变化情况，而 inotify-tools 就是这样的一个第三方软件。 inotify 可以监控文件系统的各种变化，当文件有任何变动时，就触发rsync 同步，这样刚好解决了同步数据的实时性问题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="三rsyncsersync"&gt;三、rsync+sersync&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;1、sersync是基于Inotify开发的，类似于Inotify-tools的工具&lt;/p&gt;
+&lt;p&gt;2、sersync可以记录下被监听目录中发生变化的（包括增加、删除、修改）具体某一个文件或某一个目录的名字，然后使用rsync同步的时候，只同步发生变化的这个文件或者这个目录。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="四小结"&gt;四、小结：&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;rsync+inotify-tools与rsync+sersync这两种架构有什么区别？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;rsync+Inotify-tools&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Inotify-tools只能记录下被监听的目录发生了变化（包括增加、删除、修改），并&lt;strong&gt;没有把具体&lt;/strong&gt;是哪个文件或者哪个目录发生了变化&lt;strong&gt;记录&lt;/strong&gt;下来；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;rsync 在同步的时候，并不知道具体是哪个文件或者哪个目录发生了变化，每次都是对整个目录进行同步(应该是扫描)&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;，当数据量很大时，整个目录同步非常耗时（rsync要对整个目录遍历查找对比文件），因此，效率很低。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;rsync+sersync&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;sersync可以&lt;strong&gt;记录&lt;/strong&gt;下被监听目录中发生变化的（包括增加、删除、修改）具体某一个文件或某一个目录的名字；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;rsync在同步的时候，只同步发生变化的这个文件或者这个目录（每次发生变化的数据相对整个同步目录数据来说是很小的，rsync在遍历查找比对文件时，速度很快），因此，效率很高。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;​ 当同步的目录数据量不大时，&lt;strong&gt;建议&lt;/strong&gt;使用 rsync+Inotify-tools；当数据量很大（几百G甚至1T以上）、文件很多时，建议使用 rsync+sersync。&lt;/p&gt;
+&lt;h2 id="实践"&gt;实践&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;说明：&lt;/p&gt;
+&lt;p&gt;操作系统：CentOS 7.x&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;源服务器：36.111.140.109 （Sersync+web）&lt;/p&gt;
+&lt;p&gt;目标服务器： 36.111.140.99、(Rsync+web)&lt;/p&gt;
+&lt;p&gt;目的：把源服务器上/home/Sync目录实时同步到目标服务器的/home/Sync下&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="方案一同机热备到不同的文件目录"&gt;方案一、同机热备到不同的文件目录&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Rsync+Inotify-tools 架构&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/cugbtang/image-repo/master/PicGo/20220318111839.png" alt="image-20220318111831407"&gt;&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;yum install -y rsync inotify-tools
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vim /usr/bin/inotify2rsync
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#!/bin/bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 运行脚本的用户对相关路径有读写权限就行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;src&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/jenkins/jenkins_job
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;dst&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/jenkins1/jenkins_job
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;/usr/bin/inotifywait -mrq --timefmt &lt;span style="color:#e6db74"&gt;&amp;#39;%d/%m/%y %H:%M&amp;#39;&lt;/span&gt; --format &lt;span style="color:#e6db74"&gt;&amp;#39;%T %w%f%e&amp;#39;&lt;/span&gt; -e modify,delete,create,attrib $src | &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; read files
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;#/usr/bin/rsync -vzrtopg --delete --progress --password-file=/etc/rsyncd.secrects $src $dst&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; rsync -av --exclude lost+found/ --exclude backup/ $src $dst
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; echo &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;files&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt; was rsynced&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; /var/log/rsync.log &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &amp;gt;&amp;amp; &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;exit &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="方案二不同机器热备-rsyncinotify-tools-架构"&gt;方案二、不同机器热备 rsync+Inotify-tools 架构&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;jenkins 主节点无法高可用（官方说的），针对两套主 jenkins 的&lt;strong&gt;互备方案&lt;/strong&gt;，强调磁盘是为了一定要热备到ssd上，保证性能&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/cugbtang/image-repo/master/PicGo/20220318113041.png" alt="image-20220318113041057"&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;rsync 的解决方案解析：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;左边是&lt;strong&gt;原来的&lt;/strong&gt;，一般的rsync的cs架构（client &amp;amp; server）同步模式，数据源服务器上安装rsync server，由server统一控制可以传输的数据的内容，例如权限，目录，文件数等，发起传输的是rsync client，即看起来就是将数据从源服务器拉取到备份服务器。&lt;/li&gt;
+&lt;li&gt;右边的是加上inotify-tools的&lt;strong&gt;同步模式&lt;/strong&gt;，在数据源服务器上安装rsync client，在备份源服务器上安装rsync server，也是由server统一控制传输的数据内容，但是这里是数据源服务器作为了client端，因为发起传输的是rsync client，所以这里看起来就是将数据从源服务器推送到备份服务器。&lt;/li&gt;
+&lt;li&gt;从逻辑上cs的架构 c 和 s 变成了相反位置，但是传输的模式依然是从 s 传输到 c 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/cugbtang/image-repo/master/PicGo/20220317144123.jpeg" alt="blog_rsync_(bs)_introduce_20150206.jpg"&gt;&lt;/p&gt;
+&lt;p&gt;目标服务器（热备服务器 == rsync服务端）&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo yum install -y rsync
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 设置开机启动&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;echo &lt;span style="color:#e6db74"&gt;&amp;#39;/usr/bin/rsync --daemon --config=/etc/rsyncd.conf&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; /etc/rc.d/rc.local
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat &lt;span style="color:#e6db74"&gt;&amp;lt;&amp;lt;EOF | sudo tee /etc/rsyncd.conf
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#同步目录的所属用户，有权限操作的都可以
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;uid = Sync
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#同步目录的所属组
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;gid = Sync
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#不打开chroot
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;use chroot = no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#超时时间
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;timeout = 800
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#日志文件位置，启动rsync后自动产生这个文件，无需提前创建
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;log file =/var/log/rsyncd.log
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#pid文件的存放位置
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;pid file =/var/run/rsyncd.pid
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#支持max connections参数的锁文件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;lock file =/var/run/rsync.lock
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#rsync启动时欢迎信息页面文件位置（文件内容自定义）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;motd file =/etc/rsyncd.Motd
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#默认端口
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;port = 873 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#设置rsync服务端文件为读写权限
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;read only =no 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#不显示rsync服务端资源列表
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;list = no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#最大连接数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;max connections = 200
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#执行数据同步的用户名，可以设置多个，用英文状态下逗号隔开
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;auth users = Sync
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#允许进行数据同步的客户端IP地址，可以设置多个，用英文状态下逗号隔开
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;hosts allow = 2.2.2.2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#禁止数据同步的客户端IP地址，可以设置多个，用英文状态下逗号隔开
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;hosts deny = *
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#用户认证配置文件，里面保存用户名称和密码，后面会创建这个文件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;secrets file = /etc/rsync.pass
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#定义模块
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;[Sync]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; #rsync服务端数据目录路径
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; path = /jenkins1/jenkins_job/
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; #模块描述
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; comment = Sync
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;#配置文件，添加以下内容，添加允许传输用户和密码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;#格式，用户名:密码，可以设置多个，每行一个用户名:密码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat &lt;span style="color:#e6db74"&gt;&amp;lt;&amp;lt;EOF | sudo tee /etc/rsync.pass
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;Sync:THW7DLBQ82tBKfIf
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#设置文件所有者读取、写入权限
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;chmod 600 /etc/rsyncd.conf 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#设置文件所有者读取、写入权限
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#这个密码文件只能是这个权限，服务端会做检测
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;chmod 600 /etc/rsync.pass 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#启动
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;systemctl enable rsyncd
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;systemctl restart rsyncd
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;# 服务端的rsync开启873端口
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;#vi /etc/sysconfig/iptables  #编辑防火墙配置文件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;-A RH-Firewall-1-INPUT -m state --state NE&lt;/span&gt;W -m tcp -ptcp --dport &lt;span style="color:#ae81ff"&gt;873&lt;/span&gt; -j ACCEPT&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;源服务器（主服务器 == rsync客户端）&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 客户端的Rsync可以不用开启873端口&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;yum install -y rsync inotify-tools
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#设置文件权限，只设置文件所有者具有读取、写入权限即可&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;touch /jenkins/rsync.passwd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;echo &lt;span style="color:#e6db74"&gt;&amp;#39;THW7DLBQ82tBKfIf&amp;#39;&lt;/span&gt; &amp;gt; /jenkins/rsync.passwd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;chmod &lt;span style="color:#ae81ff"&gt;600&lt;/span&gt; /jenkins/rsync.passwd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 测试&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mkdir -p /jenkins/ceshi
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#在源服务器上创建测试文件夹，然后在源服务器运行下面1行命令&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# /jenkins/ceshi 最后带不带/有很大区别&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rsync -avH --port&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;873&lt;/span&gt; --progress--delete  /jenkins/ceshi Sync@2.2.2.2::Sync --password-file&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/jenkins/rsync.passwd
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#!/bin/bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;src&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;/jenkins/jenkins_job&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;passwordfile&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;/jenkins/rsync.passwd&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;user&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;root&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;host&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;2.2.2.2&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rsync_module&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;Sync&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;/usr/bin/inotifywait -mrq --timefmt &lt;span style="color:#e6db74"&gt;&amp;#39;%d/%m/%y %H:%M&amp;#39;&lt;/span&gt; --format &lt;span style="color:#e6db74"&gt;&amp;#39;%T %w %f&amp;#39;&lt;/span&gt; -e modify,delete,create,attrib &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;src&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; | &lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; read DATE TIME DIR file
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; /usr/bin/rsync -vzrtopg --delete --progress &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;src&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;user&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;@&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;host&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;::&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;rsync_module&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; --password-file&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;passwordfile&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; echo &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;file&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt; was rsynced at &lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;DATE&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt;_&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;TIME&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt; in &lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;DIR&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; /var/log/rsync.log 2&amp;gt;&amp;amp;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;done&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="方案三不同机器热备-rsyncinotify-tools-架构"&gt;方案三、不同机器热备 rsync+Inotify-tools 架构&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;服务器A（主服务器）&lt;/li&gt;
+&lt;li&gt;服务器B（从服务器/备份服务器）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;服务器B&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#在服务器B上安装rsync&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd /app/local
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget http://rsync.samba.org/ftp/rsync/src/rsync-3.1.1.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tar zxf rsync-3.1.1.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd rsync-3.1.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;./configure
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;make &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; make install
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#设置rsync的配置文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vi /etc/rsyncd.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#服务器B上的rsyncd.conf文件内容&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;uid&lt;span style="color:#f92672"&gt;=&lt;/span&gt;root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;gid&lt;span style="color:#f92672"&gt;=&lt;/span&gt;root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#最大连接数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;max connections&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;36000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#默认为true，修改为no，增加对目录文件软连接的备份 &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;use chroot&lt;span style="color:#f92672"&gt;=&lt;/span&gt;no
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#定义日志存放位置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;log file&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/var/log/rsyncd.log
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#忽略无关错误&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ignore errors &lt;span style="color:#f92672"&gt;=&lt;/span&gt; yes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#设置rsync服务端文件为读写权限&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;read only &lt;span style="color:#f92672"&gt;=&lt;/span&gt; no
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#认证的用户名与系统帐户无关在认证文件做配置，如果没有这行则表明是匿名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;auth users &lt;span style="color:#f92672"&gt;=&lt;/span&gt; rsync
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#密码认证文件，格式(虚拟用户名:密码）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;secrets file &lt;span style="color:#f92672"&gt;=&lt;/span&gt; /etc/rsync.pass
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#这里是认证的模块名，在client端需要指定，可以设置多个模块和路径&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;rsync&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;#自定义注释&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; comment &lt;span style="color:#f92672"&gt;=&lt;/span&gt; rsync
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;#同步到B服务器的文件存放的路径&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; path&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/app/data/site/
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;img&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; comment &lt;span style="color:#f92672"&gt;=&lt;/span&gt; img
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; path&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/app/data/site/img
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#创建rsync认证文件 可以设置多个，每行一个用户名:密码，注意中间以“:”分割&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;echo &lt;span style="color:#e6db74"&gt;&amp;#34;rsync:rsync&amp;#34;&lt;/span&gt; &amp;gt; /etc/rsync.pass
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#设置文件所有者读取、写入权限&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;chmod &lt;span style="color:#ae81ff"&gt;600&lt;/span&gt; /etc/rsyncd.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;chmod &lt;span style="color:#ae81ff"&gt;600&lt;/span&gt; /etc/rsync.pass
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#启动服务器B上的rsync服务&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#rsync --daemon -v&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rsync --daemon
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#监听端口873&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;netstat -an | grep &lt;span style="color:#ae81ff"&gt;873&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lsof -i tcp:873
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rsync &lt;span style="color:#ae81ff"&gt;31445&lt;/span&gt; root 4u IPv4 &lt;span style="color:#ae81ff"&gt;443872&lt;/span&gt; 0t0 TCP *:rsync &lt;span style="color:#f92672"&gt;(&lt;/span&gt;LISTEN&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rsync &lt;span style="color:#ae81ff"&gt;31445&lt;/span&gt; root 5u IPv6 &lt;span style="color:#ae81ff"&gt;443873&lt;/span&gt; 0t0 TCP *:rsync &lt;span style="color:#f92672"&gt;(&lt;/span&gt;LISTEN&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#设置rsync为服务启动项（可选）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;echo &lt;span style="color:#e6db74"&gt;&amp;#34;/usr/local/bin/rsync --daemon&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; /etc/rc.local
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#要 Kill rsync 进程，不要用 kill -HUP {PID} 的方式重启进程，以下3种方式任选&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#ps -ef|grep rsync|grep -v grep|awk &amp;#39;{print $2}&amp;#39;|xargs kill -9&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#cat /var/run/rsyncd.pid | xargs kill -9&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pkill rsync
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#再次启动&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;/usr/local/bin/rsync --daemon&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;服务器A&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#安装rsync&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd /app/local
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget http://rsync.samba.org/ftp/rsync/src/rsync-3.1.1.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tar zxf rsync-3.1.1.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd rsync-3.1.1
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;./configure
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;make &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; make install
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#安装inotify-tools&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd /app/local
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-3.14.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tar zxf inotify-tools-3.14.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd inotify-tools-3.14
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;./configure --prefix&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/app/local/inotify
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;make &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; make install
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#安装sersync&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd /app/local
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget https://sersync.googlecode.com/files/sersync2.5.4_64bit_binary_stable_final.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tar zxf sersync2.5.4_64bit_binary_stable_final.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mv /app/local/GNU-Linux-x86/ /app/local/sersync
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cd /app/local/sersync
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#配置下密码文件，因为这个密码是要访问服务器B需要的密码和上面服务器B的密码必须一致&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;echo &lt;span style="color:#e6db74"&gt;&amp;#34;rsync&amp;#34;&lt;/span&gt; &amp;gt; /app/local/sersync/user.pass
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#修改权限&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;chmod &lt;span style="color:#ae81ff"&gt;600&lt;/span&gt; /app/local/sersync/user.pass
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#修改confxml.conf&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vi /app/local/sersync/confxml.xml&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;修改配置&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-xml" data-lang="xml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;ISO-8859-1&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;head&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;version=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;2.5&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;host&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;hostip=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;localhost&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;port=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;8008&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;lt;/host&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;debug&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;fileSystem&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;xfs=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;filter&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;exclude&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;expression=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;(.*)\.php&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;lt;/exclude&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;exclude&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;expression=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;^data/*&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&amp;lt;/exclude&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;inotify&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;delete&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;createFolder&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;createFile&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;closeWrite&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;moveFrom&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;moveTo&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;attrib&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;modify&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;/inotify&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;sersync&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;localpath&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;watch=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/home/&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;!-- 这里填写服务器A要同步的文件夹路径--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;remote&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;ip=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;8.8.8.8&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;name=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;rsync&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;!-- 这里填写服务器B的IP地址和模块名--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;/localpath&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;rsync&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;commonParams&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;params=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;-artuz&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;auth&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;true&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;users=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;rsync&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;passwordfile=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/app/local/sersync/user.pass&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt; &lt;span style="color:#75715e"&gt;&amp;lt;!-- rsync+密码文件 这里填写服务器B的认证信息--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;userDefinedPort&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;port=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;874&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;&amp;lt;!-- port=874 --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;timeout&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;time=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;100&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;&amp;lt;!-- timeout=100 --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;ssh&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;/rsync&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;failLog&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;path=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/tmp/rsync_fail_log.sh&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;timeToExecute=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;60&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;&amp;lt;!--default every 60mins execute once--&amp;gt;&amp;lt;!-- 修改失败日志记录（可选）--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;crontab&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;schedule=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;600&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;&amp;lt;!--600mins--&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;crontabfilter&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;/crontabfilter&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;/crontab&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;plugin&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;start=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;false&amp;#34;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;name=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;command&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;lt;/sersync&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#运行sersync&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;nohup /app/local/sersync/sersync2 -r -d -o /app/local/sersync/confxml.xml &amp;gt;/app/local/sersync/rsync.log 2&amp;gt;&amp;amp;&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-d:启用守护进程模式
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-r:在监控前，将监控目录与远程主机用rsync命令推送一遍
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-n: 指定开启守护线程的数量，默认为10个
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-o:指定配置文件，默认使用confxml.xml文件&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 添加一个保障&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# vi  /home/crontab/check_sersync.sh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#!/bin/sh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sersync&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/usr/local/sersync/sersync2&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;confxml&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;/usr/local/sersync/confxml.xml&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;status&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;$(&lt;/span&gt;ps aux |grep &lt;span style="color:#e6db74"&gt;&amp;#39;sersync2&amp;#39;&lt;/span&gt;|grep -v &lt;span style="color:#e6db74"&gt;&amp;#39;grep&amp;#39;&lt;/span&gt;|wc -l&lt;span style="color:#66d9ef"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#f92672"&gt;[&lt;/span&gt;$status -eq &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#f92672"&gt;]&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$sersync -d-r -o $confxml &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;exit 0;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;fi&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="排错"&gt;排错&lt;sup id="fnref:4"&gt;&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/h3&gt;
+&lt;h2 id="文献"&gt;文献&lt;/h2&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://blog.51cto.com/canonind/1843994"&gt;CentOS7下Rsync+sersync实现数据实时同步&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://segmentfault.com/a/1190000002558330"&gt;关于rsync+inotify-tools实时同步模式&lt;/a&gt;](&lt;a href="https://segmentfault.com/a/1190000002558330"&gt;https://segmentfault.com/a/1190000002558330&lt;/a&gt;)&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://hub.fastgit.xyz/wsgzao/sersync"&gt;sersync&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
+&lt;p&gt;&lt;a href="https://blog.51cto.com/wjw7702/1148808"&gt;Rsync常见错误及命令详细参数&lt;/a&gt;&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item><item><title>Jenkins, Q&amp;A</title><link>http://localhost:1313/post/devops/series-jenkins-2/</link><pubDate>Sat, 15 Jan 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/devops/series-jenkins-2/</guid><description>&lt;h2 id="1镜像选择-jenkinsciblueocean---why"&gt;1、镜像选择 &lt;code&gt;jenkinsci/blueocean&lt;/code&gt; , why?&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;安装blue ocean插件前&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://i.loli.net/2021/10/27/r1wjF2aUuZ7vm9M.png" alt=""&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;安装blue ocean插件后&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src="https://i.loli.net/2021/10/27/3aJV4YNPRjdCtI1.png" alt=""&gt;&lt;/p&gt;
+&lt;h2 id="2启动参数都表示什么"&gt;2、启动参数都表示什么？&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker run &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --rm &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -u root &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -p 8080:8080 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -v jenkins-data:/var/jenkins_home &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -v /var/run/docker.sock:/var/run/docker.sock &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -v &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;$HOME&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;:/home &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; jenkinsci/blueocean&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-p 8080:8080 &lt;/code&gt; 映射（例如“发布”）jenkinsci/blueocean 容器的端口8080到主机上的端口8080。 第一个数字代表主机上的端口，而最后一个代表容器的端口。因此，如果您为此选项指定 -p 49000:8080 ，您将通过端口49000访问主机上的Jenkins。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p 50000:50000&lt;/code&gt;（可选）将 jenkinsci/blueocean 容器的端口50000 映射到主机上的端口50000。 如果您在其他机器上设置了一个或多个基于JNLP的Jenkins代理程序，而这些代理程序又与 jenkinsci/blueocean 容器交互（充当“主”Jenkins服务器，或者简称为“Jenkins主”）， 则这是必需的。默认情况下，基于JNLP的Jenkins代理通过TCP端口50000与Jenkins主站进行通信。 您可以通过“ 配置全局安全性” 页面更改Jenkins主服务器上的端口号。如果您要将您的Jenkins主机的JNLP代理端口的TCP端口 值更改为51000（例如），那么您需要重新运行Jenkins（通过此 docker run … 命令）并指定此“发布”选项 -p 52000:51000，其中后一个值与Jenkins master上的这个更改值相匹配，第一个值是Jenkins主机的主机上的端口号， 通过它，基于JNLP的Jenkins代理与Jenkins主机进行通信 - 例如52000。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v jenkins-data:/var/jenkins_home&lt;/code&gt;（可选，但强烈建议）映射在容器中的/var/jenkins_home 目录到具有名字 jenkins-data 的volume。 如果这个卷不存在，那么这个 docker run 命令会自动为你创建卷。 如果您希望每次重新启动Jenkins（通过此 docker run … 命令）时保持Jenkins状态，则此选项是必需的 。 如果你没有指定这个选项，那么在每次重新启动后，Jenkins将有效地重置为新的实例。
+注意: 所述的 jenkins-data 卷也可以 docker volume create命令创建： docker volume create jenkins-data 代替映射 /var/jenkins_home 目录转换为Docker卷，还 可以将此目录映射到计算机本地文件系统上的目录。 例如，指定该选项 -v $HOME/jenkins:/var/jenkins_home 会将容器的 /var/jenkins_home 目录映射到 本地计算机上目录中的 jenkins 子目录， 该$HOME目录通常是 /Users/&lt;!-- raw HTML omitted --&gt;/jenkins 或/home/&lt;!-- raw HTML omitted --&gt;/jenkins 。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v /var/run/docker.sock:/var/run/docker.sock&lt;/code&gt;（可选 /var/run/docker.sock 表示Docker守护程序通过其监听的基于Unix的套接字。 该映射允许 jenkinsci/blueocean 容器与Docker守护进程通信，如果jenkinsci/blueocean容器需要实例化其他Docker容器，则该守护进程是必需的。 如果运行声明式管道，其语法包含agent部分用 docker 例如， agent { docker { &amp;hellip; } } 此选项是必需的。&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Jenkins, how to play?</title><link>http://localhost:1313/post/devops/series-jenkins-1/</link><pubDate>Sat, 01 Jan 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/devops/series-jenkins-1/</guid><description>&lt;h1 id="how-to-play-jenkins"&gt;how to play jenkins?&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;社区源码、文档&lt;sup id="fnref:1"&gt;&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref"&gt;1&lt;/a&gt;&lt;/sup&gt;等托管在 GitHub 上。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;其中基础设施部分在 &lt;a href="https://github.com/jenkins-infra"&gt;&lt;code&gt;jenkins-infra&lt;/code&gt;&lt;/a&gt;；&lt;/p&gt;
+&lt;p&gt;核心库以及插件在 &lt;a href="https://github.com/jenkinsci/"&gt;&lt;code&gt;jenkinsci&lt;/code&gt;&lt;/a&gt;&lt;sup id="fnref:2"&gt;&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref"&gt;2&lt;/a&gt;&lt;/sup&gt;；&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Jenkins 中文本地化相关的项目在 &lt;a href="https://github.com/jenkins-zh"&gt;&lt;code&gt;jenkins-zh&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;集中玩耍地地方&lt;sup id="fnref:3"&gt;&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="搜集玩法"&gt;搜集玩法&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;1、官方建议容器化部署（docker/kubernetes）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;建议使用的Docker映像是&lt;a href="https://hub.docker.com/r/jenkinsci/blueocean/"&gt;&lt;code&gt;jenkinsci/blueocean&lt;/code&gt; image&lt;/a&gt;(来自 the &lt;a href="https://hub.docker.com/"&gt;Docker Hub repository&lt;/a&gt;)。 该镜像包含当前的&lt;a href="https://www.jenkins.io/download"&gt;长期支持 (LTS) 的Jenkins版本&lt;/a&gt; （可以投入使用） ，捆绑了所有Blue Ocean插件和功能。这意味着你不需要单独安装Blue Ocean插件。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker run &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -u root &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --rm &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -d &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -p 8080:8080 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -p 50000:50000 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -v jenkins-data:/var/jenkins_home &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -v /var/run/docker.sock:/var/run/docker.sock &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; jenkinsci/blueocean&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;能玩一段时间了。。。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;2、前面都是铺垫，玩了一段时间，发现原生镜像中缺这少那的，尤其是插件，看看&lt;strong&gt;官方&lt;/strong&gt;怎么说：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Keep in mind that the process described above will automatically download the official Jenkins Docker image if this hasn’t been done before.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Create Dockerfile with the following content:&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;FROM jenkinsci/blueocean
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;USER root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;RUN apt-get update &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y lsb-release
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; https://download.docker.com/linux/debian/gpg
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;RUN echo &lt;span style="color:#e6db74"&gt;&amp;#34;deb [arch=&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;$(&lt;/span&gt;dpkg --print-architecture&lt;span style="color:#66d9ef"&gt;)&lt;/span&gt;&lt;span style="color:#e6db74"&gt; \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; https://download.docker.com/linux/debian \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &lt;/span&gt;&lt;span style="color:#66d9ef"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span style="color:#66d9ef"&gt;)&lt;/span&gt;&lt;span style="color:#e6db74"&gt; stable&amp;#34;&lt;/span&gt; &amp;gt; /etc/apt/sources.list.d/docker.list
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;RUN apt-get update &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y docker-ce-cli
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;USER jenkins
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;RUN jenkins-plugin-cli --plugins &lt;span style="color:#e6db74"&gt;&amp;#34;blueocean:1.25.3 docker-workflow:1.28&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Build a new docker image from this Dockerfile and assign the image a meaningful name, e.g. &amp;ldquo;myjenkins-blueocean:2.319.3-1&amp;rdquo;:&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker build -t myjenkins-blueocean:2.319.3-1 .&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;3、同时，也可以站在巨人的肩膀上，有一些实践者把&lt;strong&gt;常用的插件&lt;/strong&gt;已经内置到镜像发布了，比如 &lt;code&gt;kubespheredev/ks-jenkins&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;4、程序员用界面？命令行起飞&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://www.jenkins.io/zh/blog/2019/08/30/jenkins-cli/"&gt;利用 jcli 管理 Jenkins&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;vs&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.jenkins.io/doc/book/managing/cli/"&gt;原生Jenkins CLI &lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 例如，本地敏捷调试&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 安装&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget -q https://ghproxy.com/https://github.com/jenkins-zh/jenkins-cli/releases/latest/download/jcli-linux-amd64.tar.gz|tar -zxvf &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mv jcli /usr/local/bin/
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 配置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;jcli config gen
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 都走默认就🆗&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 启动&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;jcli center start -m docker --image kubespheredev/ks-jenkins --version 2.249.1 --c-user root --port &lt;span style="color:#ae81ff"&gt;8080&lt;/span&gt; --setup-wizard&lt;span style="color:#f92672"&gt;=&lt;/span&gt;false&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;5、国内插件源&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;https://updates.jenkins-zh.cn/update-center.json&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;6、划重点，就是 &lt;strong&gt;pipeline&lt;/strong&gt;（前面的插件已经铺垫过）。what？？？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;h4 id="pipeline--持续交付即代码"&gt;pipeline ==~ “持续交付即代码”&lt;/h4&gt;
+&lt;p&gt;Jenkins Pipeline 的定义通常被写入到一个文本文件（称为 &lt;code&gt;Jenkinsfile&lt;/code&gt; ）中，该文件可以被放入项目的源代码控制库中。&lt;/p&gt;
+&lt;p&gt;official recommended how to play: &lt;strong&gt;all in Jenkinsfile!!!&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.jenkins.io/doc/book/pipeline/getting-started"&gt;get started with Pipeline&lt;/a&gt; - covers how to &lt;a href="https://www.jenkins.io/doc/book/pipeline/getting-started#defining-a-pipeline"&gt;define a Jenkins Pipeline&lt;/a&gt; (i.e. your &lt;code&gt;Pipeline&lt;/code&gt;) through &lt;a href="https://www.jenkins.io/doc/book/pipeline/getting-started#through-blue-ocean"&gt;Blue Ocean&lt;/a&gt;, through the &lt;a href="https://www.jenkins.io/doc/book/pipeline/getting-started#through-the-classic-ui"&gt;classic UI&lt;/a&gt; or in &lt;a href="https://www.jenkins.io/doc/book/pipeline/getting-started#defining-a-pipeline-in-scm"&gt;SCM&lt;/a&gt;,&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.jenkins.io/doc/book/pipeline/jenkinsfile"&gt;create and use a &lt;code&gt;Jenkinsfile&lt;/code&gt;&lt;/a&gt; - covers use-case scenarios on how to craft and construct your &lt;code&gt;Jenkinsfile&lt;/code&gt;,&lt;/li&gt;
+&lt;li&gt;work with &lt;a href="https://www.jenkins.io/doc/book/pipeline/multibranch"&gt;branches and pull requests&lt;/a&gt;,&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.jenkins.io/doc/book/pipeline/docker"&gt;use Docker with Pipeline&lt;/a&gt; - covers how Jenkins can invoke Docker containers on agents/nodes (from a &lt;code&gt;Jenkinsfile&lt;/code&gt;) to build your Pipeline projects,&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.jenkins.io/doc/book/pipeline/shared-libraries"&gt;extend Pipeline with shared libraries&lt;/a&gt;,&lt;/li&gt;
+&lt;li&gt;use different &lt;a href="https://www.jenkins.io/doc/book/pipeline/development"&gt;development tools&lt;/a&gt; to facilitate the creation of your Pipeline, and&lt;/li&gt;
+&lt;li&gt;work with &lt;a href="https://www.jenkins.io/doc/book/pipeline/syntax"&gt;Pipeline syntax&lt;/a&gt; - this page is a comprehensive reference of all Declarative Pipeline syntax.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;（片段生成器+声明式+。。。反正就是生成）https://jenkins地址/job/test/pipeline-syntax/&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://www.jenkins.io/doc/book/pipeline/"&gt;【官方词典】&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src="https://raw.githubusercontent.com/cugbtang/image-repo/master/PicGo/20220302150355.png" alt="image-20220302150354810"&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;7、&lt;strong&gt;官方&lt;/strong&gt;把架子打好了，让我们发挥是吧，那有木有前辈累计的模板，或者我有新颖的使用方式方法想分享给大家呢：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;enjoy your play:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href="https://github.com/jenkinsci/pipeline-examples"&gt;【官方例子】&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/devops-ws"&gt;【DevOps Workspace】&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;8、又玩了一段时间，发现jenkins最好是作为自动化的引擎，通过接口集成到 PASS 上。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Use Pipeline through API&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href="https://github.com/go-atomci/workflow"&gt;one example&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="都在玩儿plugin"&gt;都在玩儿plugin&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;插件下载问题，更改了国内镜像源，还总是下载失败？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;1、设置代理&lt;/p&gt;
+&lt;p&gt;2、手动修改 jenkins/updates/default.json 中url &amp;mdash;&amp;gt; &lt;a href="https://mirrors.tuna.tsinghua.edu.cn"&gt;https://mirrors.tuna.tsinghua.edu.cn&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;3、&lt;a href="https://github.com/jenkins-zh/jenkins-formulas"&gt;Jenkins Customize&lt;/a&gt; 更新&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Jenkins Configuration as Code&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;虽然新部署的 Jenkins 实例自动为我们安装了所有所需的插件，并配置好了初始化 Job 等工作，但在开始使用它之前，我们仍需要完成一系列手动工作，如配置 Jenkins 的 “Configure System” 页面&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果你是一名 Jenkins 管理员，那么你一定不会对这个页面感到陌生，每次部署完一个新的 Jenkins 实例，在可以使用之前，我们往往都需要在该页面作出一些相应的配置。该页面除了包含 Jenkins 自身的一些基本配置信息外，同时还包括了当前系统中所安装的插件的配置信息。也就是说，当你的 Jenkins 安装的插件越多，该页面的配置项就有可能会越多。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;云时代 这个插件用处就少些了，所有的配置都放在打包在镜像中了&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin"&gt;generic-webhook-trigger-plugin&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;it can trigger on ant webhook&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="最佳实践"&gt;最佳实践&lt;/h2&gt;
+&lt;h3 id="1multi-branch--library"&gt;1、multi-branch + library&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=""&gt;jenkins library + &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="2webhooklibrary"&gt;2、webhook+library&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/cugbtang/jenkinslibrary-zeyangli"&gt;generic-webhook对接各种webhook封装到library中，打通端到端自动化&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;往后就是不断积累library的日子了。。。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="参考文献"&gt;参考文献&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/jenkins-zh/jenkins-zh/wiki"&gt;【introduction not offical】&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.jenkins.io/"&gt;【jenkins offical】&lt;/a&gt; ===&amp;gt; &lt;a href="https://github.com/jenkinsci/"&gt;【github】&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/jenkins-zh/jenkins-zh/issues"&gt;【国人都在玩】&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/jenkinsci/helm-charts"&gt;【Jenkins Community Kubernetes Helm Charts】&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos"&gt;【plugin: Jenkins Configuration as Code】&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/cugbtang/jenkinslibrary-zeyangli"&gt;【jenkinslibrary-zeyangli】&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnotes" role="doc-endnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://github.com/jenkins-zh/jenkins-zh/wiki"&gt;https://github.com/jenkins-zh/jenkins-zh/wiki&lt;/a&gt;&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://github.com/jenkinsci/"&gt;https://github.com/jenkinsci/&lt;/a&gt;&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://github.com/jenkins-zh/jenkins-zh/issues"&gt;https://github.com/jenkins-zh/jenkins-zh/issues&lt;/a&gt;&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink"&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description></item></channel></rss>

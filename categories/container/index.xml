@@ -1,1 +1,663 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Container on ✌yesplease's blog</title><link>http://cugbtang.github.io/categories/container/</link><description>Recent content in Container on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 02 Dec 2023 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/categories/container/index.xml" rel="self" type="application/rss+xml"/><item><title>docker, net?</title><link>http://cugbtang.github.io/post/container/series-container-3/</link><pubDate>Sat, 02 Dec 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-3/</guid><description>docker 默认的网络设备 1 2 3 4 # 列出不同的网络设备 docker network ls # 专门查看网桥设备 brctl show 如果你的docker主机可以访问互联网，你会发现，容器创建后，默认也</description></item><item><title>docker桥接网络模式下开启端口映射，流量是如何绕过防火墙的</title><link>http://cugbtang.github.io/post/container/series-container-2/</link><pubDate>Fri, 01 Dec 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-2/</guid><description>一、iptables 五条链 PREROUTING链 PREROUTING链是最先生效的，当数据包到达网口时，即开始工作。同时由于其在raw,ma</description></item><item><title>Container, how to play?</title><link>http://cugbtang.github.io/post/container/series-container-1/</link><pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-1/</guid><description>&lt;h1 id="container-technology-become-a-necessary-for-developer-during-operating-the-linux-system">container technology become a necessary for developer during operating the linux system.&lt;/h1></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Container on ✌yesplease's blog</title><link>http://localhost:1313/categories/container/</link><description>Recent content in Container on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Sat, 02 Dec 2023 16:01:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/container/index.xml" rel="self" type="application/rss+xml"/><item><title>docker, net?</title><link>http://localhost:1313/post/container/series-container-3/</link><pubDate>Sat, 02 Dec 2023 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/container/series-container-3/</guid><description>&lt;h2 id="docker-默认的网络设备"&gt;docker 默认的网络设备&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 列出不同的网络设备&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker network ls
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 专门查看网桥设备&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brctl show&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="如果你的docker主机可以访问互联网你会发现容器创建后默认也可以访问互联网-why"&gt;如果你的docker主机可以访问互联网，你会发现，容器创建后，默认也可以访问互联网, why?&lt;/h2&gt;
+&lt;p&gt;docker会借助iptables，对docker0的IP段进行SNAT&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208154856.png" alt=""&gt;&lt;/p&gt;
+&lt;h2 id="容器获取的ip是动态的先来后到先到先得容器与ip并没有绑定死"&gt;容器获取的IP是动态的，先来后到，先到先得，容器与IP并没有绑定死&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker inspect test2 | jq &lt;span style="color:#e6db74"&gt;&amp;#39;.[].NetworkSettings.Networks.bridge.IPAddress&amp;#39;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="如果想要让容器使用指定的ip地址该怎么办呢"&gt;如果想要让容器使用指定的IP地址，该怎么办呢？&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;默认情况下，我们无法对容器指定固定的IP地址，除非我们自己创建一个新的虚拟交换机，当容器使用我们自己创建的交换机和对应的网段时，才支持对容器指定固定的IP地址。也就是说，当容器连接到默认的网络时，不支持对容器指定固定的IP地址，只有连接到自定义网络时，才能对容器指定固定的IP地址。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="自定义网桥"&gt;自定义网桥&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker network create test_net -d bridge -o com.docker.network.bridge.name&lt;span style="color:#f92672"&gt;=&lt;/span&gt;test_bridge --subnet &lt;span style="color:#e6db74"&gt;&amp;#34;172.18.0.0/16&amp;#34;&lt;/span&gt; --gateway &lt;span style="color:#e6db74"&gt;&amp;#34;172.18.0.1&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#查看主机上的网桥变化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brctl show
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#查看主机上路由的变化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ip route show
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 或&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;route -n&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="默认的bridge网络和test_net网络是不通的"&gt;默认的bridge网络和test_net网络是不通的&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;查看路由表，路由条目写的都很清楚，不同的网段对应不通的接口，应该可以正常通讯才对，为什么就是无法ping通呢？
+原因就是，docker会生成对应的iptables规则，阻断了默认网络和自定义桥网络之间的通讯。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;删除STAGE-2中的前两条规则，即可让docker0中的容器和test_bridge中的容器进行通讯了&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208154944.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;但是，如果先将filter表中STAGE-2链中的规则删除，确保docker0和test_bridge能够互相通讯的情况下，会发现，即使是docker0和test_bridge之间的通讯，也是会被SNAT的（从docker0去往test_bridge，被SNAT成172.18.0.1，从test_bridge去往docker0，被SNAT成172.17.0.1），这是因为它们之间的通讯也是符合nat表中的两条SNAT规则的。造成这种情况的原因是，这两条SNAT规则没有指定固定的宿主机出口网卡（即没有使用-o指定宿主机网卡，而是使用！-o的方式把自己所在的网络内的网口排除在外）&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208155011.png" alt=""&gt;&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.zsythink.net/archives/4409"&gt;docker(7): 网络初探&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://blog.51cto.com/u_16099349/6896881"&gt;Docker与iptables docker与iptables详解&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>docker桥接网络模式下开启端口映射，流量是如何绕过防火墙的</title><link>http://localhost:1313/post/container/series-container-2/</link><pubDate>Fri, 01 Dec 2023 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/container/series-container-2/</guid><description>&lt;h2 id="一iptables"&gt;一、iptables&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208165600.png" alt=""&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;五条链&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PREROUTING链
+PREROUTING链是最先生效的，当数据包到达网口时，即开始工作。同时由于其在raw,mangle,nat表中都存在，其执行的优先l顺序是：raw(PREROUTING)&amp;ndash;&amp;gt;man
+gle(PREROUTING)&amp;mdash;-&amp;gt;mangle(nat)
+PREROUTING一般用作对包进行目标地址修改。比如将该包的目标地址，修改为非本机的另外的网络p,一般通过DNAT规则进行修改。&lt;/li&gt;
+&lt;li&gt;路由决策(Routing Decision)
+决定一个包该走哪个链。如果上述PREROUTING链对包进行了目标网络更改。那么决策会觉得这个是一个需要转发的数据包，于是会将该包转发给FORWARD链。
+否则，该包会走NPUT链&lt;/li&gt;
+&lt;li&gt;FORWARD链
+FORWARD在各表中生效的优先l顺序是：mangle(FORWARD)&amp;ndash;&amp;gt;filter(FORWARD)
+处理路由决策派发发过来的包，到这里的包一般目标网络地址在PREROUTING链被修改过&lt;/li&gt;
+&lt;li&gt;INPUT链
+其生效顺序是：mangle(INPUT)&amp;ndash;&amp;gt;filter(INPUT)
+处理路由决策派发发过来的包，到这里的包一般目标网络地址在PREROUTING链没有被修改过。&lt;/li&gt;
+&lt;li&gt;OUTPUT链
+在目标进程端口接收到输入数据包后，输出的数据包，将在这里进行规则应用。OUTPUT链在各表中生效的先后顺序是：
+raw(OUTPUT)&amp;mdash;-&amp;gt;mangle(OUTPUT)&amp;mdash;-nat(OUTPUT)&amp;mdash;-&amp;gt;filter(OUTPUT)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;四张表&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;tr:这里面的链条，规则，可以决定一个数据包是否可以到达目标进程端口&lt;/li&gt;
+&lt;li&gt;mangle:这里面的链条，规则，可以修改数据包的内容，比如t!&lt;/li&gt;
+&lt;li&gt;nat:这里面的链条，规测，可以修改源和目标的ip地址，从而进行包路由。&lt;/li&gt;
+&lt;li&gt;raw:这里面的链条，规则，能基于数据包的状态进行规则设定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;规则
+一个规则一般分为两大部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;匹配：即哪些数据包会命中这个规则，比如一个指定的，即是一个匹配规则&lt;/li&gt;
+&lt;li&gt;动作：匹配到规则之后，需要做什么动作，是放行，还是拒绝&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;动作分为以下几种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ACCEPT:直接接受该数据包，不会再走其他链条和规则。比如fit©r中的iput表中的某个规则命中后，动作是ACCEPT,那么该数据包将被直接送达目标进程端口。&lt;/li&gt;
+&lt;li&gt;DROP:直接抛弃该数据包，并且没有任何返回。且不会再走其他链和规则&lt;/li&gt;
+&lt;li&gt;REJECT:跟DROP类似，但好歹还是会跟请求方返回一些拒绝信息，比如我们拒绝掉ICMP协议后，ping该主机，会返▣“destination host unreachable”&lt;/li&gt;
+&lt;li&gt;RETURN:当前规则不做任何理，返回。让给下一个规则处理&lt;/li&gt;
+&lt;li&gt;LOG:同RETURN类以，但只是会将请求信息记录到系统日志中，记录路径为：var/log/syslog or /var/log/.messages&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="11查看某个表中有哪些链和规则"&gt;1.1、查看某个表中有哪些链和规则&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="二查看docker网桥模式下端口映射的规则变化"&gt;二、查看docker网桥模式下，端口映射的规则变化&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;启动一个端口映射的容器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; docker run --detach -p 8888:3306 --name some-mariadb1 --env MARIADB_USER&lt;span style="color:#f92672"&gt;=&lt;/span&gt;example-user --env MARIADB_PASSWORD&lt;span style="color:#f92672"&gt;=&lt;/span&gt;m@^x8bb6$d13ixuk --env MARIADB_ROOT_PASSWORD&lt;span style="color:#f92672"&gt;=&lt;/span&gt;m@^x8bb6$d13ixuk mariadb:latest&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;查看nat表&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208171939.png" alt=""&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;访问192.168.1.2:8888&lt;/li&gt;
+&lt;li&gt;数据包首先被nat表中的PREROUTING链命中&lt;/li&gt;
+&lt;li&gt;转向DOCKER链&lt;/li&gt;
+&lt;li&gt;被第2条规则命中，做了DNAT动作，访问变成了172.170.2:3306&lt;/li&gt;
+&lt;li&gt;经过路由处理，转向FORWARD链&lt;/li&gt;
+&lt;li&gt;命中FORWARD链中的第4条规则，最终访问被响应，也就可以从外部访问端口映射的服务了&lt;/li&gt;
+&lt;li&gt;由于PREROUTING对包进行了目标地址的修改，于是路由决策会将该包路由到FORWARD链。所有表中的linput链将直接忽略。
+&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208172613.png" alt=""&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="21原因及解决方案"&gt;2.1、原因及解决方案&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;原因
+由于数据包被更改了目标地址，于是路由策略将该包导向了FORWARD链。所以我们在INPUT链中再怎么定义规则，都无法限制外网对docker服务的访问。&lt;/li&gt;
+&lt;li&gt;解决方案
+既然包导向了FORWARD链，那么可以在FORWARD链中拦截。DOCKER官方给的建议便是如此，比如，针对本文中的例子，我们可以添加如下规则，即可实现所有外部网络都无法访问docker中的服务：
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;iptables -I DOCKER-USER -i eth0 -j DROP&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;DOCKER-USER是FORWARD链中第一个规则命中的链&lt;/li&gt;
+&lt;li&gt;从外部网络进入的数据包，直接丢弃&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Container, how to play?</title><link>http://localhost:1313/post/container/series-container-1/</link><pubDate>Wed, 01 Jun 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/container/series-container-1/</guid><description>&lt;h1 id="container-technology-become-a-necessary-for-developer-during-operating-the-linux-system"&gt;container technology become a necessary for developer during operating the linux system.&lt;/h1&gt;
+&lt;h2 id="一namespace"&gt;一、namespace&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;定义&lt;/p&gt;
+&lt;p&gt;namespace是 Linux 内核的一项功能，该功能对内核资源进行分区，以使一组进程看到一组资源，而另一组进程看到另一组资源。namespace 的工作方式通过为一组资源和进程设置相同的 namespace 而起作用，但是这些 namespace 引用了不同的资源。资源可能存在于多个 namespace 中。这些资源可以是进程ID、主机名、用户ID、文件名、与网络访问相关的名称和进程间通信。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特征&lt;/p&gt;
+&lt;p&gt;可以实现在同一主机系统中对进程ID、主机名、用户名ID、文件名、网络和进程间通信等资源的隔离。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;类型&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: center"&gt;namespace&lt;/th&gt;
+&lt;th style="text-align: center"&gt;summary&lt;/th&gt;
+&lt;th style="text-align: center"&gt;kernel&lt;/th&gt;
+&lt;th&gt;describe&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Mount(mnt)&lt;/td&gt;
+&lt;td style="text-align: center"&gt;隔离挂载点&lt;/td&gt;
+&lt;td style="text-align: center"&gt;2.4.19&lt;/td&gt;
+&lt;td&gt;隔离不同的进程或进程组看到的挂载点，实现容器内只能看到自己的挂在信息，在容器内的挂载操作不会影响主机的挂载目录&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Process ID(pid)&lt;/td&gt;
+&lt;td style="text-align: center"&gt;隔离进程 ID&lt;/td&gt;
+&lt;td style="text-align: center"&gt;2.6.24&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Network(net)&lt;/td&gt;
+&lt;td style="text-align: center"&gt;隔离网络设备，端口号等&lt;/td&gt;
+&lt;td style="text-align: center"&gt;2.6.29&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Interprocess Communication(ipc)&lt;/td&gt;
+&lt;td style="text-align: center"&gt;隔离 System VIPC 和 POSIX message queues&lt;/td&gt;
+&lt;td style="text-align: center"&gt;2.6.19&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;UTS Namespace(uts)&lt;/td&gt;
+&lt;td style="text-align: center"&gt;隔离主机名和域名&lt;/td&gt;
+&lt;td style="text-align: center"&gt;2.6.19&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;User Namespace(user)&lt;/td&gt;
+&lt;td style="text-align: center"&gt;隔离用户和用户组&lt;/td&gt;
+&lt;td style="text-align: center"&gt;3.8&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Control group(cgroup) Namespce&lt;/td&gt;
+&lt;td style="text-align: center"&gt;隔离 Cgroups 根目录&lt;/td&gt;
+&lt;td style="text-align: center"&gt;4.6&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: center"&gt;Time Namespace&lt;/td&gt;
+&lt;td style="text-align: center"&gt;隔离系统时间&lt;/td&gt;
+&lt;td style="text-align: center"&gt;5.6&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="11mount-namespace"&gt;1.1、Mount Namespace&lt;/h3&gt;
+&lt;p&gt;使用 unshare 命令可以新建 Mount Namespace，并且在新建的 Mount Namespace 内 mount 是和外部完全隔离的。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个bash 进程并且新建一个 Mount Namespace&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@localhost ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ sudo unshare --mount --fork /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;#&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;验证在独立的 namespce 内挂载文件，不影响别的&lt;/p&gt;
+&lt;p&gt;在 /tmp 目录下创建一个目录&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# mkdir /tmp/tmpfs&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 mount 命令挂载一个 tmpfs 类型的目录&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# mount -t tmpfs -o size=20m tmpfs /tmp/tmpfs&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 df 命令查看已经挂载的目录信息&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# df -h&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Filesystem Size Used Avail Use% Mounted on
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;/dev/sda1 40G 3.8G 37G 10% /
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;devtmpfs 457M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 457M 0% /dev
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 464M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 464M 0% /dev/shm
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 464M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 464M 0% /sys/fs/cgroup
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 464M 13M 451M 3% /run
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 93M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 93M 0% /run/user/1000
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;//172.29.0.1/vgt-2469b42ebff188de622646551002b263-6ad5fdbcbf2eaa93bd62f92333a2e6e5 466G 171G 295G 37% /vagrant
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 20M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 20M 0% /tmp/tmpfs&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;新打开一个命令窗口，执行 df 命令查看主机的挂载信息&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@localhost ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ df -h
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Filesystem Size Used Avail Use% Mounted on
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;devtmpfs 457M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 457M 0% /dev
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 464M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 464M 0% /dev/shm
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 464M 13M 451M 3% /run
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 464M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 464M 0% /sys/fs/cgroup
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;/dev/sda1 40G 3.8G 37G 10% /
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;//172.29.0.1/vgt-2469b42ebff188de622646551002b263-6ad5fdbcbf2eaa93bd62f92333a2e6e5 466G 171G 295G 37% /vagrant
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tmpfs 93M &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; 93M 0% /run/user/1000&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;基本验证完毕。接着我们查看新的mount namespace 信息&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# ls -l /proc/self/ns/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;total &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:56 ipc -&amp;gt; ipc:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531839&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:56 mnt -&amp;gt; mnt:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026532117&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:56 net -&amp;gt; net:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531956&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:56 pid -&amp;gt; pid:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531836&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:56 user -&amp;gt; user:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531837&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:56 uts -&amp;gt; uts:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531838&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;新打开一个命令窗口，使用相同的命令查看主机上的 namespace 信息&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@localhost ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ ls -l /proc/self/ns/
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;total &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; vagrant vagrant &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:57 ipc -&amp;gt; ipc:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531839&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; vagrant vagrant &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:57 mnt -&amp;gt; mnt:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531840&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; vagrant vagrant &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:57 net -&amp;gt; net:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531956&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; vagrant vagrant &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:57 pid -&amp;gt; pid:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531836&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; vagrant vagrant &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:57 user -&amp;gt; user:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531837&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;lrwxrwxrwx. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; vagrant vagrant &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 09:57 uts -&amp;gt; uts:&lt;span style="color:#f92672"&gt;[&lt;/span&gt;4026531838&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="12pid-namespace"&gt;1.2、PID Namespace&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用来隔离进程，在不同的namespace内可以拥有相同的进程号&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;创建一个 bash 进程，并且新建一个 PID Namespace&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@localhost ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ sudo unshare --pid --fork --mount-proc /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;#&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在当前的命令行窗口使用 ps aux 命令查看进程信息&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# ps aux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;root &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; 0.0 0.2 &lt;span style="color:#ae81ff"&gt;15792&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;2616&lt;/span&gt; pts/3 S 13:59 0:00 /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;root &lt;span style="color:#ae81ff"&gt;16&lt;/span&gt; 0.0 0.1 &lt;span style="color:#ae81ff"&gt;55192&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;1844&lt;/span&gt; pts/3 R+ 14:02 0:00 ps aux&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="13uts-namespace"&gt;1.3、UTS Namespace&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;它允许每个UTS Namespace 拥有一个独立的主机名&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;使用 unshare 命令创建一个 UTS Namespace&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@localhost ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ sudo unshare --uts --fork /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;#&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 hostname 命令设置主机&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# hostname -b docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# hostname&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;新打开一个命令行窗口，使用相同的命令查看主机的hostname&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@localhost vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# localhost&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="14ipc-namespace"&gt;1.4、IPC Namespace&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;主要用来隔离进程间通信的。PID Namespace 和 IPC Namespace一起使用可以实现同一 IPC Namespace 内的进程彼此可以通信，不同 IPC Namespace 的进程却不能通信。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;使用 unshare 命令创建一个 IPC Namespace&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ sudo unshare --ipc --fork /bin/bash&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;另起一个窗口，查看系统的通信进程&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ ipcs -q
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;------ Message Queues --------
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;key msqid owner perms used-bytes messages&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在新的ipc namespace下新建一个进程通信队列&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# ipcmk -Q&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Message queue id: &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;查看当前ipc namespace 下的系统通信队列列表&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# ipcs -q&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;------ Message Queues --------
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;key msqid owner perms used-bytes messages
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;0x2ae315e9 &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; root &lt;span style="color:#ae81ff"&gt;644&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;再次查看主机的系统通信队列&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ ipcs -q
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;------ Message Queues --------
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;key msqid owner perms used-bytes messages&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="15user-namespace"&gt;1.5、User Namespace&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;主要用来隔离用户和用户组。可以实现进程在容器内拥有 root 权限， 而在主机上却只是普通用户。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;以普通用户的身份创建一个 User Namespace&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ unshare --user --fork /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;unshare: unshare failed: Invalid argument
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 查看内核版本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ uname -a
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Linux docker 3.10.0-1127.el7.x86_64 &lt;span style="color:#75715e"&gt;#1 SMP Tue Mar 31 23:36:51 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 查阅资料&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# max_user_namespaces文件记录了允许创建的user namespace数量，我的CentOS 7.5默认是0，修改之&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;echo &lt;span style="color:#ae81ff"&gt;2147483647&lt;/span&gt; &amp;gt; /proc/sys/user/max_user_namespaces
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 再次运行&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ unshare --user -r /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;#&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;执行 id 命令查看当前的用户信息&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# id&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;uid&lt;span style="color:#f92672"&gt;=&lt;/span&gt;0&lt;span style="color:#f92672"&gt;(&lt;/span&gt;root&lt;span style="color:#f92672"&gt;)&lt;/span&gt; gid&lt;span style="color:#f92672"&gt;=&lt;/span&gt;0&lt;span style="color:#f92672"&gt;(&lt;/span&gt;root&lt;span style="color:#f92672"&gt;)&lt;/span&gt; groups&lt;span style="color:#f92672"&gt;=&lt;/span&gt;0&lt;span style="color:#f92672"&gt;(&lt;/span&gt;root&lt;span style="color:#f92672"&gt;)&lt;/span&gt;,65534&lt;span style="color:#f92672"&gt;(&lt;/span&gt;nfsnobody&lt;span style="color:#f92672"&gt;)&lt;/span&gt; context&lt;span style="color:#f92672"&gt;=&lt;/span&gt;unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在当前窗口执行 reboot 命令&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# reboot&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Failed to open /dev/initctl: Permission denied
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Failed to talk to init daemon.&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="16net-namespace"&gt;1.6、Net Namespace&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;用来隔离网络设备、IP地址和端口等信息。&lt;/p&gt;
+&lt;p&gt;可以让每个进程拥有自己独立的IP地址，端口和网卡信息&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;首先查看主机上的ip 信息&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ ip a
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;65536&lt;/span&gt; qdisc noqueue state UNKNOWN group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet 127.0.0.1/8 scope host lo
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet6 ::1/128 scope host
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;2: eth0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;1500&lt;/span&gt; qdisc mq state UP group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/ether 00:15:5d:25:01:09 brd ff:ff:ff:ff:ff:ff
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet 172.29.5.132/20 brd 172.29.15.255 scope global noprefixroute dynamic eth0
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft 82979sec preferred_lft 82979sec
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet6 fe80::215:5dff:fe25:109/64 scope link
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;3: docker0: &amp;lt;NO-CARRIER,BROADCAST,MULTICAST,UP&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;1500&lt;/span&gt; qdisc noqueue state DOWN group default
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/ether 02:42:f0:82:11:e0 brd ff:ff:ff:ff:ff:ff
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; valid_lft forever preferred_lft forever&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;创建 net namespace&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ sudo unshare --net --fork /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;#&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 ip a命令查看当前namespace的网络信息&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# ip a&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;1: lo: &amp;lt;LOOPBACK&amp;gt; mtu &lt;span style="color:#ae81ff"&gt;65536&lt;/span&gt; qdisc noop state DOWN group default qlen &lt;span style="color:#ae81ff"&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="17为什么-docker-需要-namespace"&gt;1.7、为什么 docker 需要 namespace?&lt;/h3&gt;
+&lt;p&gt;Linux 内核从2002年2.4.19版本开始加入了 Mount Namspace&lt;/p&gt;
+&lt;p&gt;内核3.8版本加入了 User Namespace 为容器提供了足够的支持功能&lt;/p&gt;
+&lt;p&gt;当 docker 新建一个容器时&lt;/p&gt;
+&lt;p&gt;会创建这六种 namespace， 然后将容器中的进程加入这些 namespace之中&lt;/p&gt;
+&lt;h2 id="二cgroups"&gt;二、Cgroups&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;定义&lt;/p&gt;
+&lt;p&gt;全程是 control groups， 是Linux 内核的一个功能。可以实现限制进程或者进程组的资源（cpu、mem、磁盘IO等）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特征&lt;/p&gt;
+&lt;p&gt;资源限制：限制资源的使用量&lt;/p&gt;
+&lt;p&gt;优先级控制： 不同的组可以有不用的资源使用优先级&lt;/p&gt;
+&lt;p&gt;审计：计算控制组的资源使用情况&lt;/p&gt;
+&lt;p&gt;控制： 控制进程的挂起或恢复&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;核心&lt;/p&gt;
+&lt;p&gt;subsystem: 一个内核的组件，代表一类资源调度控制器&lt;/p&gt;
+&lt;p&gt;cgroup： 表示一组进程和一组带有参数的子系统的关联关系&lt;/p&gt;
+&lt;p&gt;hierarchy：由一些列的控制组按照树状结构排列组成的子控制组默认拥有父控制组的属性&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="21subsystem"&gt;2.1、subsystem&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;查看当前主机使用了哪些子系统&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;vagrant@docker ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;$ sudo mount -t cgroup
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/systemd type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,xattr,release_agent&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/usr/lib/systemd/systemd-cgroups-agent,name&lt;span style="color:#f92672"&gt;=&lt;/span&gt;systemd&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/cpuset type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,cpuset&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,cpuacct,cpu&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/perf_event type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,perf_event&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/blkio type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,blkio&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/memory type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,memory&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/hugetlb type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,hugetlb&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/freezer type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,freezer&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,net_prio,net_cls&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/devices type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,devices&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup on /sys/fs/cgroup/pids type cgroup &lt;span style="color:#f92672"&gt;(&lt;/span&gt;rw,nosuid,nodev,noexec,relatime,seclabel,pids&lt;span style="color:#f92672"&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;以 cpu 子系统为例，演示 cgroups 如何限制进程的 cpu使用时间&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#在cpu子系统下创建测试文件夹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mkdir /sys/fs/cgroup/cpu/mydocker
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#查看&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker vagrant&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# ls /sys/fs/cgroup/cpu/mydocker -l&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;total &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cgroup.clone_children
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;--w--w--w-. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cgroup.event_control
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cgroup.procs
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-r--r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpuacct.stat
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpuacct.usage
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-r--r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpuacct.usage_percpu
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpu.cfs_period_us
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpu.cfs_quota_us
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpu.rt_period_us
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpu.rt_runtime_us
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpu.shares
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-r--r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 cpu.stat
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 notify_on_release
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;-rw-r--r--. &lt;span style="color:#ae81ff"&gt;1&lt;/span&gt; root root &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt; Feb &lt;span style="color:#ae81ff"&gt;26&lt;/span&gt; 15:15 tasks
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 将当前shell进程加入cgroup&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# echo $$&amp;gt; tasks&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 查看tasks文件内容&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;#&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mem&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 在memory子系统下创建cgroup&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# mkdir /sys/fs/cgroup/memory/mydocker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 查看新建目录中的内容&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# ls&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup.clone_children
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup.event_control
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cgroup.procs
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.failcnt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.force_empty
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.failcnt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.limit_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.max_usage_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.slabinfo
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.tcp.failcnt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.tcp.limit_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.tcp.max_usage_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.tcp.usage_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.kmem.usage_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.limit_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.max_usage_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.memsw.failcnt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.memsw.limit_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.memsw.max_usage_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.memsw.usage_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.move_charge_at_immigrate
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.numa_stat
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.oom_control
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.pressure_level
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.soft_limit_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.stat
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.swappiness
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.usage_in_bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memory.use_hierarchy
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;notify_on_release
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tasks
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 限制内存使用&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# echo 1073741824 &amp;gt; memory.limit_in_bytes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 将当前shell写入tasks内&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# echo $$&amp;gt;tasks&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# cat tasks&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;3356&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;3484&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 申请内存，当达到1G时 被杀死&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# memtester 1500M 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memtester version 4.3.0 &lt;span style="color:#f92672"&gt;(&lt;/span&gt;64-bit&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Copyright &lt;span style="color:#f92672"&gt;(&lt;/span&gt;C&lt;span style="color:#f92672"&gt;)&lt;/span&gt; 2001-2012 Charles Cazabon.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Licensed under the GNU General Public License version &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;only&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pagesize is &lt;span style="color:#ae81ff"&gt;4096&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pagesizemask is 0xfffffffffffff000
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;want 1500MB &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1572864000&lt;/span&gt; bytes&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;got 1500MB &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;1572864000&lt;/span&gt; bytes&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, trying mlock ...Killed
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 修改申请大小，完美&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@docker mydocker&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# memtester 500M 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;memtester version 4.3.0 &lt;span style="color:#f92672"&gt;(&lt;/span&gt;64-bit&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Copyright &lt;span style="color:#f92672"&gt;(&lt;/span&gt;C&lt;span style="color:#f92672"&gt;)&lt;/span&gt; 2001-2012 Charles Cazabon.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Licensed under the GNU General Public License version &lt;span style="color:#ae81ff"&gt;2&lt;/span&gt; &lt;span style="color:#f92672"&gt;(&lt;/span&gt;only&lt;span style="color:#f92672"&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pagesize is &lt;span style="color:#ae81ff"&gt;4096&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pagesizemask is 0xfffffffffffff000
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;want 500MB &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;524288000&lt;/span&gt; bytes&lt;span style="color:#f92672"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;got 500MB &lt;span style="color:#f92672"&gt;(&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;524288000&lt;/span&gt; bytes&lt;span style="color:#f92672"&gt;)&lt;/span&gt;, trying mlock ...locked.
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Loop 1/1:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Stuck Address : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Random Value : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Compare XOR : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Compare SUB : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Compare MUL : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Compare DIV : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Compare OR : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Compare AND : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Sequential Increment: ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Solid Bits : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Block Sequential : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Checkerboard : ok
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Bit Spread : ok&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;docker 是如何使用cgroups的？&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker run -ti -m&lt;span style="color:#f92672"&gt;=&lt;/span&gt;1g nginx&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="三联合文件系统"&gt;三、联合文件系统&lt;/h2&gt;</description></item></channel></rss>

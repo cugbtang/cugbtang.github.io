@@ -1,0 +1,430 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage data-theme=light><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><title>Go test, how to play? - ✌yesplease's blog</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,user-scalable=yes"><meta name=MobileOptimized content="width"><meta name=HandheldFriendly content="true"><meta name=applicable-device content="pc,mobile"><meta name=color-scheme content="light dark"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=mobile-web-app-capable content="yes"><meta name=generator content="Hugo 0.152.2"><link rel=canonical href=http://localhost:1313/post/go/base/series-go-4/><meta name=author content="yesplease"><meta name=description content="go 测试 go test 后面接着的应该是一个包名 go test 可以生成覆盖率的profile文件，这个文件可以被go tool cover工具解析(go tool cover -func=cover.out/go tool cover -html=cover.out)
+1、Go top-level test: 优点
+Copy go test会将每个TestXxx放在单独的goroutine中执行，保持相互的隔离； 某个TestXxx用例未过，通过Errorf，甚至是Fatalf输出错误结果，都不会影响到其他TestXxx的执行； 某个TestXxx用例中的某个结果判断未过，如果通过Errorf输出错误结果，则该TestXxx会继续执行； 不过，如果TestXxx使用的是Fatal/Fatalf，这会导致该TestXxx的执行在调用Fatal/Fatalf的位置立即结束，TestXxx函数体内的后续测试代码将不会得到执行； 默认各个TestXxx按声明顺序逐一执行，即便它们是在各自的goroutine中执行的； 通过go test -shuffle=on可以让各个TestXxx按随机次序执行，这样可以检测出各个TestXxx之间是否存在执行顺序的依赖，我们要避免在测试代码中出现这种依赖； 通过“go test -run=正则式”的方式，可以选择执行某些TestXxx。 各个TestXxx函数可以调用t.Parallel方法(即testing.T.Parallel方法)来将TestXxx加入到可并行执行的用例集合中，注意：加入到并行执行集合后，这些TestXxx的执行顺序就不确定了。 示例
+"><meta name=keywords content="go,test"><meta property="og:url" content="http://localhost:1313/post/go/base/series-go-4/"><meta property="og:site_name" content="✌yesplease's blog"><meta property="og:title" content="Go test, how to play?"><meta property="og:description" content="go 测试 go test 后面接着的应该是一个包名 go test 可以生成覆盖率的profile文件，这个文件可以被go tool cover工具解析(go tool cover -func=cover.out/go tool cover -html=cover.out)
+1、Go top-level test: 优点
+Copy go test会将每个TestXxx放在单独的goroutine中执行，保持相互的隔离； 某个TestXxx用例未过，通过Errorf，甚至是Fatalf输出错误结果，都不会影响到其他TestXxx的执行； 某个TestXxx用例中的某个结果判断未过，如果通过Errorf输出错误结果，则该TestXxx会继续执行； 不过，如果TestXxx使用的是Fatal/Fatalf，这会导致该TestXxx的执行在调用Fatal/Fatalf的位置立即结束，TestXxx函数体内的后续测试代码将不会得到执行； 默认各个TestXxx按声明顺序逐一执行，即便它们是在各自的goroutine中执行的； 通过go test -shuffle=on可以让各个TestXxx按随机次序执行，这样可以检测出各个TestXxx之间是否存在执行顺序的依赖，我们要避免在测试代码中出现这种依赖； 通过“go test -run=正则式”的方式，可以选择执行某些TestXxx。 各个TestXxx函数可以调用t.Parallel方法(即testing.T.Parallel方法)来将TestXxx加入到可并行执行的用例集合中，注意：加入到并行执行集合后，这些TestXxx的执行顺序就不确定了。 示例"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2024-01-04T16:01:23+08:00"><meta property="article:modified_time" content="2024-01-04T16:01:23+08:00"><meta property="article:tag" content="Go"><meta property="article:tag" content="Test"><meta itemprop=name content="Go test, how to play?"><meta itemprop=description content="go 测试 go test 后面接着的应该是一个包名 go test 可以生成覆盖率的profile文件，这个文件可以被go tool cover工具解析(go tool cover -func=cover.out/go tool cover -html=cover.out)
+1、Go top-level test: 优点
+Copy go test会将每个TestXxx放在单独的goroutine中执行，保持相互的隔离； 某个TestXxx用例未过，通过Errorf，甚至是Fatalf输出错误结果，都不会影响到其他TestXxx的执行； 某个TestXxx用例中的某个结果判断未过，如果通过Errorf输出错误结果，则该TestXxx会继续执行； 不过，如果TestXxx使用的是Fatal/Fatalf，这会导致该TestXxx的执行在调用Fatal/Fatalf的位置立即结束，TestXxx函数体内的后续测试代码将不会得到执行； 默认各个TestXxx按声明顺序逐一执行，即便它们是在各自的goroutine中执行的； 通过go test -shuffle=on可以让各个TestXxx按随机次序执行，这样可以检测出各个TestXxx之间是否存在执行顺序的依赖，我们要避免在测试代码中出现这种依赖； 通过“go test -run=正则式”的方式，可以选择执行某些TestXxx。 各个TestXxx函数可以调用t.Parallel方法(即testing.T.Parallel方法)来将TestXxx加入到可并行执行的用例集合中，注意：加入到并行执行集合后，这些TestXxx的执行顺序就不确定了。 示例"><meta itemprop=datePublished content="2024-01-04T16:01:23+08:00"><meta itemprop=dateModified content="2024-01-04T16:01:23+08:00"><meta itemprop=wordCount content="4106"><meta itemprop=keywords content="Go,Test"><meta name=twitter:card content="summary"><meta name=twitter:title content="Go test, how to play?"><meta name=twitter:description content="go 测试 go test 后面接着的应该是一个包名 go test 可以生成覆盖率的profile文件，这个文件可以被go tool cover工具解析(go tool cover -func=cover.out/go tool cover -html=cover.out)
+1、Go top-level test: 优点
+Copy go test会将每个TestXxx放在单独的goroutine中执行，保持相互的隔离； 某个TestXxx用例未过，通过Errorf，甚至是Fatalf输出错误结果，都不会影响到其他TestXxx的执行； 某个TestXxx用例中的某个结果判断未过，如果通过Errorf输出错误结果，则该TestXxx会继续执行； 不过，如果TestXxx使用的是Fatal/Fatalf，这会导致该TestXxx的执行在调用Fatal/Fatalf的位置立即结束，TestXxx函数体内的后续测试代码将不会得到执行； 默认各个TestXxx按声明顺序逐一执行，即便它们是在各自的goroutine中执行的； 通过go test -shuffle=on可以让各个TestXxx按随机次序执行，这样可以检测出各个TestXxx之间是否存在执行顺序的依赖，我们要避免在测试代码中出现这种依赖； 通过“go test -run=正则式”的方式，可以选择执行某些TestXxx。 各个TestXxx函数可以调用t.Parallel方法(即testing.T.Parallel方法)来将TestXxx加入到可并行执行的用例集合中，注意：加入到并行执行集合后，这些TestXxx的执行顺序就不确定了。 示例"><link rel=icon href=/favicon.ico><link rel=stylesheet href=/css/style.min.a0ae63bb9404f735c1a2045deae9e97f06e10118e5ad7befa80df30c5cd7fabc.css integrity="sha256-oK5ju5QE9zXBogRd6unpfwbhARjlrXvvqA3zDFzX+rw=" media=screen crossorigin=anonymous><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--><script>(function(){var e=localStorage.getItem("theme")||"light";document.documentElement.setAttribute("data-theme",e)})()</script></head><body><div id=back-to-top></div><header class=site-header><div class=desktop-header><div class=desktop-header-logo><a href=/ class=logo>✌yesplease</a></div><nav class=desktop-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=http://localhost:1313/>This is Home</a></li><li class=menu-item><a class=menu-item-link href=http://localhost:1313/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=http://localhost:1313/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=http://localhost:1313/about/>About</a></li><li class=menu-item><a class="theme-toggle menu-item-link" href=javascript:void(0);><svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="M12 3a6 6 0 009 9 9 9 0 11-9-9z"/></svg></a></li><li class=menu-item><a class=menu-item-link href=http://localhost:1313/index.xml rel="noopener alternate" type=application/rss+xml title=rss target=_blank><svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg></a></li></ul></nav></div><div class=mobile-header><div id=mobile-navbar class=mobile-navbar><div id=mobile-navbar-icon class=mobile-navbar-icon><svg aria-hidden="true" class="lucide lucide-menu hi-svg-inline icon--menu" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg></div><div class=mobile-navbar-logo><a href=/ class=logo>✌yesplease</a></div></div><div id=mobile-menu-close-modal class=mobile-menu-close-modal></div><nav id=mobile-menu class=mobile-menu><ul class=mobile-menu-list><li class=mobile-menu-item><a class=menu-item-link href=http://localhost:1313/>This is Home</a></li><li class=mobile-menu-item><a class=menu-item-link href=http://localhost:1313/post/>Archives</a></li><li class=mobile-menu-item><a class=menu-item-link href=http://localhost:1313/tags/>Tags</a></li><li class=mobile-menu-item><a class=menu-item-link href=http://localhost:1313/about/>About</a></li><li class=mobile-menu-item><a class="theme-toggle menu-item-link" href=javascript:void(0);><svg aria-hidden="true" class="lucide lucide-sun hi-svg-inline theme-icon-light" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+<svg aria-hidden="true" class="lucide lucide-moon hi-svg-inline theme-icon-dark" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="M12 3a6 6 0 009 9 9 9 0 11-9-9z"/></svg></a></li><li class=mobile-menu-item><a class=menu-item-link href=http://localhost:1313/index.xml rel="noopener alternate" type=application/rss+xml title=rss target=_blank><svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline icon--rss" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg></a></li></ul></nav></div></header><main id=main class="main pico container"><div class=content-wrapper><aside class=left-sidebar><nav class=toc id=toc><div class=toc-title>Table of Contents</div><div class="toc-content custom-scrollbar"><nav id=TableOfContents><ul><li><a href=#1go-top-level-test>1、Go top-level test:</a></li><li><a href=#2go-17版本引入了subtest>2、Go 1.7版本引入了subtest！</a></li><li><a href=#3testify>3、testify</a></li><li><a href=#4test-double尽量使用fake-object而不是mock-object>4、Test Double(尽量使用fake object，而不是mock object)</a></li><li><a href=#5竞争检测race-detection>5、竞争检测(race detection)</a></li><li><a href=#6fuzz>6、fuzz</a></li><li><a href=#6使用场景>6、使用场景</a></li><li><a href=#引用>引用</a></li></ul></nav></div></nav></aside><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>Go test, how to play?</h1><div class=post-meta-list><div class="post-meta-item post-meta-author"><svg aria-hidden="true" class="lucide lucide-user-round-pen hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="M2 21a8 8 0 0110.821-7.487"/><path d="M21.378 16.626a1 1 0 00-3.004-3.004l-4.01 4.012a2 2 0 00-.506.854l-.837 2.87a.5.5.0 00.62.62l2.87-.837a2 2 0 00.854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
+<a href=/about><span class=post-meta-author-name>yesplease</span></a></div><div class="post-meta-item post-meta-time"><svg aria-hidden="true" class="lucide lucide-calendar-days hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+<time datetime=2024-01-04>2024-01-04</time></div><div class=post-meta__right><div class="post-meta-item post-meta-category"><a href=http://localhost:1313/categories/go/>go</a></div></div></div></header><div class=post-content><h1 id=go-测试>go 测试</h1><p>go test 后面接着的应该是一个包名
+go test 可以生成覆盖率的profile文件，这个文件可以被go tool cover工具解析(go tool cover -func=cover.out/go tool cover -html=cover.out)</p><h2 id=1go-top-level-test>1、Go top-level test:</h2><ul><li><p>优点</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>go test会将每个TestXxx放在单独的goroutine中执行，保持相互的隔离；
+某个TestXxx用例未过，通过Errorf，甚至是Fatalf输出错误结果，都不会影响到其他TestXxx的执行；
+某个TestXxx用例中的某个结果判断未过，如果通过Errorf输出错误结果，则该TestXxx会继续执行；
+不过，如果TestXxx使用的是Fatal/Fatalf，这会导致该TestXxx的执行在调用Fatal/Fatalf的位置立即结束，TestXxx函数体内的后续测试代码将不会得到执行；
+默认各个TestXxx按声明顺序逐一执行，即便它们是在各自的goroutine中执行的；
+通过go test -shuffle=on可以让各个TestXxx按随机次序执行，这样可以检测出各个TestXxx之间是否存在执行顺序的依赖，我们要避免在测试代码中出现这种依赖；
+通过“go test -run=正则式”的方式，可以选择执行某些TestXxx。
+各个TestXxx函数可以调用t.Parallel方法(即testing.T.Parallel方法)来将TestXxx加入到可并行执行的用例集合中，注意：加入到并行执行集合后，这些TestXxx的执行顺序就不确定了。</code></pre></div></li><li><p>示例</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// Go top-level test</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Add</span>(<span style=color:#a6e22e>a</span>, <span style=color:#a6e22e>b</span> <span style=color:#66d9ef>int</span>) <span style=color:#66d9ef>int</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>b</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// 测试代码</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestAdd</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>got</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>got</span> <span style=color:#f92672>!=</span> <span style=color:#ae81ff>5</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;Add(2, 3) got %d, want 5&#34;</span>, <span style=color:#a6e22e>got</span>)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestAddZero</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>got</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>0</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>got</span> <span style=color:#f92672>!=</span> <span style=color:#ae81ff>2</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;Add(2, 0) got %d, want 2&#34;</span>, <span style=color:#a6e22e>got</span>)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestAddOppositeNum</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>got</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>got</span> <span style=color:#f92672>!=</span> <span style=color:#ae81ff>0</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;Add(2, -2) got %d, want 0&#34;</span>, <span style=color:#a6e22e>got</span>)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}</span></span></code></pre></div></div></li><li><p>Go最佳实践的表驱动(table-driven)测试</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>    <span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestAddWithTable</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>cases</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>a</span>    <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>b</span>    <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>r</span>    <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>        }{
+</span></span><span style=display:flex><span>            {<span style=color:#e6db74>&#34;2+3&#34;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>5</span>},
+</span></span><span style=display:flex><span>            {<span style=color:#e6db74>&#34;2+0&#34;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>2</span>},
+</span></span><span style=display:flex><span>            {<span style=color:#e6db74>&#34;2+(-2)&#34;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>0</span>},
+</span></span><span style=display:flex><span>            <span style=color:#75715e>//... ...</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>caze</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>cases</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>got</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Add</span>(<span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>a</span>, <span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>b</span>)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>got</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>r</span> {
+</span></span><span style=display:flex><span>                <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;%s got %d, want %d&#34;</span>, <span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>got</span>, <span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>r</span>)
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }</span></span></code></pre></div></div></li><li><p>基于top-level test+表驱动的测试,可以满足大多数Gopher的常规单测需求,不足：</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>表内的cases顺序执行，无法shuffle;
+表内所有cases在同一个goroutine中执行，隔离性差；
+如果使用fatal/fatalf，那么一旦某个case失败，后面的测试表项(cases)将不能得到执行；
+表内test case无法并行(parallel)执行；
+测试用例的组织只能平铺，不够灵活，无法建立起层次。</code></pre></div></li></ul><h2 id=2go-17版本引入了subtest>2、Go 1.7版本引入了subtest！</h2><ul><li><p>优点</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>go subtest也会放在单独的goroutine中执行，保持相互的隔离；
+某个Subtest用例未过，通过Errorf，甚至是Fatalf输出错误结果，都不会影响到同一TestXxx下的其他Subtest的执行；
+某个Subtest中的某个结果判断未过，如果通过Errorf输出错误结果，则该Subtest会继续执行；
+不过，如果subtest使用的是Fatal/Fatalf，这会导致该subtest的执行在调用Fatal/Fatalf的位置立即结束，subtest函数体内的后续测试代码将不会得到执行；
+默认各个TestXxx下的subtest将按声明顺序逐一执行，即便它们是在各自的goroutine中执行的；
+到目前为止，subtest不支持shuffle方式的随机序执行；
+通过“go test -run=TestXxx/正则式[/...]”的方式，我们可以选择执行TestXxx下的某个或某些subtest；
+各个subtest可以调用t.Parallel方法(即testing.T.Parallel方法)来将subtest加入到可并行执行的用例集合中，注意：加入到并行执行集合后，这些subTest的执行顺序就不确定了。</code></pre></div><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>更细粒度的测试：通过将测试用例分成多个小测试函数，可以更容易地定位问题和调试。
+可读性更好：subtest可以让测试代码更加清晰和易于理解。
+更灵活的测试：subtest可以根据需要进行组合和排列，以满足不同的测试需求。
+更有层次的组织测试代码：通过subtest可以设计出更有层次的测试代码组织形式，更方便地共享资源和在某一组织层次上设置setup与teardown</code></pre></div></li><li><p>示例</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// subtest</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestAddWithSubtest</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>cases</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>a</span>    <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>b</span>    <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>r</span>    <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>    }{
+</span></span><span style=display:flex><span>        {<span style=color:#e6db74>&#34;2+3&#34;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>5</span>},
+</span></span><span style=display:flex><span>        {<span style=color:#e6db74>&#34;2+0&#34;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>2</span>},
+</span></span><span style=display:flex><span>        {<span style=color:#e6db74>&#34;2+(-2)&#34;</span>, <span style=color:#ae81ff>2</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>0</span>},
+</span></span><span style=display:flex><span>        <span style=color:#75715e>//... ...</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>caze</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>cases</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>name</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Log</span>(<span style=color:#e6db74>&#34;g:&#34;</span>, <span style=color:#a6e22e>curGoroutineID</span>())
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>got</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Add</span>(<span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>a</span>, <span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>b</span>)
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>got</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>r</span> {
+</span></span><span style=display:flex><span>                <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;got %d, want %d&#34;</span>, <span style=color:#a6e22e>got</span>, <span style=color:#a6e22e>caze</span>.<span style=color:#a6e22e>r</span>)
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>curGoroutineID</span>() <span style=color:#66d9ef>int</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>buf</span> [<span style=color:#ae81ff>64</span>]<span style=color:#66d9ef>byte</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>n</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>runtime</span>.<span style=color:#a6e22e>Stack</span>(<span style=color:#a6e22e>buf</span>[:], <span style=color:#66d9ef>false</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span> <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>6</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>n</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>buf</span>[<span style=color:#a6e22e>i</span>] <span style=color:#f92672>==</span> <span style=color:#ae81ff>0x20</span> {
+</span></span><span style=display:flex><span>            <span style=color:#a6e22e>id</span> = string(<span style=color:#a6e22e>buf</span>[<span style=color:#ae81ff>6</span>:<span style=color:#a6e22e>i</span>])
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>break</span>
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>gid</span>, <span style=color:#a6e22e>_</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Atoi</span>(<span style=color:#a6e22e>id</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>gid</span>
+</span></span><span style=display:flex><span>}</span></span></code></pre></div></div></li></ul><p>Go testing包没有引入testsuite(测试套件)或testcase(测试用例)的概念，只有Test和SubTest</p><h2 id=3testify>3、testify</h2><p>testify的suite包为我们提供了一种基于suite/case结构组织测试代码的方式</p><ul><li><p>assert/require（十分全面的测试断言包）</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>
+// testify
+func TestAssert(t *testing.T) {
+    // Equal断言
+    assert.Equal(t, 4, Add(1, 3), &#34;The result should be 4&#34;)
+
+    sl1 := []int{1, 2, 3}
+    sl2 := []int{1, 2, 3}
+    sl3 := []int{2, 3, 4}
+    assert.Equal(t, sl1, sl2, &#34;sl1 should equal to sl2 &#34;)
+
+    p1 := &amp;sl1
+    p2 := &amp;sl2
+    assert.Equal(t, p1, p2, &#34;the content which p1 point to should equal to which p2 point to&#34;)
+
+    err := errors.New(&#34;demo error&#34;)
+    assert.EqualError(t, err, &#34;demo error&#34;)
+
+    // assert.Exactly(t, int32(123), int64(123)) // failed! both type and value must be same
+
+    // 布尔断言
+    assert.True(t, 1+1 == 2, &#34;1+1 == 2 should be true&#34;)
+    assert.Contains(t, &#34;Hello World&#34;, &#34;World&#34;)
+    assert.Contains(t, []string{&#34;Hello&#34;, &#34;World&#34;}, &#34;World&#34;)
+    assert.Contains(t, map[string]string{&#34;Hello&#34;: &#34;World&#34;}, &#34;Hello&#34;)
+    assert.ElementsMatch(t, []int{1, 3, 2, 3}, []int{1, 3, 3, 2})
+
+    // 反向断言
+    assert.NotEqual(t, 4, Add(2, 3), &#34;The result should not be 4&#34;)
+    assert.NotEqual(t, sl1, sl3, &#34;sl1 should not equal to sl3 &#34;)
+    assert.False(t, 1+1 == 3, &#34;1+1 == 3 should be false&#34;)
+    assert.Never(t, func() bool { return false }, time.Second, 10*time.Millisecond) //1秒之内condition参数都不为true，每10毫秒检查一次
+    assert.NotContains(t, &#34;Hello World&#34;, &#34;Go&#34;)
+}
+
+func TestAdd1(t *testing.T) {
+    result := Add(1, 3)
+    assert.Equal(t, 4, result, &#34;The result should be 4&#34;)
+    result = Add(2, 2)
+    assert.Equal(t, 4, result, &#34;The result should be 4&#34;)
+    result = Add(2, 3)
+    assert.Equal(t, 5, result, &#34;The result should be 5&#34;)
+    result = Add(0, 3)
+    assert.Equal(t, 3, result, &#34;The result should be 3&#34;)
+    result = Add(-1, 1)
+    assert.Equal(t, 0, result, &#34;The result should be 0&#34;)
+}
+
+func TestAdd2(t *testing.T) {
+    assert := assert.New(t)
+
+    result := Add(1, 3)
+    assert.Equal(4, result, &#34;The result should be 4&#34;)
+    result = Add(2, 2)
+    assert.Equal(4, result, &#34;The result should be 4&#34;)
+    result = Add(2, 3)
+    assert.Equal(5, result, &#34;The result should be 5&#34;)
+    result = Add(0, 3)
+    assert.Equal(3, result, &#34;The result should be 3&#34;)
+    result = Add(-1, 1)
+    assert.Equal(0, result, &#34;The result should be 0&#34;)
+}</code></pre></div></li><li><p>suite（提供了一个类xUnit的Suite/Case的测试代码组织形式的实现方案）</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>ExampleSuite</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>Suite</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>indent</span> <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>indents</span>() (<span style=color:#a6e22e>result</span> <span style=color:#66d9ef>string</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>result</span> <span style=color:#f92672>+=</span> <span style=color:#e6db74>&#34;----&#34;</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>SetupSuite</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;Suite setup&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>TearDownSuite</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;Suite teardown&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>SetupTest</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;Test setup&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>TearDownTest</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;Test teardown&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>--</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>BeforeTest</span>(<span style=color:#a6e22e>suiteName</span>, <span style=color:#a6e22e>testName</span> <span style=color:#66d9ef>string</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;%sBefore %s.%s\n&#34;</span>, <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#a6e22e>suiteName</span>, <span style=color:#a6e22e>testName</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>AfterTest</span>(<span style=color:#a6e22e>suiteName</span>, <span style=color:#a6e22e>testName</span> <span style=color:#66d9ef>string</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;%sAfter %s.%s\n&#34;</span>, <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#a6e22e>suiteName</span>, <span style=color:#a6e22e>testName</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>--</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>SetupSubTest</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;SubTest setup&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>TearDownSubTest</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;SubTest teardown&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>--</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>TestCase1</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;End TestCase1&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>--</span>
+</span></span><span style=display:flex><span>    }()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;Begin TestCase1&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#e6db74>&#34;case1-subtest1&#34;</span>, <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;Begin TestCase1.Subtest1&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;End TestCase1.Subtest1&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>--</span>
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#e6db74>&#34;case1-subtest2&#34;</span>, <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;Begin TestCase1.Subtest2&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;End TestCase1.Subtest2&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>--</span>
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>suite</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>ExampleSuite</span>) <span style=color:#a6e22e>TestCase2</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;End TestCase2&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>--</span>
+</span></span><span style=display:flex><span>    }()
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;Begin TestCase2&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#e6db74>&#34;case2-subtest1&#34;</span>, <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>++</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;Begin TestCase2.Subtest1&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indents</span>(), <span style=color:#e6db74>&#34;End TestCase2.Subtest1&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>indent</span><span style=color:#f92672>--</span>
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestExampleSuite</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>suite</span>.<span style=color:#a6e22e>Run</span>(<span style=color:#a6e22e>t</span>, new(<span style=color:#a6e22e>ExampleSuite</span>))
+</span></span><span style=display:flex><span>}</span></span></code></pre></div></div></li><li><p>mock（不建议用mock。 但结合mockery工具和testify mock，我们可以针对接口为被测目标自动生成testify的mock部分代码，这会大大提交mock test的编写效率）</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// mock</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>User</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>ID</span>   <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Name</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Age</span>  <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>UserRepository</span> <span style=color:#66d9ef>interface</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>CreateUser</span>(<span style=color:#a6e22e>user</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>User</span>) (<span style=color:#66d9ef>int</span>, <span style=color:#66d9ef>error</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>GetUserById</span>(<span style=color:#a6e22e>id</span> <span style=color:#66d9ef>int</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>UserService</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>repo</span> <span style=color:#a6e22e>UserRepository</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewUserService</span>(<span style=color:#a6e22e>repo</span> <span style=color:#a6e22e>UserRepository</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>UserService</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>UserService</span>{<span style=color:#a6e22e>repo</span>: <span style=color:#a6e22e>repo</span>}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>s</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>UserService</span>) <span style=color:#a6e22e>CreateUser</span>(<span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>age</span> <span style=color:#66d9ef>int</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>user</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>User</span>{<span style=color:#a6e22e>Name</span>: <span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>Age</span>: <span style=color:#a6e22e>age</span>}
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>id</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>repo</span>.<span style=color:#a6e22e>CreateUser</span>(<span style=color:#a6e22e>user</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>ID</span> = <span style=color:#a6e22e>id</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>user</span>, <span style=color:#66d9ef>nil</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>s</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>UserService</span>) <span style=color:#a6e22e>GetUserById</span>(<span style=color:#a6e22e>id</span> <span style=color:#66d9ef>int</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>s</span>.<span style=color:#a6e22e>repo</span>.<span style=color:#a6e22e>GetUserById</span>(<span style=color:#a6e22e>id</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>UserRepositoryMock</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>mock</span>.<span style=color:#a6e22e>Mock</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>m</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>UserRepositoryMock</span>) <span style=color:#a6e22e>CreateUser</span>(<span style=color:#a6e22e>user</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>User</span>) (<span style=color:#66d9ef>int</span>, <span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>args</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>m</span>.<span style=color:#a6e22e>Called</span>(<span style=color:#a6e22e>user</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>args</span>.<span style=color:#a6e22e>Int</span>(<span style=color:#ae81ff>0</span>), <span style=color:#a6e22e>args</span>.<span style=color:#a6e22e>Error</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>m</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>UserRepositoryMock</span>) <span style=color:#a6e22e>GetUserById</span>(<span style=color:#a6e22e>id</span> <span style=color:#66d9ef>int</span>) (<span style=color:#f92672>*</span><span style=color:#a6e22e>User</span>, <span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>args</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>m</span>.<span style=color:#a6e22e>Called</span>(<span style=color:#a6e22e>id</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>args</span>.<span style=color:#a6e22e>Get</span>(<span style=color:#ae81ff>0</span>).(<span style=color:#f92672>*</span><span style=color:#a6e22e>User</span>), <span style=color:#a6e22e>args</span>.<span style=color:#a6e22e>Error</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestUserService_CreateUser</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>repo</span> <span style=color:#f92672>:=</span> new(<span style=color:#a6e22e>UserRepositoryMock</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>service</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>NewUserService</span>(<span style=color:#a6e22e>repo</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>user</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>User</span>{<span style=color:#a6e22e>Name</span>: <span style=color:#e6db74>&#34;Alice&#34;</span>, <span style=color:#a6e22e>Age</span>: <span style=color:#ae81ff>30</span>}
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>repo</span>.<span style=color:#a6e22e>On</span>(<span style=color:#e6db74>&#34;CreateUser&#34;</span>, <span style=color:#a6e22e>user</span>).<span style=color:#a6e22e>Return</span>(<span style=color:#ae81ff>1</span>, <span style=color:#66d9ef>nil</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>createdUser</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>service</span>.<span style=color:#a6e22e>CreateUser</span>(<span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>Name</span>, <span style=color:#a6e22e>user</span>.<span style=color:#a6e22e>Age</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>NoError</span>(<span style=color:#a6e22e>t</span>, <span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>Equal</span>(<span style=color:#a6e22e>t</span>, <span style=color:#ae81ff>1</span>, <span style=color:#a6e22e>createdUser</span>.<span style=color:#a6e22e>ID</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>Equal</span>(<span style=color:#a6e22e>t</span>, <span style=color:#e6db74>&#34;Alice&#34;</span>, <span style=color:#a6e22e>createdUser</span>.<span style=color:#a6e22e>Name</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>assert</span>.<span style=color:#a6e22e>Equal</span>(<span style=color:#a6e22e>t</span>, <span style=color:#ae81ff>30</span>, <span style=color:#a6e22e>createdUser</span>.<span style=color:#a6e22e>Age</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>repo</span>.<span style=color:#a6e22e>AssertExpectations</span>(<span style=color:#a6e22e>t</span>)
+</span></span><span style=display:flex><span>}</span></span></code></pre></div></div></li></ul><h2 id=4test-double尽量使用fake-object而不是mock-object>4、Test Double(尽量使用fake object，而不是mock object)</h2><p>fake object也是Go testing中最为常用的一类（fake object最容易理解，它是被测系统SUT(System Under Test)依赖的外部协作者的“替身”）</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>以Go的标准库为例，我们在src/database/sql
+Go标准库中还有net/dnsclient_unix_test.go中的fakeDNSServer</code></pre></div><p>stub可以理解为一种fake object的特例。(一个内置了预期值/响应值且可以在多个测试间复用的替身object)</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>Go标准库中的net/http/httptest就是一个提供创建stub的典型的测试辅助包
+httptest还常用来做http.Handler的测试</code></pre></div><p>fake建立困难但使用简单。而mock object则是一种建立简单，使用简单程度因被测目标与外部协作者交互复杂程度而异的test double</p><p>mock object要与接口类型联合使用</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>我们与fake object的交互方式与与真实外部协作者交互的方式相同，这让其显得更简单，更容易使用，也降低了测试的复杂性；
+fake objet的行为更像真正的协作者，可以给开发人员更多的信心；
+当真实协作者更新时，我们不需要更新使用fake object时设置的expection和结果验证条件，因此，使用fake object时，重构代码往往比使用其他test double更容易。
+
+fake object的创建和维护可能很费时，就像上面的fakeDriver，源码有近2k行；
+fake object可能无法提供与真实组件相同的功能覆盖水平，这与fake object的提供方式有关。
+fake object的实现需要维护，每当真正的协作者更新时，都必须更新fake object。</code></pre></div><p>借助类似ChatGPT/copilot的工具快速构建出一个fake object</p><p>如果要更高的可信度和更高的功能覆盖水平，我们还可以借助docker来构建“真实版/无阉割版”的fake object。
+借助github上开源的testcontainers-go可以更为简便的构建出一个fake object，并且testcontainer提供了常见的外部协作者的封装实现，比如：MySQL、Redis、Postgres等。
+testcontainer更多也会被用在集成测试或冒烟测试上</p><h2 id=5竞争检测race-detection>5、竞争检测(race detection)</h2><div class=highlight-container><button class="copy-code-btn outline">Copy</button><pre tabindex=0><code>$ go test -race mypkg    // to test the package
+$ go run -race mysrc.go  // to run the source file
+$ go build -race mycmd   // to build the command
+$ go install -race mypkg // to install the package</code></pre></div><h2 id=6fuzz>6、fuzz</h2><p>The unit test has limitations, namely that each input must be added to the test by the developer. One benefit of fuzzing is that it comes up with inputs for your code, and may identify edge cases that the test cases you came up with didn’t reach.</p><div class=highlight-container><button class="copy-code-btn outline">Copy</button><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//reverse.go</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>input</span> <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#34;The quick brown fox jumped over the lazy dog&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>rev</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Reverse</span>(<span style=color:#a6e22e>input</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>doubleRev</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Reverse</span>(<span style=color:#a6e22e>rev</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;original: %q\n&#34;</span>, <span style=color:#a6e22e>input</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;reversed: %q\n&#34;</span>, <span style=color:#a6e22e>rev</span>)
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;reversed again: %q\n&#34;</span>, <span style=color:#a6e22e>doubleRev</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Reverse</span>(<span style=color:#a6e22e>s</span> <span style=color:#66d9ef>string</span>) (<span style=color:#66d9ef>string</span>) {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>r</span> <span style=color:#f92672>:=</span> []rune(<span style=color:#a6e22e>s</span>)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>j</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>, len(<span style=color:#a6e22e>r</span>)<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>; <span style=color:#a6e22e>i</span> &lt; len(<span style=color:#a6e22e>r</span>)<span style=color:#f92672>/</span><span style=color:#ae81ff>2</span>; <span style=color:#a6e22e>i</span>, <span style=color:#a6e22e>j</span> = <span style=color:#a6e22e>i</span><span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>, <span style=color:#a6e22e>j</span><span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>r</span>[<span style=color:#a6e22e>i</span>], <span style=color:#a6e22e>r</span>[<span style=color:#a6e22e>j</span>] = <span style=color:#a6e22e>r</span>[<span style=color:#a6e22e>j</span>], <span style=color:#a6e22e>r</span>[<span style=color:#a6e22e>i</span>]
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> string(<span style=color:#a6e22e>r</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//reverse_test.go</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;unicode/utf8&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>TestReverse</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>testcases</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>in</span>, <span style=color:#a6e22e>want</span> <span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>    }{
+</span></span><span style=display:flex><span>        {<span style=color:#e6db74>&#34;Hello, world&#34;</span>, <span style=color:#e6db74>&#34;dlrow ,olleH&#34;</span>},
+</span></span><span style=display:flex><span>        {<span style=color:#e6db74>&#34; &#34;</span>, <span style=color:#e6db74>&#34; &#34;</span>},
+</span></span><span style=display:flex><span>        {<span style=color:#e6db74>&#34;!12345&#34;</span>, <span style=color:#e6db74>&#34;54321!&#34;</span>},
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testcases</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>rev</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Reverse</span>(<span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>in</span>)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>rev</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>want</span> {
+</span></span><span style=display:flex><span>                <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;Reverse: %q, want %q&#34;</span>, <span style=color:#a6e22e>rev</span>, <span style=color:#a6e22e>tc</span>.<span style=color:#a6e22e>want</span>)
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>FuzzReverse</span>(<span style=color:#a6e22e>f</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>F</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>testcases</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>string</span>{<span style=color:#e6db74>&#34;Hello, world&#34;</span>, <span style=color:#e6db74>&#34; &#34;</span>, <span style=color:#e6db74>&#34;!12345&#34;</span>}
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>tc</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>testcases</span> {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#a6e22e>tc</span>)  <span style=color:#75715e>// Use f.Add to provide a seed corpus</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>Fuzz</span>(<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>, <span style=color:#a6e22e>orig</span> <span style=color:#66d9ef>string</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>rev</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Reverse</span>(<span style=color:#a6e22e>orig</span>)
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>doubleRev</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Reverse</span>(<span style=color:#a6e22e>rev</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;Number of runes: orig=%d, rev=%d, doubleRev=%d&#34;</span>, <span style=color:#a6e22e>utf8</span>.<span style=color:#a6e22e>RuneCountInString</span>(<span style=color:#a6e22e>orig</span>), <span style=color:#a6e22e>utf8</span>.<span style=color:#a6e22e>RuneCountInString</span>(<span style=color:#a6e22e>rev</span>), <span style=color:#a6e22e>utf8</span>.<span style=color:#a6e22e>RuneCountInString</span>(<span style=color:#a6e22e>doubleRev</span>))
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>orig</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>doubleRev</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;Before: %q, after: %q&#34;</span>, <span style=color:#a6e22e>orig</span>, <span style=color:#a6e22e>doubleRev</span>)
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>utf8</span>.<span style=color:#a6e22e>ValidString</span>(<span style=color:#a6e22e>orig</span>) <span style=color:#f92672>&amp;&amp;</span> !<span style=color:#a6e22e>utf8</span>.<span style=color:#a6e22e>ValidString</span>(<span style=color:#a6e22e>rev</span>) {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;Reverse produced invalid UTF-8 string %q&#34;</span>, <span style=color:#a6e22e>rev</span>)
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>}</span></span></code></pre></div></div><h2 id=6使用场景>6、使用场景</h2><p>net/http/httptest包提供了许多帮助函数，用于测试那些发送或处理Http请求的代码。</p><h2 id=引用>引用</h2><ul><li><a href=https://tonybai.com/2023/04/20/provide-fake-object-for-external-collaborators/>单测时尽量用fake object</a></li><li><a href=https://go.dev/doc/tutorial/fuzz>fuzz</a></li></ul></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>yesplease</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2024-01-04</span></p><p class=copyright-item><span class=item-title>License</span>
+<span class=item-content><a rel="license noopener" href=https://creativecommons.org/licenses/by-nc-nd/4.0/ target=_blank>CC BY-NC-ND 4.0</a></span></p></div><footer class=post-footer><div class=post-tags><a href=http://localhost:1313/tags/go/>go</a>
+<a href=http://localhost:1313/tags/test/>test</a></div><nav class=post-nav><a class=prev href=/post/go/base/series-go-5/><i class=iconfont><svg aria-hidden="true" class="lucide lucide-chevron-left hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="m15 18-6-6 6-6"/></svg>
+</i><span class="prev-text nav-default">Go 高级编程, how to play?</span>
+<span class="prev-text nav-mobile">Prev</span>
+</a><a class=next href=/post/go/base/series-go-2/><span class="next-text nav-default">Effective Go：编写高质量Go代码的实践指南</span>
+<span class="prev-text nav-mobile">Next</span>
+<i class=iconfont><svg aria-hidden="true" class="lucide lucide-chevron-right hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="m9 18 6-6-6-6"/></svg></i></a></nav></footer></article></div><aside class=right-sidebar></aside></div></main><footer id=footer class=site-footer><div class=social-icon-links><a href=mailto:cugbtang@sina.com rel="me noopener" class=social-icon-link title=email><svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" viewBox="0 0 1451 1024" width="1em" xlink="http://www.w3.org/1999/xlink"><path d="M664.781909 681.472759.0 97.881301C0 3.997201 71.046997.0 71.046997.0H474.477909 961.649408h399.992405s71.046998 3.997201 71.046998 97.881301L771.345323 681.472759S764.482731 685.154773 753.594283 688.65053V688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858V688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759zm53.281707 130.131124C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633.0 212.052267.0 212.052267V942.809523S0 1024 83.726336 1024H682.532949 753.579947h595.368192C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523V212.052267S893.138176 701.759633 817.019477 767.734955c-39.771477 34.470494-74.671786 43.295855-98.955861 43.868928z"/></svg>
+</a><a href=https://github.com/cugbtang rel="me noopener" class=social-icon-link title=github target=_blank><svg aria-hidden="true" class="icon hi-svg-inline" fill="currentColor" height="1em" viewBox="0 0 1024 1024" width="1em" xlink="http://www.w3.org/1999/xlink"><path d="M512 12.672c-282.88.0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667.0-12.16-.426667-44.373333-.64-87.04C242.005334 929.664 211.968 830.08 211.968 830.08 188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333.0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333.0.0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667.0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72.0 68.522667-.64 123.562667-.64 140.202666.0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"/></svg>
+</a><a href=http://localhost:1313/index.xml rel="noopener alternate" type=application/rss+xml class=social-icon-link title=rss target=_blank><svg aria-hidden="true" class="lucide lucide-rss hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a>
+</span><span class=division>|</span>
+<span class=theme-info>Theme - <a class=theme-link href=https://github.com/xianmin/hugo-theme-jane>Jane</a>
+</span><span class=copyright-year>&copy;
+2017 -
+2025
+<span class=heart><i class=iconfont><svg aria-hidden="true" class="lucide lucide-heart hi-svg-inline" fill="none" height="1em" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5.0 0016.5 3c-1.76.0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5.0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg>
+</i></span><span class=author>yesplease</span></span></div></footer><script type=text/javascript src=/js/main.002d1a80e7bd914cb4592a8c6486c23920f3d9827531bd1c79b3b5716dcf0bd5.js integrity="sha256-AC0agOe9kUy0WSqMZIbCOSDz2YJ1Mb0cebO1cW3PC9U=" crossorigin=anonymous></script><script type=text/javascript src=/lib/photoswipe/photoswipe.min.js></script><script type=text/javascript src=/lib/photoswipe/photoswipe-ui-default.min.js></script></body></html>

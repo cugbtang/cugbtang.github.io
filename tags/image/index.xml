@@ -1,1 +1,448 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Image on ✌yesplease's blog</title><link>http://cugbtang.github.io/tags/image/</link><description>Recent content in Image on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 15 Apr 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/image/index.xml" rel="self" type="application/rss+xml"/><item><title>gcr.io 镜像，how to play?</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-8/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-8/</guid><description>常用镜像仓库 DockerHub镜像仓库 Docker Hub 官方镜像仓库 (https://hub.docker.com/) Google 镜像仓库 https://gcr.io/google-containers/ https://gcr.io/kubernetes-helm/ https://gcr.io/google-containers/pause CoreOS 镜像仓库 https://quay.io/repository/coreos/ Elastic 镜像仓库 https://www.docker.elastic.co/ RedHat 镜像仓库 https://catalog.redhat.com/software/containers/search 阿里云镜像仓库 https://cr.console.aliyun.com/ 华为云镜像仓库 https://console.huaweicloud.com/swr/</description></item><item><title>kubernetes admission,how to play?</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-9/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-9/</guid><description>admission 一、static admission controllers 官方内置，启用就行 二、dynamic admission controllers 官方介绍 简单流程： 创建一个web服务（tls） 自签发证书 创建Dockerfil</description></item><item><title>kubernetes admission(kubebuilder),how to play?</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-10/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-10/</guid><description>admission 一、static admission controllers 官方内置，启用就行 二、dynamic admission controllers 官方介绍 简单流程： 创建一个web服务（tls） 自签发证书 创建Dockerfil</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Image on ✌yesplease's blog</title><link>http://localhost:1313/tags/image/</link><description>Recent content in Image on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Fri, 15 Apr 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/image/index.xml" rel="self" type="application/rss+xml"/><item><title>gcr.io 镜像，how to play?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-8/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-8/</guid><description>&lt;h1 id="常用镜像仓库"&gt;常用镜像仓库&lt;/h1&gt;
+&lt;h2 id="dockerhub镜像仓库"&gt;DockerHub镜像仓库&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Docker Hub 官方镜像仓库 (&lt;a href="https://hub.docker.com/"&gt;https://hub.docker.com/&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="google-镜像仓库"&gt;Google 镜像仓库&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://gcr.io/google-containers/"&gt;https://gcr.io/google-containers/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://gcr.io/kubernetes-helm/"&gt;https://gcr.io/kubernetes-helm/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://gcr.io/google-containers/pause"&gt;https://gcr.io/google-containers/pause&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="coreos-镜像仓库"&gt;CoreOS 镜像仓库&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://quay.io/repository/coreos/"&gt;https://quay.io/repository/coreos/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="elastic-镜像仓库"&gt;Elastic 镜像仓库&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.docker.elastic.co/"&gt;https://www.docker.elastic.co/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="redhat-镜像仓库"&gt;RedHat 镜像仓库&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://catalog.redhat.com/software/containers/search"&gt;https://catalog.redhat.com/software/containers/search&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="阿里云镜像仓库"&gt;阿里云镜像仓库&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://cr.console.aliyun.com/"&gt;https://cr.console.aliyun.com/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="华为云镜像仓库"&gt;华为云镜像仓库&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://console.huaweicloud.com/swr/"&gt;https://console.huaweicloud.com/swr/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id="国内可以访问的镜像源"&gt;国内可以访问的镜像源&lt;/h1&gt;
+&lt;p&gt;部分国外镜像仓库无法访问，但国内有对应镜像源，可以从以下镜像源拉取到本地然后重新打标签即可：&lt;/p&gt;
+&lt;h2 id="阿里云镜像仓库-1"&gt;阿里云镜像仓库&lt;/h2&gt;
+&lt;p&gt;可以拉取 k8s.gcr.io 镜像&lt;/p&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker pull k8s.gcr.io/pause:3.2
+# 改为
+docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id="docker-hub-镜像仓库"&gt;Docker Hub 镜像仓库&lt;/h2&gt;
+&lt;p&gt;可以拉取 k8s.gcr.io 镜像&lt;/p&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker pull k8s.gcr.io/pause:3.1
+docker pull k8s.gcr.io/kube-apiserver:v1.17.3
+# 改为
+docker pull willdockerhub/pause:3.1
+docker pull willdockerhub/kube-apiserver:v1.17.3&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id="七牛云镜像仓库"&gt;七牛云镜像仓库&lt;/h2&gt;
+&lt;p&gt;可以拉取 k8s.gcr.io 镜像&lt;/p&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;docker pull quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0
+# 改为
+docker pull quay-mirror.qiniu.com/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id="docker-hub-搜索镜像"&gt;Docker Hub 搜索镜像&lt;/h2&gt;
+&lt;p&gt;很多国外镜像已经有热心网友上传到了 Docker Hub，例如 &lt;code&gt;gcr.io/kubernetes-helm/tiller:v2.16.5&lt;/code&gt; 这个镜像，直接搜索关键字，找到排序靠前的然后在 Docker Hub 确认并拉取即可。&lt;/p&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# docker search tiller
+NAME DESCRIPTION STARS OFFICIAL AUTOMATED
+jessestuart/tiller Nightly multi-architecture (amd64, arm64, ar 19 [OK]
+sapcc/tiller Mirror of https://gcr.io/kubernetes-helm/til 9
+ist0ne/tiller https://gcr.io/kubernetes-helm/tiller ....&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;gcr.io镜像
+根据开源项目anjia0532/gcr.io_mirror，作者将gcr.io相关镜像pull下来，然后push到docker官方仓库，相关转换语法如下：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;gcr.io/namespace/image_name:image_tag
+# 等价于
+anjia0532/namespace.image_name:image_tag# 特别的
+k8s.gcr.io/{image}/{tag} &amp;lt;==&amp;gt; gcr.io/google-containers/{image}/{tag} &amp;lt;==&amp;gt; anjia0532/google-containers.{image}/{tag}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;方法一
+K8S的exapmle里的yaml默认是k8s.gcr.io的镜像，为了方便运行我们可以预先拉取相关镜像：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# vim pull-google.sh
+image=$1echo $1img=`echo $image | sed &amp;#39;s/k8s\.gcr\.io/anjia0532\/google-containers/g;s/gcr\.io/anjia0532/g;s/\//\./g;s/ /\n/g;s/_/-/g;s/anjia0532\./anjia0532\//g&amp;#39; | uniq | awk &amp;#39;{print &amp;#34;&amp;#34;$1&amp;#34;&amp;#34;}&amp;#39;`echo &amp;#34;docker pull $img&amp;#34;docker pull $imgecho &amp;#34;docker tag $img $image&amp;#34;docker tag $img $image
+# chmod +x pull-google.sh &amp;amp;&amp;amp; cp pull-google.sh /usr/local/bin/pull-google-container &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;就可以愉快的使用pull-google-container 命令了&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;# pull-google-container gcr.io/google-samples/gb-frontend:v4
+gcr.io/google-samples/gb-frontend:v4
+docker pull anjia0532/google-samples.gb-frontend:v4
+v4: Pulling from anjia0532/google-samples.gb-frontend
+Digest: sha256:aaa5b327ef3b4cb705513ab674fa40df66981616950c7de4912a621f9ee03dd4
+Status: Image is up to date for anjia0532/google-samples.gb-frontend:v4
+docker tag anjia0532/google-samples.gb-frontend:v4 gcr.io/google-samples/gb-frontend:v4&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;方法二
+除了预先拉取镜像，我们还可以将k8s.gcr.io 替换为可执行镜像
+为了方便替换，我们编写一个repair_yaml 脚本：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;vim /usr/local/bin/repair_yaml
+cp $1 &amp;#34;$1.bak&amp;#34;cat $1.bak | sed &amp;#39;s/k8s\.gcr\.io\/\(.*\)\//anjia0532\/google-containers.\1./g;s/gcr\.io\/\(.*\)\//anjia0532\/\1./g;s/google_/google-/g;&amp;#39; &amp;gt; $1rm -f &amp;#34;$1.bak&amp;#34;
+# chmod +x /usr/local/bin/repair_yaml
+# repair_yaml frontend-deployment.yaml
+# cat frontend-deployment.yaml &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id="dockerhub镜像国内加速"&gt;DockerHub镜像国内加速&lt;/h2&gt;
+&lt;h3 id="阿里云镜像加速"&gt;阿里云镜像加速&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo mkdir -p /etc/docker
+tee /etc/docker/daemon.json &amp;lt;&amp;lt;-&amp;#39;EOF&amp;#39;
+{&amp;#34;registry-mirrors&amp;#34;: [&amp;#34;https://uyah70su.mirror.aliyuncs.com&amp;#34;]
+}
+EOF&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id="daocloud-dockerhub镜像加速"&gt;DaoCloud DockerHub镜像加速&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id="西北农林大学dockerhub镜像加速"&gt;西北农林大学DockerHub镜像加速&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo mkdir -p /etc/docker
+tee /etc/docker/daemon.json &amp;lt;&amp;lt;-&amp;#39;EOF&amp;#39;
+{&amp;#34;registry-mirrors&amp;#34;: [&amp;#34;https://dockerhub.mirrors.nwafu.edu.cn/&amp;#34;]
+}
+EOF&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id="华为云dockerhub镜像加速"&gt;华为云DockerHub镜像加速&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json &amp;lt;&amp;lt;- &amp;#39;EOF&amp;#39;
+{&amp;#34;registry-mirrors&amp;#34;: [&amp;#34;https://7bafc985f90c43b887a96c2b846cf984.mirror.swr.myhuaweicloud.com&amp;#34;]
+}
+EOF&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后重新启动 Docker 服务：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo systemctl daemon-reload &amp;amp;&amp;amp; sudo systemctl restart docker&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id="验证加速器是否生效"&gt;验证加速器是否生效&lt;/h2&gt;
+&lt;p&gt;执行 &lt;code&gt;docker info&lt;/code&gt; 命令，如果从结果中看到了如下内容，说明配置成功。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;$ docker info | grep Mirrors -A1
+Registry Mirrors:https://uyah70su.mirror.aliyuncs.com/&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id="验证镜像拉取速度"&gt;验证镜像拉取速度&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;$ time docker pull centos&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;</description></item><item><title>kubernetes admission,how to play?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-9/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-9/</guid><description>&lt;h1 id="admission"&gt;Admission&lt;/h1&gt;
+&lt;h2 id="一static-admission-controllers"&gt;一、static admission controllers&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/"&gt;官方内置&lt;/a&gt;，启用就行&lt;/p&gt;
+&lt;h2 id="二dynamic-admission-controllers"&gt;二、dynamic admission controllers&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/"&gt;官方介绍&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;简单流程：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建一个web服务（tls）&lt;/li&gt;
+&lt;li&gt;自签发证书&lt;/li&gt;
+&lt;li&gt;创建Dockerfile和deployment service 文件&lt;/li&gt;
+&lt;li&gt;创建MutatingWebhookConfiguration资源&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;name&lt;span style="color:#f92672"&gt;=&lt;/span&gt;mywebhook
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;namespace&lt;span style="color:#f92672"&gt;=&lt;/span&gt;mynamespace
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go mod init &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;name&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat &lt;span style="color:#e6db74"&gt;&amp;lt;&amp;lt;EOF &amp;gt; ./main.go
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;package main
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;import (
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &amp;#34;context&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &amp;#34;encoding/json&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &amp;#34;log&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &amp;#34;net/http&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &amp;#34;os&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &amp;#34;os/signal&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &amp;#34;syscall&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; admissionv1 &amp;#34;k8s.io/api/admission/v1&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; corev1 &amp;#34;k8s.io/api/core/v1&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; metav1 &amp;#34;k8s.io/apimachinery/pkg/apis/meta/v1&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;type jsonPatch struct {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; OP string \`json:&amp;#34;op&amp;#34;\`
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Path string \`json:&amp;#34;path&amp;#34;\`
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Value interface{} \`json:&amp;#34;value&amp;#34;\`
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;s
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;func podsMutate(w http.ResponseWriter, r *http.Request) {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; admissionReviewReq := &amp;amp;admissionv1.AdmissionReview{}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; if err := json.NewDecoder(r.Body).Decode(admissionReviewReq); err != nil {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; return
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; pod := &amp;amp;corev1.Pod{}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; if err := json.Unmarshal(admissionReviewReq.Request.Object.Raw, pod); err != nil {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; return
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; labels := pod.Labels
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; if pod.Labels == nil {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; labels = make(map[string]string)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; labels[&amp;#34;a&amp;#34;] = &amp;#34;1&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; var patchs []jsonPatch
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; patchs = append(patchs, jsonPatch{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; OP: &amp;#34;add&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Path: &amp;#34;/metadata/labels&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Value: labels,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; })
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; jsonPatchata, err := json.Marshal(patchs)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; if err != nil {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; return
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; patchType := admissionv1.PatchTypeJSONPatch
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; resp := &amp;amp;admissionv1.AdmissionResponse{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; UID: admissionReviewReq.Request.UID,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Allowed: true,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Patch: jsonPatchata,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; PatchType: &amp;amp;patchType,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; admissionReviewResp := &amp;amp;admissionv1.AdmissionReview{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; TypeMeta: metav1.TypeMeta{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Kind: &amp;#34;AdmissionReview&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; APIVersion: &amp;#34;admission.k8s.io/v1&amp;#34;,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Response: resp,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; if err := json.NewEncoder(w).Encode(admissionReviewResp); err != nil {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; return
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;func main() {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; mux := http.NewServeMux()
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; server := &amp;amp;http.Server{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; Handler: mux,
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; mux.HandleFunc(&amp;#34;/pods/mutate&amp;#34;, podsMutate)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; ch := make(chan os.Signal, 1)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; go func() {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; &amp;lt;-ch
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; server.Shutdown(context.TODO())
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }()
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; if err := server.ListenAndServeTLS(&amp;#34;/etc/${name}/tls.crt&amp;#34;, &amp;#34;/etc/${name}/tls.key&amp;#34;); err != nil &amp;amp;&amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; err != http.ErrServerClosed {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; log.Fatalf(&amp;#34;Failed to ListenAndServeTLS, err:%#v&amp;#34;, err)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;go mod tidy
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat &lt;span style="color:#e6db74"&gt;&amp;lt;&amp;lt;EOF &amp;gt; ./Dockerfile
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;FROM golang:alpine as builder
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;ENV GO111MODULE=on \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; GOPROXY=https://goproxy.cn,direct
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;ARG CONF=dev
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;WORKDIR /go/app
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;COPY go.mod .
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;COPY go.sum .
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;RUN go mod download
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;COPY main.go main.go
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o app .
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;FROM alpine:latest as prod
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;ARG CONF=dev
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;RUN sed -i &amp;#39;s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g&amp;#39; /etc/apk/repositories &amp;amp;&amp;amp; apk --no-cache add ca-certificates &amp;amp;&amp;amp; apk add tzdata &amp;amp;&amp;amp; cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;amp;&amp;amp; echo &amp;#34;Asia/Shanghai&amp;#34; &amp;gt; /etc/timezone
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;WORKDIR /app/
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;COPY --from=0 /go/app/app .
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;CMD [&amp;#34;./app&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker build -t mywebhook:0.1 .
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl create ns &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;namespace&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;openssl genrsa -out ca.key &lt;span style="color:#ae81ff"&gt;2048&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;openssl req -new -x509 -days &lt;span style="color:#ae81ff"&gt;365&lt;/span&gt; -key ca.key &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -subj &lt;span style="color:#e6db74"&gt;&amp;#34;/C=AU/CN=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;name&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -out ca.crt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;openssl req -newkey rsa:2048 -nodes -keyout server.key &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -subj &lt;span style="color:#e6db74"&gt;&amp;#34;/C=AU/CN=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;name&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -out server.csr
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;openssl x509 -req &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -extfile &amp;lt;&lt;span style="color:#f92672"&gt;(&lt;/span&gt;printf &lt;span style="color:#e6db74"&gt;&amp;#34;subjectAltName=DNS:&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;name&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt;.&lt;/span&gt;&lt;span style="color:#e6db74"&gt;${&lt;/span&gt;namespace&lt;span style="color:#e6db74"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt;.svc&amp;#34;&lt;/span&gt;&lt;span style="color:#f92672"&gt;)&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -days &lt;span style="color:#ae81ff"&gt;365&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -in server.csr &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -CA ca.crt -CAkey ca.key -CAcreateserial &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; -out server.crt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl create secret tls -n &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;namespace&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; &lt;span style="color:#e6db74"&gt;${&lt;/span&gt;name&lt;span style="color:#e6db74"&gt;}&lt;/span&gt; &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --cert&lt;span style="color:#f92672"&gt;=&lt;/span&gt;server.crt &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --key&lt;span style="color:#f92672"&gt;=&lt;/span&gt;server.key &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --dry-run&lt;span style="color:#f92672"&gt;=&lt;/span&gt;client -o yaml &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; &amp;gt; ./secret.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;caBundle&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;`&lt;/span&gt;cat ca.crt | base64 | fold |awk BEGIN&lt;span style="color:#f92672"&gt;{&lt;/span&gt;RS&lt;span style="color:#f92672"&gt;=&lt;/span&gt;EOF&lt;span style="color:#f92672"&gt;}&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;{gsub(/\n/,&amp;#34;&amp;#34;);print}&amp;#39;&lt;/span&gt;&lt;span style="color:#e6db74"&gt;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat &lt;span style="color:#e6db74"&gt;&amp;lt;&amp;lt;EOF &amp;gt; ./webhook.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;apiVersion: admissionregistration.k8s.io/v1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;kind: MutatingWebhookConfiguration
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; name: ${name}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; namespace: ${namespace}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;webhooks:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;- name: ${name}.${namespace}.com
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; failurePolicy: &amp;#34;Fail&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; matchPolicy: &amp;#34;Equivalent&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; rules:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - apiGroups: [&amp;#34;&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; apiVersions: [&amp;#34;v1&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; operations: [&amp;#34;CREATE&amp;#34;,&amp;#34;UPDATE&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; resources: [&amp;#34;pods&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; scope: &amp;#34;*&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; clientConfig:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; service:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; namespace: ${namespace}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; name: ${name}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; path: /pods/mutate
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; port: 443
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; caBundle: ${caBundle}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; admissionReviewVersions: [&amp;#34;v1&amp;#34;, &amp;#34;v1beta1&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; sideEffects: None
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; timeoutSeconds: 10
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; reinvocationPolicy: &amp;#34;Never&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat &lt;span style="color:#e6db74"&gt;&amp;lt;&amp;lt;EOF &amp;gt; ./deployment.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;apiVersion: apps/v1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;kind: Deployment
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; name: ${name}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; namespace: ${namespace}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;spec:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; replicas: 1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; selector:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; matchLabels:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; app: ${name}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; template:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; labels:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; app: ${name}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; spec:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; containers:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - image: ${name}:0.1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; imagePullPolicy: Never
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; name: app
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; volumeMounts:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - name: tls
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; mountPath: &amp;#34;/etc/${name}&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; readOnly: true
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; volumes:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - name: tls
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; secret:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; secretName: ${name}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat &lt;span style="color:#e6db74"&gt;&amp;lt;&amp;lt;EOF &amp;gt; ./service.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;apiVersion: v1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;kind: Service
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; name: ${name}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; namespace: ${namespace}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;spec:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; type: ClusterIP
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; ports:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - port: 443
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; protocol: TCP
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; targetPort: 443
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; selector:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; app: ${name}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cat &lt;span style="color:#e6db74"&gt;&amp;lt;&amp;lt;EOF &amp;gt; ./demo.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;apiVersion: v1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;kind: Pod
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;metadata:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; name: demo
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; namespace: ${namespace}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;spec:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; containers:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - command:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - sh
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - -c
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; - &amp;#39;sleep 10&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; image: busybox
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt; name: busybox
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#e6db74"&gt;EOF&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="2-部署webhook"&gt;2. 部署webhook&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl apply -f secret.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl apply -f deployment.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl apply -f service.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl apply -f webhook.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rm ca.crt ca.key ca.srl server.crt server.csr server.key&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="3-部署demo"&gt;3. 部署demo&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#创建webhook相关以及demo pod yaml&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;bash webhook.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl apply -f demo.yaml&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>

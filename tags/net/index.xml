@@ -1,1 +1,141 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Net on ✌yesplease's blog</title><link>http://cugbtang.github.io/tags/net/</link><description>Recent content in Net on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 02 Dec 2023 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/net/index.xml" rel="self" type="application/rss+xml"/><item><title>docker, net?</title><link>http://cugbtang.github.io/post/container/series-container-3/</link><pubDate>Sat, 02 Dec 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-3/</guid><description>docker 默认的网络设备 1 2 3 4 # 列出不同的网络设备 docker network ls # 专门查看网桥设备 brctl show 如果你的docker主机可以访问互联网，你会发现，容器创建后，默认也</description></item><item><title>docker桥接网络模式下开启端口映射，流量是如何绕过防火墙的</title><link>http://cugbtang.github.io/post/container/series-container-2/</link><pubDate>Fri, 01 Dec 2023 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/container/series-container-2/</guid><description>一、iptables 五条链 PREROUTING链 PREROUTING链是最先生效的，当数据包到达网口时，即开始工作。同时由于其在raw,ma</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Net on ✌yesplease's blog</title><link>http://localhost:1313/tags/net/</link><description>Recent content in Net on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Sat, 02 Dec 2023 16:01:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/net/index.xml" rel="self" type="application/rss+xml"/><item><title>docker, net?</title><link>http://localhost:1313/post/container/series-container-3/</link><pubDate>Sat, 02 Dec 2023 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/container/series-container-3/</guid><description>&lt;h2 id="docker-默认的网络设备"&gt;docker 默认的网络设备&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 列出不同的网络设备&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker network ls
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 专门查看网桥设备&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brctl show&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="如果你的docker主机可以访问互联网你会发现容器创建后默认也可以访问互联网-why"&gt;如果你的docker主机可以访问互联网，你会发现，容器创建后，默认也可以访问互联网, why?&lt;/h2&gt;
+&lt;p&gt;docker会借助iptables，对docker0的IP段进行SNAT&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208154856.png" alt=""&gt;&lt;/p&gt;
+&lt;h2 id="容器获取的ip是动态的先来后到先到先得容器与ip并没有绑定死"&gt;容器获取的IP是动态的，先来后到，先到先得，容器与IP并没有绑定死&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker inspect test2 | jq &lt;span style="color:#e6db74"&gt;&amp;#39;.[].NetworkSettings.Networks.bridge.IPAddress&amp;#39;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="如果想要让容器使用指定的ip地址该怎么办呢"&gt;如果想要让容器使用指定的IP地址，该怎么办呢？&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;默认情况下，我们无法对容器指定固定的IP地址，除非我们自己创建一个新的虚拟交换机，当容器使用我们自己创建的交换机和对应的网段时，才支持对容器指定固定的IP地址。也就是说，当容器连接到默认的网络时，不支持对容器指定固定的IP地址，只有连接到自定义网络时，才能对容器指定固定的IP地址。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id="自定义网桥"&gt;自定义网桥&lt;/h2&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;docker network create test_net -d bridge -o com.docker.network.bridge.name&lt;span style="color:#f92672"&gt;=&lt;/span&gt;test_bridge --subnet &lt;span style="color:#e6db74"&gt;&amp;#34;172.18.0.0/16&amp;#34;&lt;/span&gt; --gateway &lt;span style="color:#e6db74"&gt;&amp;#34;172.18.0.1&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#查看主机上的网桥变化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;brctl show
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#查看主机上路由的变化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ip route show
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 或&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;route -n&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="默认的bridge网络和test_net网络是不通的"&gt;默认的bridge网络和test_net网络是不通的&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;查看路由表，路由条目写的都很清楚，不同的网段对应不通的接口，应该可以正常通讯才对，为什么就是无法ping通呢？
+原因就是，docker会生成对应的iptables规则，阻断了默认网络和自定义桥网络之间的通讯。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;删除STAGE-2中的前两条规则，即可让docker0中的容器和test_bridge中的容器进行通讯了&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208154944.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;但是，如果先将filter表中STAGE-2链中的规则删除，确保docker0和test_bridge能够互相通讯的情况下，会发现，即使是docker0和test_bridge之间的通讯，也是会被SNAT的（从docker0去往test_bridge，被SNAT成172.18.0.1，从test_bridge去往docker0，被SNAT成172.17.0.1），这是因为它们之间的通讯也是符合nat表中的两条SNAT规则的。造成这种情况的原因是，这两条SNAT规则没有指定固定的宿主机出口网卡（即没有使用-o指定宿主机网卡，而是使用！-o的方式把自己所在的网络内的网口排除在外）&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208155011.png" alt=""&gt;&lt;/p&gt;
+&lt;h2 id="参考"&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.zsythink.net/archives/4409"&gt;docker(7): 网络初探&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://blog.51cto.com/u_16099349/6896881"&gt;Docker与iptables docker与iptables详解&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>docker桥接网络模式下开启端口映射，流量是如何绕过防火墙的</title><link>http://localhost:1313/post/container/series-container-2/</link><pubDate>Fri, 01 Dec 2023 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/container/series-container-2/</guid><description>&lt;h2 id="一iptables"&gt;一、iptables&lt;/h2&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208165600.png" alt=""&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;五条链&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PREROUTING链
+PREROUTING链是最先生效的，当数据包到达网口时，即开始工作。同时由于其在raw,mangle,nat表中都存在，其执行的优先l顺序是：raw(PREROUTING)&amp;ndash;&amp;gt;man
+gle(PREROUTING)&amp;mdash;-&amp;gt;mangle(nat)
+PREROUTING一般用作对包进行目标地址修改。比如将该包的目标地址，修改为非本机的另外的网络p,一般通过DNAT规则进行修改。&lt;/li&gt;
+&lt;li&gt;路由决策(Routing Decision)
+决定一个包该走哪个链。如果上述PREROUTING链对包进行了目标网络更改。那么决策会觉得这个是一个需要转发的数据包，于是会将该包转发给FORWARD链。
+否则，该包会走NPUT链&lt;/li&gt;
+&lt;li&gt;FORWARD链
+FORWARD在各表中生效的优先l顺序是：mangle(FORWARD)&amp;ndash;&amp;gt;filter(FORWARD)
+处理路由决策派发发过来的包，到这里的包一般目标网络地址在PREROUTING链被修改过&lt;/li&gt;
+&lt;li&gt;INPUT链
+其生效顺序是：mangle(INPUT)&amp;ndash;&amp;gt;filter(INPUT)
+处理路由决策派发发过来的包，到这里的包一般目标网络地址在PREROUTING链没有被修改过。&lt;/li&gt;
+&lt;li&gt;OUTPUT链
+在目标进程端口接收到输入数据包后，输出的数据包，将在这里进行规则应用。OUTPUT链在各表中生效的先后顺序是：
+raw(OUTPUT)&amp;mdash;-&amp;gt;mangle(OUTPUT)&amp;mdash;-nat(OUTPUT)&amp;mdash;-&amp;gt;filter(OUTPUT)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;四张表&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;tr:这里面的链条，规则，可以决定一个数据包是否可以到达目标进程端口&lt;/li&gt;
+&lt;li&gt;mangle:这里面的链条，规则，可以修改数据包的内容，比如t!&lt;/li&gt;
+&lt;li&gt;nat:这里面的链条，规测，可以修改源和目标的ip地址，从而进行包路由。&lt;/li&gt;
+&lt;li&gt;raw:这里面的链条，规则，能基于数据包的状态进行规则设定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;规则
+一个规则一般分为两大部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;匹配：即哪些数据包会命中这个规则，比如一个指定的，即是一个匹配规则&lt;/li&gt;
+&lt;li&gt;动作：匹配到规则之后，需要做什么动作，是放行，还是拒绝&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;动作分为以下几种：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ACCEPT:直接接受该数据包，不会再走其他链条和规则。比如fit©r中的iput表中的某个规则命中后，动作是ACCEPT,那么该数据包将被直接送达目标进程端口。&lt;/li&gt;
+&lt;li&gt;DROP:直接抛弃该数据包，并且没有任何返回。且不会再走其他链和规则&lt;/li&gt;
+&lt;li&gt;REJECT:跟DROP类似，但好歹还是会跟请求方返回一些拒绝信息，比如我们拒绝掉ICMP协议后，ping该主机，会返▣“destination host unreachable”&lt;/li&gt;
+&lt;li&gt;RETURN:当前规则不做任何理，返回。让给下一个规则处理&lt;/li&gt;
+&lt;li&gt;LOG:同RETURN类以，但只是会将请求信息记录到系统日志中，记录路径为：var/log/syslog or /var/log/.messages&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="11查看某个表中有哪些链和规则"&gt;1.1、查看某个表中有哪些链和规则&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="二查看docker网桥模式下端口映射的规则变化"&gt;二、查看docker网桥模式下，端口映射的规则变化&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;启动一个端口映射的容器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; docker run --detach -p 8888:3306 --name some-mariadb1 --env MARIADB_USER&lt;span style="color:#f92672"&gt;=&lt;/span&gt;example-user --env MARIADB_PASSWORD&lt;span style="color:#f92672"&gt;=&lt;/span&gt;m@^x8bb6$d13ixuk --env MARIADB_ROOT_PASSWORD&lt;span style="color:#f92672"&gt;=&lt;/span&gt;m@^x8bb6$d13ixuk mariadb:latest&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;查看nat表&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208171939.png" alt=""&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;访问192.168.1.2:8888&lt;/li&gt;
+&lt;li&gt;数据包首先被nat表中的PREROUTING链命中&lt;/li&gt;
+&lt;li&gt;转向DOCKER链&lt;/li&gt;
+&lt;li&gt;被第2条规则命中，做了DNAT动作，访问变成了172.170.2:3306&lt;/li&gt;
+&lt;li&gt;经过路由处理，转向FORWARD链&lt;/li&gt;
+&lt;li&gt;命中FORWARD链中的第4条规则，最终访问被响应，也就可以从外部访问端口映射的服务了&lt;/li&gt;
+&lt;li&gt;由于PREROUTING对包进行了目标地址的修改，于是路由决策会将该包路由到FORWARD链。所有表中的linput链将直接忽略。
+&lt;img src="https://cdn.jsdelivr.net/gh/cugbtang/image-repo/PicGo/20231208172613.png" alt=""&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="21原因及解决方案"&gt;2.1、原因及解决方案&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;原因
+由于数据包被更改了目标地址，于是路由策略将该包导向了FORWARD链。所以我们在INPUT链中再怎么定义规则，都无法限制外网对docker服务的访问。&lt;/li&gt;
+&lt;li&gt;解决方案
+既然包导向了FORWARD链，那么可以在FORWARD链中拦截。DOCKER官方给的建议便是如此，比如，针对本文中的例子，我们可以添加如下规则，即可实现所有外部网络都无法访问docker中的服务：
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;iptables -I DOCKER-USER -i eth0 -j DROP&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;DOCKER-USER是FORWARD链中第一个规则命中的链&lt;/li&gt;
+&lt;li&gt;从外部网络进入的数据包，直接丢弃&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

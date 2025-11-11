@@ -1,3 +1,123 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cri on ✌yesplease's blog</title><link>http://cugbtang.github.io/tags/cri/</link><description>Recent content in Cri on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 15 Mar 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/cri/index.xml" rel="self" type="application/rss+xml"/><item><title>kubernetes1.24.0, Why use docker in production environment ?</title><link>http://cugbtang.github.io/post/kubernetes/series-kubernetes-4/</link><pubDate>Tue, 15 Mar 2022 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/kubernetes/series-kubernetes-4/</guid><description>kubernetes1.24.0, Why use docker in production environment ? if you consider Mirantis and Docker have committed to maintaining a replacement adapter for Docker Engine, and to maintain that adapter even after the in-tree dockershim is removed from Kubernetes. The replacement adapter is named cri-dockerd.
-Download the cri-dockerd binary package or compile the source code yourself
-1 2 3 4 5 6 # download file wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.2.0/cri-dockerd-v0.2.0-linux-amd64.tar.gz # unzip file tar -xvf cri-dockerd-v0.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cri on ✌yesplease's blog</title><link>http://localhost:1313/tags/cri/</link><description>Recent content in Cri on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Tue, 15 Mar 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/cri/index.xml" rel="self" type="application/rss+xml"/><item><title>kubernetes1.24.0, Why use docker in production environment ?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-4/</link><pubDate>Tue, 15 Mar 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-4/</guid><description>&lt;h2 id="kubernetes1240-why-use-docker--in-production-environment-"&gt;kubernetes1.24.0, Why use docker in production environment ?&lt;/h2&gt;
+&lt;h2 id="if-you-consider"&gt;if you consider&lt;/h2&gt;
+&lt;p&gt;Mirantis and Docker have &lt;a href="https://www.mirantis.com/blog/mirantis-to-take-over-support-of-kubernetes-dockershim-2/"&gt;committed&lt;/a&gt; to maintaining a replacement adapter for Docker Engine, and to maintain that adapter even after the in-tree dockershim is removed from Kubernetes. The replacement adapter is named &lt;a href="https://github.com/Mirantis/cri-dockerd"&gt;&lt;code&gt;cri-dockerd&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Download the cri-dockerd binary package or compile the source code yourself&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# download file&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.2.0/cri-dockerd-v0.2.0-linux-amd64.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# unzip file&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tar -xvf cri-dockerd-v0.2.0-linux-amd64.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Copy the binary file to the specified directory&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cp cri-dockerd /usr/bin/&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Configure startup files&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vim /usr/lib/systemd/system/cri-docker.service
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;Unit&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Description&lt;span style="color:#f92672"&gt;=&lt;/span&gt;CRI Interface &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; Docker Application Container Engine
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Documentation&lt;span style="color:#f92672"&gt;=&lt;/span&gt;https://docs.mirantis.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;After&lt;span style="color:#f92672"&gt;=&lt;/span&gt;network-online.target firewalld.service docker.service
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Wants&lt;span style="color:#f92672"&gt;=&lt;/span&gt;network-online.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Requires&lt;span style="color:#f92672"&gt;=&lt;/span&gt;cri-docker.socket
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;Service&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Type&lt;span style="color:#f92672"&gt;=&lt;/span&gt;notify
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ExecStart&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/usr/bin/cri-dockerd --container-runtime-endpoint&lt;span style="color:#f92672"&gt;=&lt;/span&gt;unix:///var/run/cri-docker.sock --network-plugin&lt;span style="color:#f92672"&gt;=&lt;/span&gt;cni --cni-bin-dir&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/opt/cni/bin &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --cni-conf-dir&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/etc/cni/net.d --image-pull-progress-deadline&lt;span style="color:#f92672"&gt;=&lt;/span&gt;30s --pod-infra-container-image&lt;span style="color:#f92672"&gt;=&lt;/span&gt;docker.io/juestnow/pause:3.6 &lt;span style="color:#ae81ff"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#ae81ff"&gt;&lt;/span&gt; --docker-endpoint&lt;span style="color:#f92672"&gt;=&lt;/span&gt;unix:///var/run/docker.sock --cri-dockerd-root-directory&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/var/lib/docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ExecReload&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/bin/kill -s HUP $MAINPID
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;TimeoutSec&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;RestartSec&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Restart&lt;span style="color:#f92672"&gt;=&lt;/span&gt;always
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Note that StartLimit* options were moved from &amp;#34;Service&amp;#34; to &amp;#34;Unit&amp;#34; in systemd 229.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Both the old, and new location are accepted by systemd 229 and up, so using the old location&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# to make them work for either version of systemd.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;StartLimitBurst&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Note that StartLimitInterval was renamed to StartLimitIntervalSec in systemd 230.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Both the old, and new name are accepted by systemd 230 and up, so using the old name to make&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# this option work for either version of systemd.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;StartLimitInterval&lt;span style="color:#f92672"&gt;=&lt;/span&gt;60s
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Having non-zero Limit*s causes performance problems due to accounting overhead&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# in the kernel. We recommend using cgroups to do container-local accounting.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;LimitNOFILE&lt;span style="color:#f92672"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;LimitNPROC&lt;span style="color:#f92672"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;LimitCORE&lt;span style="color:#f92672"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Comment TasksMax if your systemd version does not support it.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Only systemd 226 and above support this option.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;TasksMax&lt;span style="color:#f92672"&gt;=&lt;/span&gt;infinity
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Delegate&lt;span style="color:#f92672"&gt;=&lt;/span&gt;yes
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;KillMode&lt;span style="color:#f92672"&gt;=&lt;/span&gt;process
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;Install&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;WantedBy&lt;span style="color:#f92672"&gt;=&lt;/span&gt;multi-user.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Generate socket file&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vim /usr/lib/systemd/system/cri-docker.socket
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;Unit&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Description&lt;span style="color:#f92672"&gt;=&lt;/span&gt;CRI Docker Socket &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; the API
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;PartOf&lt;span style="color:#f92672"&gt;=&lt;/span&gt;cri-docker.service
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;Socket&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ListenStream&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/var/run/cri-dockerd.sock
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;SocketMode&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;0660&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;SocketUser&lt;span style="color:#f92672"&gt;=&lt;/span&gt;root
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;SocketGroup&lt;span style="color:#f92672"&gt;=&lt;/span&gt;docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;Install&lt;span style="color:#f92672"&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;WantedBy&lt;span style="color:#f92672"&gt;=&lt;/span&gt;sockets.target
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# start up cri-dockerd&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl daemon-reload
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl start cri-docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# set startup&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl enable cri-docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# view startup status&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;systemctl status cri-docker&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Download cri-tools to verify whether cri-docker is normal&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Download binaries&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.24.0/crictl-v1.24.0-linux-amd64.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# unzip&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tar -xvf crictl-v1.24.0-linux-amd64.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Copy the binaries to the specified directory&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cp crictl /usr/bin/
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Create configuration file&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vim /etc/crictl.yaml
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;runtime-endpoint: &lt;span style="color:#e6db74"&gt;&amp;#34;unix:///var/run/cri-docker.sock&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;image-endpoint: &lt;span style="color:#e6db74"&gt;&amp;#34;unix:///var/run/cri-docker.sock&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;timeout: &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;debug: false
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pull-image-on-create: true
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;disable-pull-on-run: false
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Test if you can access docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# View running containers&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;crictl ps
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# View pulled images&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;crictl images
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# pull image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;crictl pull busybox
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;[&lt;/span&gt;root@k8s-node-4 ~&lt;span style="color:#f92672"&gt;]&lt;/span&gt;&lt;span style="color:#75715e"&gt;# crictl pull busybox&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Image is up to date &lt;span style="color:#66d9ef"&gt;for&lt;/span&gt; busybox@sha256:5acba83a746c7608ed544dc1533b87c737a0b0fb730301639a0179f9344b1678
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Return true, cri-dockerd access to docker is complete&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;1&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="ref"&gt;REF&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://kubernetes.io/blog/2022/02/17/dockershim-faq/"&gt;Thursday, February 17, 2022 - Updated: Dockershim Removal FAQ&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

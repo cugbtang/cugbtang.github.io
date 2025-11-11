@@ -1,1 +1,75 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Interface on ✌yesplease's blog</title><link>http://cugbtang.github.io/tags/interface/</link><description>Recent content in Interface on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 05 Jan 2024 16:01:23 +0800</lastBuildDate><atom:link href="http://cugbtang.github.io/tags/interface/index.xml" rel="self" type="application/rss+xml"/><item><title>Go function interface, how to play?</title><link>http://cugbtang.github.io/post/go/series-go-13/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><guid>http://cugbtang.github.io/post/go/series-go-13/</guid><description>接口型函数 在 Go 语言中，函数也可以作为接口的一部分，这种称为函数接口（Function Interface）的概念让我们可以更加灵活地定义接口和</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Interface on ✌yesplease's blog</title><link>http://localhost:1313/tags/interface/</link><description>Recent content in Interface on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Fri, 05 Jan 2024 16:01:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/interface/index.xml" rel="self" type="application/rss+xml"/><item><title>Go function interface, how to play?</title><link>http://localhost:1313/post/go/deep/series-go-4/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/deep/series-go-4/</guid><description>&lt;h2 id="接口型函数"&gt;接口型函数&lt;/h2&gt;
+&lt;p&gt;在 Go 语言中，函数也可以作为接口的一部分，这种称为函数接口（Function Interface）的概念让我们可以更加灵活地定义接口和实现。&lt;/p&gt;
+&lt;p&gt;通过函数接口，我们可以将函数作为接口的方法，这样就可以将不同的函数赋值给接口变量，并通过接口变量来调用这些函数。这种方式类似于将函数当作一种行为或特性来对待，使得我们可以更加方便地实现多态性和组合性。&lt;/p&gt;
+&lt;p&gt;使用函数接口，我们可以定义一个接口，然后让不同的函数去实现这个接口，从而实现统一的调用方式。这种方式非常适合于需要根据不同情况动态选择具体实现的场景，让代码更加灵活、可扩展和易于维护。&lt;/p&gt;
+&lt;p&gt;总的来说，函数接口是 Go 语言中一种非常有用的特性，它让我们可以将函数作为一种行为来对待，更加灵活地定义接口和实现，从而实现代码的解耦和灵活性。&lt;/p&gt;
+&lt;h3 id="1例子"&gt;1、例子&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// A Getter loads data for a key.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Getter&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;interface&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;Get&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) ([]&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;error&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// A GetterFunc implements Getter with a function.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;GetterFunc&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) ([]&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;error&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Get implements Getter interface function&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;f&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;GetterFunc&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;Get&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) ([]&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;f&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="2为什么这么设计"&gt;2、为什么这么设计&lt;/h3&gt;
+&lt;p&gt;一般有接口参与的设计会增加使用的通用性。&lt;/p&gt;
+&lt;p&gt;我们想象这么一个使用场景，GetFromSource 的作用是从某数据源获取结果，接口类型 Getter 是其中一个参数，代表某数据源。&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;GetFromSource&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;getter&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Getter&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;key&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) []&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;buf&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;getter&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Get&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;err&lt;/span&gt; &lt;span style="color:#f92672"&gt;==&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;buf&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;方式一：GetterFunc 类型的函数作为参数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;//匿名&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;GetFromSource&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;GetterFunc&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) ([]&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; []byte(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt;), &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}), &lt;span style="color:#e6db74"&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 普通&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;test&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) ([]&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; []byte(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt;), &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;GetFromSource&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;GetterFunc&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;test&lt;/span&gt;), &lt;span style="color:#e6db74"&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;方式二：实现了 Getter 接口的结构体作为参数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;type&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;DB&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;struct&lt;/span&gt;{ &lt;span style="color:#a6e22e"&gt;url&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;db&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;DB&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;Query&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;sql&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;args&lt;/span&gt; &lt;span style="color:#f92672"&gt;...&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;db&lt;/span&gt; &lt;span style="color:#f92672"&gt;*&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;DB&lt;/span&gt;) &lt;span style="color:#a6e22e"&gt;Get&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;key&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;) ([]&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;v&lt;/span&gt; &lt;span style="color:#f92672"&gt;:=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;db&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Query&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;SELECT NAME FROM TABLE WHEN NAME= ?&amp;#34;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;key&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; []byte(&lt;span style="color:#a6e22e"&gt;v&lt;/span&gt;), &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;func&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;GetFromSource&lt;/span&gt;(new(&lt;span style="color:#a6e22e"&gt;DB&lt;/span&gt;), &lt;span style="color:#e6db74"&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>
