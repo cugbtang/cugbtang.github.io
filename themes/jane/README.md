@@ -1,38 +1,36 @@
+## V3 Upgrade Notice
+hugo-theme-jane just had a major update, please check out: [Jane Theme V3 Major Update](https://www.xianmin.org/hugo-theme-jane/post/jane-theme-v3-major-update/) & [Hugo-Theme-Jane V3 Upgrade Notice !!! · xianmin/hugo-theme-jane · Discussion #397](https://github.com/xianmin/hugo-theme-jane/discussions/397)
+
+
 ![jane-preview](https://raw.githubusercontent.com/xianmin/hugo-theme-jane/master/images/preview.png)
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors)
 
 ## hugo-theme-jane
 
-Jane is a readable theme for Hugo. It's a fork of [hugo-theme-even](https://github.com/olOwOlo/hugo-theme-even) with a lot of additional changes.
+Jane is a readable theme for Hugo. Many color schemes to choose, and easy to personalize. Working well since 2018.
 
 [Demo](https://xianmin.github.io/hugo-theme-jane/) | [中文说明](https://github.com/xianmin/hugo-theme-jane/blob/master/README-zh.md)
 
-This theme focuses on improving the reading experience.
-
-**Other Key features:**
-
+**Key features:**
+- Better reading experience
+- Use [Pico CSS](https://picocss.com/) as the color scheme, allowing theme color switching and dark/light mode toggle.
+- Style Settings, located at `/assets/sass/_settings.scss` .
 - Responsive and mobile friendly
 - Multilingual Mode support
-- Shortcodes : image, blockquote, music, etc.
-- Separate design for Tags & Categories Page
-- Social network linking
 - Better Pagination, TOC, footnote behavior
 - Use the awesome Chroma syntax highlighting
 - Custom css, Custom js, Custom head support
 - Sub menu support
 - Search Optimization
 
+## Development Philosophy of This Theme
+1. No `node_modules` - fewer dependencies make maintenance easier.
+2. Encourages users to modify the theme according to personal preferences for a more personalized website.
+3. Reading Experience is the top priority.
+4. Deploy once, focus on writing, no more hassle.
 
-## Who uses Hugo-theme-Jane
-
-- [Jack Baty's Blog](https://www.baty.net/) - Thousands of posts on the site powered by Hugo & Theme Jane.
-- [虞双齐爱折腾](https://yushuangqi.com/) - @ysqi 个人技术博客.
-- [제이든의 프로그래밍 이야기](https://jayden-lee.github.io/) - Personal Programming blog in Korean by @jayden-lee
-- **[and many more...](https://github.com/xianmin/hugo-theme-jane/blob/master/SITES.md)**
-
-
-Are you using **hugo-theme-jane**? [Add your site](https://github.com/xianmin/hugo-theme-jane/edit/master/SITES.md) to the list!
-
+## Real-world examples
+- [crazyoptimist](https://crazyoptimist.net/)
+- [一座島](https://island.shaform.com/zh/)
 
 ## Quick Start
 
@@ -43,11 +41,11 @@ Are you using **hugo-theme-jane**? [Add your site](https://github.com/xianmin/hu
 
 
 
-### 1. Install Hugo
+### 1. Install Hugo & Dart Sass
 
 Download the appropriate version for your platform from [Hugo Releases](https://github.com/gohugoio/hugo/releases). Once downloaded, the binary can be run from anywhere. Ideally, you should install it somewhere in your `PATH` for easy use. `/usr/local/bin` is the most probable location.
 
-
+Install Dart Sass, refer to the official documentation: https://gohugo.io/hugo-pipes/transpile-sass-to-css/#dart-sass .
 
 ### 2. Create a New Site
 
@@ -68,6 +66,19 @@ cd myBlog
 git clone https://github.com/xianmin/hugo-theme-jane.git --depth=1 themes/jane
 ```
 
+<details>
+<summary>Alternative, installation as a module</summary>
+
+If you have [Go](https://go.dev/) installed you can install the theme as a [hugo module](https://gohugo.io/hugo-modules/), then there will be no need to clone it into the `themes` folder:
+
+```bash
+hugo mod init example.com/my-blog
+```
+
+After that, you would need to use `github.com/xianmin/hugo-theme-jane` as your `theme` and not `hugo-theme-jane` in your `config.toml` file.
+
+</details>
+
 Copy the example site content:
 
 ```bash
@@ -77,7 +88,7 @@ cp -r themes/jane/exampleSite/content ./
 Copy the default site config:
 
 ```bash
-cp themes/jane/exampleSite/config.toml ./
+cp themes/jane/exampleSite/hugo.toml ./
 ```
 
 Take a look at the example site:
@@ -92,7 +103,7 @@ Open http://localhost:1313/ , you will see your site running with the example co
 
 ### 4. Start a Blog
 
-The default config file `config.toml` is located in your site root directory. You can customize it to match the details of your site.  Documentation about configuring Hugo can be found in the [Official Documentation](https://gohugo.io/getting-started/configuration/)
+The default config file `hugo.toml` is located in your site root directory. You can customize it to match the details of your site.  Documentation about configuring Hugo can be found in the [Official Documentation](https://gohugo.io/getting-started/configuration/)
 
 The default content files are located in the `./content/post` directory.
 
@@ -104,7 +115,7 @@ Run `hugo` , this generates your website to the `public/` directory by default.
 
 Nice work!
 
-If you have extra time or want to know more about [Hugo][] , check out the awosome  [Hugo Official Docs][] .
+If you have extra time or want to know more about [Hugo][] , check out the awesome  [Hugo Official Docs][] .
 
 
 
@@ -115,7 +126,7 @@ Take a look in the [exampleSite](https://github.com/xianmin/hugo-theme-jane/tree
 This directory contains an example config file and the content for the demo.
 It serves as an example setup for you to configure to your liking.
 
-Copy the `config.toml` to the root directory of your website. Overwrite the existing config file if necessary.
+Copy the `hugo.toml` to the root directory of your website. Overwrite the existing config file if necessary.
 
 
 
@@ -162,7 +173,7 @@ To use the translations:
 
 ```toml
 # use Chinese translation
-defaultContentLanguage = "zh-cn"  # Default language to use (if you setup multilingual support)
+defaultContentLanguage = "zh-cn"  # Default language to use (if you set up multilingual support)
 [Languages.zh-cn]
   languageCode = "zh-cn"
 ```
@@ -184,25 +195,14 @@ There are many ways to contribute to the Jane theme:
 
 
 ## Contributors
+This project exists thanks to all the people who contribute:
 
-Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-| [<img src="https://avatars3.githubusercontent.com/u/2177570?v=4" width="80px;"/><br /><sub><b>Chen Xianmin</b></sub>](http://www.xianmin.org)<br />[💻](https://github.com/xianmin/hugo-theme-jane/commits?author=xianmin "Code") [🎨](#design-xianmin "Design") [📖](https://github.com/xianmin/hugo-theme-jane/commits?author=xianmin "Documentation") [💬](#question-xianmin "Answering Questions") | [<img src="https://avatars3.githubusercontent.com/u/970?v=4" width="80px;"/><br /><sub><b>Jack Baty</b></sub>](https://www.baty.net)<br />[🐛](https://github.com/xianmin/hugo-theme-jane/issues?q=author%3Ajackbaty "Bug reports") [🤔](#ideas-jackbaty "Ideas, Planning, & Feedback") [⚠️](https://github.com/xianmin/hugo-theme-jane/commits?author=jackbaty "Tests") [👀](#review-jackbaty "Reviewed Pull Requests") | [<img src="https://avatars0.githubusercontent.com/u/126313?v=4" width="80px;"/><br /><sub><b>Athurg Feng</b></sub>](https://www.gooth.org)<br />[👀](#review-athurg "Reviewed Pull Requests") [⚠️](https://github.com/xianmin/hugo-theme-jane/commits?author=athurg "Tests") [🐛](https://github.com/xianmin/hugo-theme-jane/issues?q=author%3Aathurg "Bug reports") | [<img src="https://avatars1.githubusercontent.com/u/712534?v=4" width="80px;"/><br /><sub><b>Dmitry Verkhoturov</b></sub>](https://terrty.net/cv/verhoturov.pdf)<br />[👀](#review-paskal "Reviewed Pull Requests") [🌍](#translation-paskal "Translation") [🤔](#ideas-paskal "Ideas, Planning, & Feedback") | [<img src="https://avatars0.githubusercontent.com/u/1678456?v=4" width="80px;"/><br /><sub><b>Deckon</b></sub>](https://deckon-blog.netlify.com/)<br />[🌍](#translation-Deckon "Translation") | [<img src="https://avatars3.githubusercontent.com/u/2821085?v=4" width="80px;"/><br /><sub><b>YuShuangqi</b></sub>](https://yushuangqi.com)<br />[👀](#review-ysqi "Reviewed Pull Requests") [🤔](#ideas-ysqi "Ideas, Planning, & Feedback") [💻](https://github.com/xianmin/hugo-theme-jane/commits?author=ysqi "Code") | [<img src="https://avatars1.githubusercontent.com/u/88564?v=4" width="80px;"/><br /><sub><b>Josta Yee</b></sub>](https://josta.me)<br />[🤔](#ideas-jostyee "Ideas, Planning, & Feedback") [💻](https://github.com/xianmin/hugo-theme-jane/commits?author=jostyee "Code") |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars2.githubusercontent.com/u/1475583?v=4" width="80px;"/><br /><sub><b>German Lashevich</b></sub>](https://github.com/Zebradil)<br />[💻](https://github.com/xianmin/hugo-theme-jane/commits?author=Zebradil "Code") [🤔](#ideas-Zebradil "Ideas, Planning, & Feedback") [🐛](https://github.com/xianmin/hugo-theme-jane/issues?q=author%3AZebradil "Bug reports") [⚠️](https://github.com/xianmin/hugo-theme-jane/commits?author=Zebradil "Tests") | [<img src="https://avatars0.githubusercontent.com/u/4357360?v=4" width="80px;"/><br /><sub><b>Jean-Loup Adde</b></sub>](https://juanwolf.fr)<br />[🌍](#translation-juanwolf "Translation") | [<img src="https://avatars1.githubusercontent.com/u/38299370?v=4" width="80px;"/><br /><sub><b>AxdLog</b></sub>](https://gitlab.com/MaxdSre)<br />[💻](https://github.com/xianmin/hugo-theme-jane/commits?author=MaxdSre "Code") | [<img src="https://avatars1.githubusercontent.com/u/30607?v=4" width="80px;"/><br /><sub><b>Andrea Borruso</b></sub>](https://github.com/aborruso)<br />[📖](https://github.com/xianmin/hugo-theme-jane/commits?author=aborruso "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/367172?v=4" width="80px;"/><br /><sub><b>Yong-Siang Shih (Shaform)</b></sub>](https://shaform.com)<br />[💻](https://github.com/xianmin/hugo-theme-jane/commits?author=shaform "Code") [🌍](#translation-shaform "Translation") |
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
+<a href = "https://github.com/xianmin/hugo-theme-jane/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=xianmin/hugo-theme-jane"/>
+</a>
 
 
 ## License
 
 Hugo-theme-jane is licensed under the MIT license. Check the [LICENSE](LICENSE.md) file for details.
 
-# Stackbit
-
-This theme is ready to import into Stackbit. This theme can be deployed to Netlify and you can connect any headless CMS including Forestry, NetlifyCMS, DatoCMS or Contentful. 
-
-[![Create with Stackbit](https://assets.stackbit.com/badge/create-with-stackbit.svg)](https://app.stackbit.com/create?theme=https://github.com/xianmin/hugo-theme-jane)

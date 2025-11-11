@@ -1,7 +1,15 @@
+{{ $icons := partial "icons.html" . }}
+
 {{ if .IsTranslated }}
-<div class="post-meta">
+<div class="post-title-i18n">
+  {{ partial "icons/icon" (dict
+  "path" "icons/header/languages.svg"
+  "className" "icon--languages"
+  ) }}
   {{ range .Translations }}
-  <div><a href="{{ .Permalink }}">{{ i18n (printf "read_%s" .Lang) }}: {{ .Title }}</a></div>
+  <div>
+    <a href="{{ .Permalink }}">{{ or .Language.LanguageName .Language.Lang }}</a>
+  </div>
   {{ end }}
 </div>
 {{ end }}

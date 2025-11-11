@@ -1,5 +1,10 @@
 {
-  "editor.inlineSuggest.showToolbar": "onHover",
-  "CodeFree.index": true,
-  "CodeFree.ignoreFileType": [".so", ".cache", ".exe", ".dll", ".log"]
+    "CodeFree.index": true,
+    "CodeFree.ignoreFileType": [
+        ".so",
+        ".cache",
+        ".exe",
+        ".dll",
+        ".log"
+    ]
 }

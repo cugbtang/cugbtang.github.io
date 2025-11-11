@@ -9,16 +9,12 @@ paginate = 3              # Number of articles displayed on the homepage # 首�
 rssLimit = 20             # Limit Entry Count to Rss file # 限制 Rss 文章输出数量
 disqusShortname = ""      # disqus_shortname
 googleAnalytics = ""      # UA-XXXXXXXX-X
-copyright = ""            # default: author.name ↓        # 默认为下面配置的author.name ↓
+copyright = ""            # default: params.author.name ↓ # 默认为下面配置的params.author.name ↓
 enableGitInfo = true      # use git commit log to generate lastmod record # 可根据 Git 中的提交生成最近更新记录。
 # uglyURLs = true         # more info: https://gohugo.io/content-management/urls/#ugly-urls
 
-# Highlight options.
-# See https://gohugo.io/content-management/syntax-highlighting/
-PygmentsCodeFences = true # Enable syntax highlighting with GitHub flavoured code fences
-PygmentsUseClasses = true # Use CSS classes to format highlighted code
-PygmentsCodefencesGuessSyntax = true
-PygmentsOptions = "linenos=table"
+[pagination]
+  pagerSize = 5           # Number of articles displayed on the homepage  # 首页每页显示的文章数
 
 # Enable author pages
 #[taxonomies]
@@ -31,9 +27,6 @@ defaultContentLanguage = "en"           # Default language to use
 [languages.en]
   languageCode = "en"
 
-[author]                  # essential                     # 必需
-  name = "xianmin"
-
 [sitemap]                 # essential                     # 必需
   changefreq = "weekly"
   priority = 0.5
@@ -43,34 +36,33 @@ defaultContentLanguage = "en"           # Default language to use
   name = "Home"
   weight = 10
   identifier = "home"
-  url = "/"
+  pageref = "/"
 [[menu.main]]
   name = "Archives"
   weight = 20
   identifier = "archives"
-  url = "/post/"
+  pageref = "/post/"
 [[menu.main]]
   name = "Tags"
   weight = 30
   identifier = "tags"
-  url = "/tags/"
-[[menu.main]]
-  name = "Categories"
-  weight = 40
-  identifier = "categories"
-  url = "/categories/"
+  pageref = "/tags/"
 [[menu.main]]
   name = "external-link"
   weight = 50
-  url = "https://gohugo.io"
+  pageref = "https://gohugo.io"
 
 
 [params]
   debug = false             # If true, load `eruda.min.js`. See https://github.com/liriliri/eruda
   since = "2017"            # Site creation time          # 站点建立时间
-  homeFullContent = false   # if false, show post summaries on home page. Othewise show full content.
+  homeFullContent = false   # if false, show post summaries on home page. Otherwise show full content.
   rssFullContent = true     # if false, Rss feed instead of the summary
   mainSections = ["post"]
+
+  author.name = "Jane"      # essential                     # 必需
+  author.email = "me@example.com" # optional, for RSS             # 可选
+  author.url = "/about"        # optional                      # 可选
 
   # site info (optional)                                  # 站点信息（可选，不需要的可以直接注释掉）
   logoTitle = "Jane"        # default: the title value    # 默认值: 上面设置的title值
@@ -95,6 +87,10 @@ defaultContentLanguage = "en"           # Default language to use
 
   showAuthorInfo = true # show author info below the article
 
+  # Optional custom wallpaper image URL. Can be a remote image or local /static/img/wallpaper.jpg (make sure it has a small filesize for quick site painting)
+  # wallpaper = "/static/img/wallpaper.jpg"
+  wallpaper = "https://followingmyfeet.com/wp-content/uploads/2018/02/825_2229-HDR.jpg"
+
   # 一些全局开关，你也可以在每一篇内容的 front matter 中针对单篇内容关闭或开启某些功能，在 archetypes/default.md 查看更多信息。
   # Some global options, you can also close or open something in front matter for a single post, see more information from `archetypes/default.md`.
   toc = true                                                                            # 是否开启目录
@@ -117,16 +113,18 @@ defaultContentLanguage = "en"           # Default language to use
   customCSS = []            # if ['custom.css'], load '/static/css/custom.css' file
   customJS = []             # if ['custom.js'], load '/static/js/custom.js' file
 
-  # enable 'fork me on github', see https://blog.github.com/2008-12-19-github-ribbons/
-  # forkMeOnGithub = "https://github.com/xianmin/hugo-theme-jane"
-
   # add custom info on the footer.   # 添加备案信息
   # customFooter = "京ICP备10000000号-1"
 
+  # Remark42 is self-hosted privacy-focused comment system, https://remark42.com
+  remark42Url = "https://remark42.example.com"
+  remark42SiteId = "remark"
+
+  [params.commentCount.remark42] # enable "comment count" feature for remark42, requires moreMeta param to be enabled as well
+    enable = true
+
   [params.publicCDN]        # load these files from public cdn                          # 启用公共CDN，需自行定义
     enable = false
-    jquery = '<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>'
-    slideout = '<script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>'
     gitmentJS = '<script src="https://cdn.jsdelivr.net/npm/gitment@0.0.3/dist/gitment.browser.min.js" crossorigin="anonymous"></script>'
     gitmentCSS = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitment@0.0.3/style/default.min.css" crossorigin="anonymous">'
     photoswipe = '<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.js" integrity="sha256-AC9ChpELidrhGHX23ZU53vmRdz3FhKaN9E28+BbcWBw=" crossorigin="anonymous"></script>'
@@ -134,16 +132,29 @@ defaultContentLanguage = "en"           # Default language to use
     photoswipeCSS = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css" integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin="anonymous">'
     photoswipeSKIN = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css" integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin="anonymous">'
 
+  [params.giscus]         # giscus is a comment system based on GitHub Discussions. see https://giscus.app
+    enable = true
+    repo = "xianmin/comments-for-hugo-theme-jane"
+    repoId = "MDEwOlJlcG9zaXRvcnkxNDAyNDYzNjc="
+    category = "Announcements"
+    categoryId = "DIC_kwDOCFv9X84CRRWF"
+    # mapping = "pathname"  # comment value is the default value
+    # strict = 0
+    # reactionsEnabled = 1
+    # emitMetadata = 0
+    # inputPosition = "top"
+    # theme = "light"
+    # lang = "en"
+    # lazyLoading = false
+
   [params.utteranc]         # utteranc is a comment system based on GitHub issues. see https://utteranc.es
     enable = false
     repo = "xianmin/comments-for-hugo-theme-jane"    # The repo to store comments
     issueTerm = "pathname"
 
-  [params.gitment]          # Gitment is a comment system based on GitHub issues. see https://github.com/imsun/gitment
-    owner = ""              # Your GitHub ID
-    repo = ""               # The repo to store comments
-    clientId = ""           # Your client ID
-    clientSecret = ""       # Your client secret
+  [params.commento] # Commento is a feature rich lightweight comment system oriented on privacy (https://commento.io/)
+    enable = false
+    url = "http://commento.example.com"
 
   [params.livere]          	#LiveRe comment. see https://www.livere.com/
 	  uid = ""
@@ -225,7 +236,7 @@ defaultContentLanguage = "en"           # Default language to use
 
 
 # multilingual support example
-# [langusges]
+# [languages]
 # [languages.en]
 #   title = "Jane - A simple theme for Hugo"
 #   weight = 1
@@ -240,3 +251,18 @@ defaultContentLanguage = "en"           # Default language to use
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+  # Highlight options. See https://gohugo.io/content-management/syntax-highlighting/
+  [markup.highlight]
+    anchorLineNos = true
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ''
+    hl_inline = false
+    lineAnchors = ''
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = true
+    noHl = false
+    style = 'friendly'
+    tabWidth = 4
