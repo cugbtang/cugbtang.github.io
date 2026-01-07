@@ -1,0 +1,28 @@
+{
+  "hooks": 
+    [
+
+    {
+      "name": "permission_prompt",
+      "description": "当Claude等待用户输入时发送系统通知",
+      "trigger": "on-user-prompt-submit",
+      "command": "python \"$CLAUDE_PROJECT_DIR\"/.claude/simple_notify.py start-wait",
+      "enabled": true
+    },
+    {
+      "name": "clear-notification",
+      "description": "当用户提交回复后清除等待状态",
+      "trigger": "on-tool-call",
+      "command": "python \"./.claude/simple_notify.py\" end-wait",
+      "enabled": true
+    },
+    {
+      "name": "notify-test",
+      "description": "测试通知功能",
+      "trigger": "manual",
+      "command": "python \"./.claude/simple_notify.py\" notify --title \"测试通知\" --message \"Claude Code通知功能测试\"",
+      "enabled": true
+    }
+  ]
+  
+}
