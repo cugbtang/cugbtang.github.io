@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>机器学习 on ✌yesplease's blog</title><link>http://localhost:1313/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</link><description>Recent content in 机器学习 on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Mon, 18 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml"/><item><title>LLM发展关键术语：从"单词卡片"到"思维网络"</title><link>http://localhost:1313/post/llm/llm-1/</link><pubDate>Mon, 18 Nov 2024 00:00:00 +0000</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/llm/llm-1/</guid><description>&lt;h2 id="一基础构建模块"&gt;一、基础构建模块&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>机器学习 on ✌yesplease's blog</title><link>https://cugbtang.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</link><description>Recent content in 机器学习 on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Mon, 18 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://cugbtang.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml"/><item><title>LLM发展关键术语：从"单词卡片"到"思维网络"</title><link>https://cugbtang.github.io/post/llm/llm-1/</link><pubDate>Mon, 18 Nov 2024 00:00:00 +0000</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/llm/llm-1/</guid><description>&lt;h2 id="一基础构建模块"&gt;一、基础构建模块&lt;/h2&gt;
 &lt;h2 id="1-标量scalar"&gt;1. 标量（Scalar）&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;形象比喻&lt;/strong&gt;：一个单独的数字，比如你的体重 65 kg，或者温度 23°C。&lt;/li&gt;
@@ -113,7 +113,7 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;hr&gt;</description></item><item><title>从Word2Vec到Seq2Seq</title><link>http://localhost:1313/post/llm/llm-3/</link><pubDate>Mon, 18 Nov 2024 00:00:00 +0000</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/llm/llm-3/</guid><description>&lt;h2 id="1-word2vec2013"&gt;1. Word2Vec（2013）&lt;/h2&gt;
+&lt;hr&gt;</description></item><item><title>从Word2Vec到Seq2Seq</title><link>https://cugbtang.github.io/post/llm/llm-3/</link><pubDate>Mon, 18 Nov 2024 00:00:00 +0000</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/llm/llm-3/</guid><description>&lt;h2 id="1-word2vec2013"&gt;1. Word2Vec（2013）&lt;/h2&gt;
 &lt;h3 id="核心思想"&gt;核心思想&lt;/h3&gt;
 &lt;p&gt;Word2Vec 是由 Google 在 2013 年提出的&lt;strong&gt;词嵌入（word embedding）方法&lt;/strong&gt;，旨在将词汇映射为&lt;strong&gt;低维稠密向量&lt;/strong&gt;，使得语义相近的词在向量空间中距离更近。&lt;/p&gt;
 &lt;h3 id="两种主要模型结构"&gt;两种主要模型结构：&lt;/h3&gt;
@@ -188,7 +188,7 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;两者共同标志着 NLP 从&lt;strong&gt;传统统计方法&lt;/strong&gt;迈向&lt;strong&gt;深度表示学习&lt;/strong&gt;的关键转折。&lt;/p&gt;</description></item><item><title>从统计到智能：NLP技术的三场革命</title><link>http://localhost:1313/post/llm/llm-2/</link><pubDate>Mon, 18 Nov 2024 00:00:00 +0000</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/llm/llm-2/</guid><description>&lt;p&gt;支持向量机（SVM）、循环神经网络（RNN）和大语言模型（LLM）是自然语言处理（NLP）发展历程中三个具有代表性的技术范式，它们在&lt;strong&gt;建模思想、结构特点、适用任务和历史阶段&lt;/strong&gt;上存在显著区别。下面从&lt;strong&gt;区别对比&lt;/strong&gt;和&lt;strong&gt;历史演进&lt;/strong&gt;两个角度进行简要介绍。&lt;/p&gt;
+&lt;p&gt;两者共同标志着 NLP 从&lt;strong&gt;传统统计方法&lt;/strong&gt;迈向&lt;strong&gt;深度表示学习&lt;/strong&gt;的关键转折。&lt;/p&gt;</description></item><item><title>从统计到智能：NLP技术的三场革命</title><link>https://cugbtang.github.io/post/llm/llm-2/</link><pubDate>Mon, 18 Nov 2024 00:00:00 +0000</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/llm/llm-2/</guid><description>&lt;p&gt;支持向量机（SVM）、循环神经网络（RNN）和大语言模型（LLM）是自然语言处理（NLP）发展历程中三个具有代表性的技术范式，它们在&lt;strong&gt;建模思想、结构特点、适用任务和历史阶段&lt;/strong&gt;上存在显著区别。下面从&lt;strong&gt;区别对比&lt;/strong&gt;和&lt;strong&gt;历史演进&lt;/strong&gt;两个角度进行简要介绍。&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="一三者的核心区别"&gt;一、三者的核心区别&lt;/h2&gt;
 &lt;table&gt;

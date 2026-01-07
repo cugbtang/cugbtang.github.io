@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Web-Scraping on ✌yesplease's blog</title><link>https://cugbtang.github.io/tags/web-scraping/</link><description>Recent content in Web-Scraping on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Sun, 04 Jan 2026 14:50:00 +0800</lastBuildDate><atom:link href="https://cugbtang.github.io/tags/web-scraping/index.xml" rel="self" type="application/rss+xml"/><item><title>Chrome MCP 深度实战：解锁浏览器自动化新维度</title><link>https://cugbtang.github.io/post/coding/claude-code-introduction/</link><pubDate>Sun, 04 Jan 2026 14:50:00 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/coding/claude-code-introduction/</guid><description>&lt;h2 id="什么是-chrome-mcp"&gt;什么是 Chrome MCP？&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;MCP（Model Context Protocol）&lt;/strong&gt; 是 Claude Code 的革命性扩展，它允许 AI 直接与外部系统交互。而 &lt;strong&gt;Chrome MCP&lt;/strong&gt; 则是专门为浏览器自动化设计的强大工具，它让 Claude Code 能够控制 Chrome 浏览器，实现智能化的网页操作、数据提取和测试自动化。&lt;/p&gt;
+&lt;h3 id="核心价值从编程助手到浏览器管家"&gt;核心价值：从&amp;quot;编程助手&amp;quot;到&amp;quot;浏览器管家&amp;quot;&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;传统方式&lt;/strong&gt;：手动编写 Puppeteer/Playwright 脚本&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;需要学习复杂 API&lt;/li&gt;
+&lt;li&gt;调试困难&lt;/li&gt;
+&lt;li&gt;代码维护成本高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;MCP 方式&lt;/strong&gt;：自然语言指令 + AI 智能执行&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用自然语言描述需求&lt;/li&gt;
+&lt;li&gt;AI 自动生成并执行操作&lt;/li&gt;
+&lt;li&gt;实时反馈和调整&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="深度实战chrome-mcp-高级应用"&gt;深度实战：Chrome MCP 高级应用&lt;/h2&gt;
+&lt;h3 id="1-环境配置与启动"&gt;1. 环境配置与启动&lt;/h3&gt;
+&lt;p&gt;首先确保你已安装 Claude Code，然后配置 Chrome MCP：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 查看可用的 MCP 服务器&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude code mcp list
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 安装 Chrome MCP 服务器&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;npm install -g @modelcontextprotocol/server-chrome
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 启动 Chrome MCP&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude code mcp start chrome --args&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;--headless --no-sandbox&amp;#34;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;配置文件示例&lt;/strong&gt; (&lt;code&gt;~/.claude/mcp-servers.json&lt;/code&gt;):&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-json" data-lang="json"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;chrome&amp;#34;&lt;/span&gt;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;command&amp;#34;&lt;/span&gt;: &lt;span style="color:#e6db74"&gt;&amp;#34;npx&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#f92672"&gt;&amp;#34;args&amp;#34;&lt;/span&gt;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;-y&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;@modelcontextprotocol/server-chrome&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;--port&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;3000&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; ]
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="2-实战场景智能数据抓取"&gt;2. 实战场景：智能数据抓取&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;场景：电商价格监控&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户：帮我监控 Amazon 上 iPhone 16 的价格变化，每天检查一次
+Claude Code Chrome MCP 执行：
+1. 打开 Amazon 网站
+2. 搜索 &amp;#34;iPhone 16&amp;#34;
+3. 提取前10个结果的价格、评分和库存信息
+4. 保存到 CSV 文件
+5. 设置每天自动执行&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;实际执行代码&lt;/strong&gt;（由 MCP 自动生成）：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-javascript" data-lang="javascript"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// MCP 自动生成的 Puppeteer 脚本
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;&lt;span style="color:#66d9ef"&gt;async&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;monitorAmazonPrices&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;browser&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;puppeteer&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;launch&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;page&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;browser&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;newPage&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;page&lt;/span&gt;.&lt;span style="color:#66d9ef"&gt;goto&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;https://www.amazon.com&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;page&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;type&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;#twotabsearchtextbox&amp;#39;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;iPhone 16&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;page&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;click&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;#nav-search-submit-button&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;page&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;waitForSelector&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;.s-result-item&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;const&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;products&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;page&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;evaluate&lt;/span&gt;(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; Array.&lt;span style="color:#a6e22e"&gt;from&lt;/span&gt;(document.&lt;span style="color:#a6e22e"&gt;querySelectorAll&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;.s-result-item&amp;#39;&lt;/span&gt;)).&lt;span style="color:#a6e22e"&gt;slice&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;map&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;item&lt;/span&gt; =&amp;gt; ({
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;title&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;item&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;querySelector&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;h2&amp;#39;&lt;/span&gt;)&lt;span style="color:#f92672"&gt;?&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;textContent&lt;/span&gt;&lt;span style="color:#f92672"&gt;?&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;trim&lt;/span&gt;(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;price&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;item&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;querySelector&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;.a-price-whole&amp;#39;&lt;/span&gt;)&lt;span style="color:#f92672"&gt;?&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;textContent&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;rating&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;item&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;querySelector&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;.a-icon-alt&amp;#39;&lt;/span&gt;)&lt;span style="color:#f92672"&gt;?&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;textContent&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;url&lt;/span&gt;&lt;span style="color:#f92672"&gt;:&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;item&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;querySelector&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)&lt;span style="color:#f92672"&gt;?&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;href&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;// 保存数据并安排下次执行
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;fs&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;writeFileSync&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;iphone_prices.csv&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;products&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;map&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;p&lt;/span&gt; =&amp;gt; Object.&lt;span style="color:#a6e22e"&gt;values&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;p&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;join&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;,&amp;#39;&lt;/span&gt;)).&lt;span style="color:#a6e22e"&gt;join&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;\n&amp;#39;&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;schedule&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;scheduleJob&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;0 9 * * *&amp;#39;&lt;/span&gt;, &lt;span style="color:#a6e22e"&gt;monitorAmazonPrices&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 每天上午9点执行
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="3-高级应用场景"&gt;3. 高级应用场景&lt;/h3&gt;
+&lt;h4 id="场景1自动化测试生成"&gt;场景1：自动化测试生成&lt;/h4&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户：为我的 React 登录页面生成端到端测试
+Claude Code Chrome MCP：
+1. 分析页面结构，识别表单元素
+2. 生成测试用例：
+- 有效登录
+- 无效密码
+- 空用户名
+- 记住我功能
+3. 执行测试并生成报告&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h4 id="场景2竞争对手分析"&gt;场景2：竞争对手分析&lt;/h4&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户：分析竞争对手网站的功能和定价策略
+Claude Code Chrome MCP：
+1. 访问多个竞争对手网站
+2. 提取产品特性、价格、用户评价
+3. 生成对比分析报告
+4. 识别市场机会和差距&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h4 id="场景3内容自动化发布"&gt;场景3：内容自动化发布&lt;/h4&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户：自动将我的博客文章发布到 Medium 和 Dev.to
+Claude Code Chrome MCP：
+1. 读取本地 Markdown 文件
+2. 登录各个平台
+3. 格式化并发布内容
+4. 添加标签和分类
+5. 监控发布状态&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id="chrome-mcp-最佳实践"&gt;Chrome MCP 最佳实践&lt;/h2&gt;
+&lt;h3 id="1-精确的需求描述"&gt;1. 精确的需求描述&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;好描述&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;登录 GitHub，找到我的仓库列表，提取每个仓库的 star 数、最后更新时间，保存为 JSON&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;差描述&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;帮我看看 GitHub&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="2-分步执行策略"&gt;2. 分步执行策略&lt;/h3&gt;
+&lt;p&gt;对于复杂任务，分步骤进行：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 第一步：探索网站结构&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户：打开 GitHub 并分析页面结构
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 第二步：执行具体操作&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户：现在登录并提取我的仓库信息
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 第三步：处理数据&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;用户：将数据格式化为 JSON 并保存&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id="3-错误处理与重试"&gt;3. 错误处理与重试&lt;/h3&gt;
+&lt;p&gt;Chrome MCP 支持智能重试：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;网络超时自动重试&lt;/li&gt;
+&lt;li&gt;元素未找到时尝试其他选择器&lt;/li&gt;
+&lt;li&gt;页面加载失败时刷新重试&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="4-性能优化技巧"&gt;4. 性能优化技巧&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;使用 headless 模式&lt;/strong&gt;：无界面运行，节省资源&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;合理设置超时&lt;/strong&gt;：根据网络状况调整等待时间&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缓存常用操作&lt;/strong&gt;：避免重复执行相同步骤&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;批量处理&lt;/strong&gt;：一次操作多个页面元素&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="chrome-mcp-常见问题"&gt;Chrome MCP 常见问题&lt;/h2&gt;
+&lt;h3 id="q1-chrome-mcp-安全吗会泄露我的登录信息吗"&gt;Q1: Chrome MCP 安全吗？会泄露我的登录信息吗？&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;A&lt;/strong&gt;: Chrome MCP 在本地运行，所有数据都保留在你的机器上。对于敏感操作（如登录），建议：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用环境变量存储凭证&lt;/li&gt;
+&lt;li&gt;配置会话超时&lt;/li&gt;
+&lt;li&gt;定期清理浏览器数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="q2-如何处理反爬虫网站"&gt;Q2: 如何处理反爬虫网站？&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;A&lt;/strong&gt;: Chrome MCP 提供多种策略：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;模拟人类行为&lt;/strong&gt;：随机延迟、鼠标移动&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;使用代理轮换&lt;/strong&gt;：避免 IP 被封&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;遵守 robots.txt&lt;/strong&gt;：尊重网站规则&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;限制请求频率&lt;/strong&gt;：避免对服务器造成压力&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="q3-性能如何能处理大规模数据吗"&gt;Q3: 性能如何？能处理大规模数据吗？&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;A&lt;/strong&gt;: 对于大规模任务：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;分页处理&lt;/strong&gt;：分批抓取数据&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;并行执行&lt;/strong&gt;：同时控制多个浏览器实例&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;增量更新&lt;/strong&gt;：只抓取变化的数据&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据压缩&lt;/strong&gt;：减少存储空间&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="q4-如何调试-mcp-脚本"&gt;Q4: 如何调试 MCP 脚本？&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;A&lt;/strong&gt;: 调试技巧：&lt;/p&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 启用详细日志&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude code mcp start chrome --debug
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 保存执行截图&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude code mcp capture --screenshot-on-error
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 查看生成的代码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;claude code mcp show-code&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id="技术深度mcp-架构解析"&gt;技术深度：MCP 架构解析&lt;/h2&gt;
+&lt;h3 id="工作原理"&gt;工作原理&lt;/h3&gt;
+&lt;div class="highlight-container"&gt;
+&lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;自然语言指令 → MCP 服务器 → 浏览器操作 → 结果返回
+↓ ↓ ↓ ↓
+用户描述 协议转换 Puppeteer执行 数据格式化&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h3 id="核心优势"&gt;核心优势&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;零代码学习曲线&lt;/strong&gt;：不需要学习 Puppeteer/Playwright API&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;智能错误恢复&lt;/strong&gt;：AI 自动处理异常情况&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;上下文感知&lt;/strong&gt;：理解网页结构和用户意图&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;实时反馈&lt;/strong&gt;：立即看到执行结果&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="实战项目建议"&gt;实战项目建议&lt;/h2&gt;
+&lt;h3 id="入门项目"&gt;入门项目&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;天气信息抓取&lt;/strong&gt;：从气象网站提取每日预报&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;新闻摘要生成&lt;/strong&gt;：自动抓取并总结热门新闻&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;价格历史追踪&lt;/strong&gt;：监控商品价格变化&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="中级项目"&gt;中级项目&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;社交媒体自动化&lt;/strong&gt;：定时发布内容，分析互动数据&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SEO 监控工具&lt;/strong&gt;：检查网站排名和关键词表现&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;学习进度跟踪&lt;/strong&gt;：从在线课程平台提取学习数据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="高级项目"&gt;高级项目&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;竞品智能分析系统&lt;/strong&gt;：多维度对比竞争对手&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;自动化测试平台&lt;/strong&gt;：为 Web 应用生成和执行测试&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据管道构建&lt;/strong&gt;：定时抓取、处理、存储和可视化数据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="下一步学习路径"&gt;下一步学习路径&lt;/h2&gt;
+&lt;p&gt;在后续文章中，我们将深入探讨：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;MCP 服务器开发&lt;/strong&gt;：如何创建自定义 MCP 服务器&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分布式爬虫系统&lt;/strong&gt;：使用多个 Chrome 实例并行处理&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据集成&lt;/strong&gt;：将 MCP 抓取的数据接入数据库和 BI 工具&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安全与合规&lt;/strong&gt;：确保自动化操作合法合规&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;技术比喻&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Chrome MCP 就像给你的浏览器装上了&amp;quot;AI 大脑&amp;quot; + &amp;ldquo;机械手臂&amp;rdquo;。AI 大脑理解你的意图，机械手臂精确执行操作，两者结合让浏览器自动化变得像对话一样自然。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;重要提醒&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;尊重网站的使用条款和服务协议&lt;/li&gt;
+&lt;li&gt;避免对目标网站造成过载压力&lt;/li&gt;
+&lt;li&gt;定期检查和更新你的自动化脚本&lt;/li&gt;
+&lt;li&gt;备份重要数据和配置&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>

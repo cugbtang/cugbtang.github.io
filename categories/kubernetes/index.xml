@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kubernetes on ✌yesplease's blog</title><link>http://localhost:1313/categories/kubernetes/</link><description>Recent content in Kubernetes on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Thu, 28 Mar 2024 15:28:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>etcd authentication, how to deploy?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-11/</link><pubDate>Thu, 28 Mar 2024 15:28:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-11/</guid><description>&lt;h2 id="一加载启动参数"&gt;一、加载启动参数&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kubernetes on ✌yesplease's blog</title><link>https://cugbtang.github.io/categories/kubernetes/</link><description>Recent content in Kubernetes on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Thu, 28 Mar 2024 15:28:23 +0800</lastBuildDate><atom:link href="https://cugbtang.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml"/><item><title>etcd authentication, how to deploy?</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-11/</link><pubDate>Thu, 28 Mar 2024 15:28:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-11/</guid><description>&lt;h2 id="一加载启动参数"&gt;一、加载启动参数&lt;/h2&gt;
 &lt;h3 id="1-配置文件configuration-file"&gt;1. 配置文件（Configuration file）&lt;/h3&gt;
 &lt;p&gt;如果您提供了一个配置文件，那么配置文件中的设置将具有最高优先级。这意味着配置文件中的配置项将覆盖通过命令行标志和环境变量设置的所有配置。&lt;/p&gt;
 &lt;h3 id="2-命令行标志command-line-flags"&gt;2. 命令行标志（Command-line flags）&lt;/h3&gt;
@@ -307,7 +307,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; emptyDir: &lt;span style="color:#f92672"&gt;{}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;h2 id="五引用"&gt;五、引用&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://etcd.io/docs/v3.6/op-guide/configuration/"&gt;etcd&lt;/a&gt;&lt;/p&gt;</description></item><item><title>flannel vxlan, check sum</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-7/</link><pubDate>Wed, 07 Dec 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-7/</guid><description>&lt;p&gt;集群内pod无法dig mysql.middleware
+&lt;p&gt;&lt;a href="https://etcd.io/docs/v3.6/op-guide/configuration/"&gt;etcd&lt;/a&gt;&lt;/p&gt;</description></item><item><title>flannel vxlan, check sum</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</link><pubDate>Wed, 07 Dec 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</guid><description>&lt;p&gt;集群内pod无法dig mysql.middleware
 修改主机dns nameserver为集群core dns地址，主机上可以dig mysql.middleware&lt;/p&gt;
 &lt;h2 id="一问题分析"&gt;一、问题分析&lt;/h2&gt;
 &lt;p&gt;从pod内发出的请求数据包到flannel网卡时出现问题&lt;/p&gt;
@@ -556,7 +556,7 @@ pod内发送的udp数据包不能正常到达&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo sysctl -p&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/li&gt;
-&lt;/ol&gt;</description></item><item><title>kubeadm startup Kubernetes less than v1.20.0 (centos+docker+ipvs+calico)</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-2/</link><pubDate>Sun, 15 May 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-2/</guid><description>&lt;h2 id="一更新系统软件全部节点"&gt;一、更新系统软件（全部节点）&lt;/h2&gt;
+&lt;/ol&gt;</description></item><item><title>kubeadm startup Kubernetes less than v1.20.0 (centos+docker+ipvs+calico)</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-2/</link><pubDate>Sun, 15 May 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-2/</guid><description>&lt;h2 id="一更新系统软件全部节点"&gt;一、更新系统软件（全部节点）&lt;/h2&gt;
 &lt;p&gt;由于 Docker 对系统内核有一定的要求，所以我们最好使用 yum 来更新系统软件及其内核。&lt;/p&gt;
 &lt;div class="highlight-container"&gt;
 &lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
@@ -1343,7 +1343,7 @@ $ echo &amp;#34;source &amp;lt;(kubectl completion bash)&amp;#34; &amp;gt;&amp;g
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;EnvironmentFile&lt;span style="color:#f92672"&gt;=&lt;/span&gt;-/etc/sysconfig/kubelet
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ExecStart&lt;span style="color:#f92672"&gt;=&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ExecStart&lt;span style="color:#f92672"&gt;=&lt;/span&gt;/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>Kubernetes, how to deploy?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-1/</link><pubDate>Sun, 01 May 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-1/</guid><description>&lt;p&gt;汇总kubernetes部署的方案：&lt;/p&gt;
+&lt;/div&gt;</description></item><item><title>Kubernetes, how to deploy?</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-1/</link><pubDate>Sun, 01 May 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-1/</guid><description>&lt;p&gt;汇总kubernetes部署的方案：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;kubernetes &amp;lt; 1.20 + centos7 + docker + iptables + flannel&lt;/p&gt;
@@ -1363,7 +1363,7 @@ $ echo &amp;#34;source &amp;lt;(kubectl completion bash)&amp;#34; &amp;gt;&amp;g
 &lt;li&gt;
 &lt;p&gt;kubernetes &amp;gt; 1.24 + centos7 + cri-dockerd + docker + ipvs + calico&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>The node was low on resource: ephemeral-storage. Evicted</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-6/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-6/</guid><description>&lt;h2 id="the-node-was-low-on-resource-ephemeral-storage-evicted"&gt;The node was low on resource: ephemeral-storage. Evicted&lt;/h2&gt;
+&lt;/ul&gt;</description></item><item><title>The node was low on resource: ephemeral-storage. Evicted</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</guid><description>&lt;h2 id="the-node-was-low-on-resource-ephemeral-storage-evicted"&gt;The node was low on resource: ephemeral-storage. Evicted&lt;/h2&gt;
 &lt;p&gt;最近某个节点频繁出现这个问题&lt;/p&gt;
 &lt;h2 id="问题分析"&gt;问题分析&lt;/h2&gt;
 &lt;h2 id="解决方案"&gt;解决方案&lt;/h2&gt;
@@ -1402,7 +1402,7 @@ $ echo &amp;#34;source &amp;lt;(kubectl completion bash)&amp;#34; &amp;gt;&amp;g
 &lt;h2 id="引用"&gt;引用&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://stackoverflow.com/questions/59906810/the-node-was-low-on-resource-ephemeral-storage"&gt;https://stackoverflow.com/questions/59906810/the-node-was-low-on-resource-ephemeral-storage&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>kubernetes1.24.0, Why use docker in production environment ?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-4/</link><pubDate>Tue, 15 Mar 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-4/</guid><description>&lt;h2 id="kubernetes1240-why-use-docker--in-production-environment-"&gt;kubernetes1.24.0, Why use docker in production environment ?&lt;/h2&gt;
+&lt;/ul&gt;</description></item><item><title>kubernetes1.24.0, Why use docker in production environment ?</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-4/</link><pubDate>Tue, 15 Mar 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-4/</guid><description>&lt;h2 id="kubernetes1240-why-use-docker--in-production-environment-"&gt;kubernetes1.24.0, Why use docker in production environment ?&lt;/h2&gt;
 &lt;h2 id="if-you-consider"&gt;if you consider&lt;/h2&gt;
 &lt;p&gt;Mirantis and Docker have &lt;a href="https://www.mirantis.com/blog/mirantis-to-take-over-support-of-kubernetes-dockershim-2/"&gt;committed&lt;/a&gt; to maintaining a replacement adapter for Docker Engine, and to maintain that adapter even after the in-tree dockershim is removed from Kubernetes. The replacement adapter is named &lt;a href="https://github.com/Mirantis/cri-dockerd"&gt;&lt;code&gt;cri-dockerd&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;ul&gt;
@@ -1524,7 +1524,7 @@ $ echo &amp;#34;source &amp;lt;(kubectl completion bash)&amp;#34; &amp;gt;&amp;g
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="ref"&gt;REF&lt;/h2&gt;
-&lt;p&gt;&lt;a href="https://kubernetes.io/blog/2022/02/17/dockershim-faq/"&gt;Thursday, February 17, 2022 - Updated: Dockershim Removal FAQ&lt;/a&gt;&lt;/p&gt;</description></item><item><title>kubeadm startup Kubernetes more than v1.20.0 (centos7+containerd+ipvs+calico)</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-3/</link><pubDate>Tue, 01 Mar 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-3/</guid><description>&lt;p&gt;这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://kubernetes.io/blog/2022/02/17/dockershim-faq/"&gt;Thursday, February 17, 2022 - Updated: Dockershim Removal FAQ&lt;/a&gt;&lt;/p&gt;</description></item><item><title>kubeadm startup Kubernetes more than v1.20.0 (centos7+containerd+ipvs+calico)</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</link><pubDate>Tue, 01 Mar 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-3/</guid><description>&lt;p&gt;这篇文章的作者部署的是kubernetes v1.23，但其实是基于kubernetes对CRI的改动执行的较为流行的方案。&lt;/p&gt;
 &lt;p&gt;我绝的主要是针对Docker的支持问题，因为在1.24中才正式将docker-shim剔除。以下列举了较为流行的部署方案：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;

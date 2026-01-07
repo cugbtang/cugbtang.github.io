@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>FAQ on ✌yesplease's blog</title><link>http://localhost:1313/tags/faq/</link><description>Recent content in FAQ on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Wed, 07 Dec 2022 16:01:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/faq/index.xml" rel="self" type="application/rss+xml"/><item><title>flannel vxlan, check sum</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-7/</link><pubDate>Wed, 07 Dec 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-7/</guid><description>&lt;p&gt;集群内pod无法dig mysql.middleware
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>FAQ on ✌yesplease's blog</title><link>https://cugbtang.github.io/tags/faq/</link><description>Recent content in FAQ on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Wed, 07 Dec 2022 16:01:23 +0800</lastBuildDate><atom:link href="https://cugbtang.github.io/tags/faq/index.xml" rel="self" type="application/rss+xml"/><item><title>flannel vxlan, check sum</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</link><pubDate>Wed, 07 Dec 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-7/</guid><description>&lt;p&gt;集群内pod无法dig mysql.middleware
 修改主机dns nameserver为集群core dns地址，主机上可以dig mysql.middleware&lt;/p&gt;
 &lt;h2 id="一问题分析"&gt;一、问题分析&lt;/h2&gt;
 &lt;p&gt;从pod内发出的请求数据包到flannel网卡时出现问题&lt;/p&gt;
@@ -247,7 +247,7 @@ pod内发送的udp数据包不能正常到达&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;sudo sysctl -p&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;/li&gt;
-&lt;/ol&gt;</description></item><item><title>gcr.io 镜像，how to play?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-8/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-8/</guid><description>&lt;h1 id="常用镜像仓库"&gt;常用镜像仓库&lt;/h1&gt;
+&lt;/ol&gt;</description></item><item><title>gcr.io 镜像，how to play?</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-8/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-8/</guid><description>&lt;h1 id="常用镜像仓库"&gt;常用镜像仓库&lt;/h1&gt;
 &lt;h2 id="dockerhub镜像仓库"&gt;DockerHub镜像仓库&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Docker Hub 官方镜像仓库 (&lt;a href="https://hub.docker.com/"&gt;https://hub.docker.com/&lt;/a&gt;)&lt;/li&gt;
@@ -412,7 +412,7 @@ Registry Mirrors:https://uyah70su.mirror.aliyuncs.com/&lt;/code&gt;&lt;/pre&gt;
 &lt;div class="highlight-container"&gt;
 &lt;button class="copy-code-btn outline"&gt;Copy&lt;/button&gt;
 &lt;pre tabindex="0"&gt;&lt;code&gt;$ time docker pull centos&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;</description></item><item><title>kubernetes admission,how to play?</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-9/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-9/</guid><description>&lt;h1 id="admission"&gt;Admission&lt;/h1&gt;
+&lt;/div&gt;</description></item><item><title>kubernetes admission,how to play?</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-9/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-9/</guid><description>&lt;h1 id="admission"&gt;Admission&lt;/h1&gt;
 &lt;h2 id="一static-admission-controllers"&gt;一、static admission controllers&lt;/h2&gt;
 &lt;p&gt;&lt;a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/"&gt;官方内置&lt;/a&gt;，启用就行&lt;/p&gt;
 &lt;h2 id="二dynamic-admission-controllers"&gt;二、dynamic admission controllers&lt;/h2&gt;
@@ -694,7 +694,7 @@ Registry Mirrors:https://uyah70su.mirror.aliyuncs.com/&lt;/code&gt;&lt;/pre&gt;
 &lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#创建webhook相关以及demo pod yaml&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;bash webhook.sh
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;kubectl apply -f demo.yaml&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>The node was low on resource: ephemeral-storage. Evicted</title><link>http://localhost:1313/post/kubernetes/series-kubernetes-6/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/kubernetes/series-kubernetes-6/</guid><description>&lt;h2 id="the-node-was-low-on-resource-ephemeral-storage-evicted"&gt;The node was low on resource: ephemeral-storage. Evicted&lt;/h2&gt;
+&lt;/div&gt;</description></item><item><title>The node was low on resource: ephemeral-storage. Evicted</title><link>https://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</link><pubDate>Fri, 15 Apr 2022 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/kubernetes/series-kubernetes-6/</guid><description>&lt;h2 id="the-node-was-low-on-resource-ephemeral-storage-evicted"&gt;The node was low on resource: ephemeral-storage. Evicted&lt;/h2&gt;
 &lt;p&gt;最近某个节点频繁出现这个问题&lt;/p&gt;
 &lt;h2 id="问题分析"&gt;问题分析&lt;/h2&gt;
 &lt;h2 id="解决方案"&gt;解决方案&lt;/h2&gt;

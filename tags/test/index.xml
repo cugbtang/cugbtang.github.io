@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Test on ✌yesplease's blog</title><link>http://localhost:1313/tags/test/</link><description>Recent content in Test on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Sat, 06 Jan 2024 16:01:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/test/index.xml" rel="self" type="application/rss+xml"/><item><title>Go Web App, how to play?</title><link>http://localhost:1313/post/go/deep/series-go-2/</link><pubDate>Sat, 06 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/deep/series-go-2/</guid><description>&lt;h2 id="优雅重启http服务"&gt;优雅重启HTTP服务&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Test on ✌yesplease's blog</title><link>https://cugbtang.github.io/tags/test/</link><description>Recent content in Test on ✌yesplease's blog</description><generator>Hugo -- gohugo.io</generator><language>en</language><managingEditor>cugbtang@sina.com (yesplease)</managingEditor><webMaster>cugbtang@sina.com (yesplease)</webMaster><lastBuildDate>Sat, 06 Jan 2024 16:01:23 +0800</lastBuildDate><atom:link href="https://cugbtang.github.io/tags/test/index.xml" rel="self" type="application/rss+xml"/><item><title>Go Web App, how to play?</title><link>https://cugbtang.github.io/post/go/deep/series-go-2/</link><pubDate>Sat, 06 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/go/deep/series-go-2/</guid><description>&lt;h2 id="优雅重启http服务"&gt;优雅重启HTTP服务&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;目的
@@ -112,7 +112,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#a6e22e"&gt;log&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Fatal&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;http&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;ListenAndServe&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;:8080&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;nil&lt;/span&gt;))
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>Go tools, how to play?</title><link>http://localhost:1313/post/go/tools/series-go-7/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/tools/series-go-7/</guid><description>&lt;ul&gt;
+&lt;/div&gt;</description></item><item><title>Go tools, how to play?</title><link>https://cugbtang.github.io/post/go/tools/series-go-7/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/go/tools/series-go-7/</guid><description>&lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Delve是一个基于命令行的Go语言调试器，它提供了类似于GDB的功能，支持设置断点、单步执行、查看变量值、调用堆栈等操作。相比于GDB，Delve更加方便易用，支持直接在命令行中输入Go表达式进行求值。Delve还支持VSCode和GoLand等集成开发环境中的调试器扩展。&lt;/p&gt;
 &lt;/li&gt;
@@ -125,7 +125,7 @@
 &lt;li&gt;
 &lt;p&gt;dlv是Delve的缩写，也是一个基于命令行的Go语言调试器，它是Delve的CLI版本。dlv支持所有Delve所支持的调试功能，与Delve相比，它更加轻量级，适合在终端中使用。&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Go 高级编程, how to play?</title><link>http://localhost:1313/post/go/base/series-go-5/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/base/series-go-5/</guid><description>&lt;h3 id="1-并发编程"&gt;1. &lt;strong&gt;并发编程&lt;/strong&gt;&lt;/h3&gt;
+&lt;/ul&gt;</description></item><item><title>Go 高级编程, how to play?</title><link>https://cugbtang.github.io/post/go/base/series-go-5/</link><pubDate>Fri, 05 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/go/base/series-go-5/</guid><description>&lt;h3 id="1-并发编程"&gt;1. &lt;strong&gt;并发编程&lt;/strong&gt;&lt;/h3&gt;
 &lt;p&gt;在这一部分主要介绍了Go语言的并发模型和相关的并发编程技术，包括协程、通道、互斥锁、条件变量等。关键知识点包括：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;协程的基本用法和实现原理；&lt;/li&gt;
@@ -553,7 +553,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 进行数据库查询优化&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;db&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;LogMode&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;db&lt;/span&gt;.&lt;span style="color:#a6e22e"&gt;Debug&lt;/span&gt;().&lt;span style="color:#a6e22e"&gt;Where&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;age &amp;gt; ?&amp;#34;&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;18&lt;/span&gt;).&lt;span style="color:#a6e22e"&gt;Find&lt;/span&gt;(&lt;span style="color:#f92672"&gt;&amp;amp;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;users&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;</description></item><item><title>Go test, how to play?</title><link>http://localhost:1313/post/go/base/series-go-4/</link><pubDate>Thu, 04 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/base/series-go-4/</guid><description>&lt;h1 id="go-测试"&gt;go 测试&lt;/h1&gt;
+&lt;/div&gt;</description></item><item><title>Go test, how to play?</title><link>https://cugbtang.github.io/post/go/base/series-go-4/</link><pubDate>Thu, 04 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/go/base/series-go-4/</guid><description>&lt;h1 id="go-测试"&gt;go 测试&lt;/h1&gt;
 &lt;p&gt;go test 后面接着的应该是一个包名
 go test 可以生成覆盖率的profile文件，这个文件可以被go tool cover工具解析(go tool cover -func=cover.out/go tool cover -html=cover.out)&lt;/p&gt;
 &lt;h2 id="1go-top-level-test"&gt;1、Go top-level test:&lt;/h2&gt;
@@ -1057,7 +1057,7 @@ $ go install -race mypkg // to install the package&lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://tonybai.com/2023/04/20/provide-fake-object-for-external-collaborators/"&gt;单测时尽量用fake object&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://go.dev/doc/tutorial/fuzz"&gt;fuzz&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Go fundamentals, how to play?</title><link>http://localhost:1313/post/go/base/series-go-1/</link><pubDate>Tue, 02 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/base/series-go-1/</guid><description>&lt;p&gt;Go Fundamentals 是更多的Go基础知识，涵盖了数据结构（基础数据结构、数组、slice、map）、语言基础（函数、接口、反射）、关键字和并发等方面。掌握这些概念和技术将帮助您编写高效、可靠和复杂的Go程序。&lt;/p&gt;
+&lt;/ul&gt;</description></item><item><title>Go fundamentals, how to play?</title><link>https://cugbtang.github.io/post/go/base/series-go-1/</link><pubDate>Tue, 02 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/go/base/series-go-1/</guid><description>&lt;p&gt;Go Fundamentals 是更多的Go基础知识，涵盖了数据结构（基础数据结构、数组、slice、map）、语言基础（函数、接口、反射）、关键字和并发等方面。掌握这些概念和技术将帮助您编写高效、可靠和复杂的Go程序。&lt;/p&gt;
 &lt;h3 id="数据结构"&gt;数据结构&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;
@@ -1497,7 +1497,7 @@ $ go install -race mypkg // to install the package&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;以上是Go Fundamentals的简要介绍和代码举例。这些基本概念是Go编程的核心，熟练掌握它们可以帮助您编写清晰、高效和可读性强的代码。&lt;/p&gt;</description></item><item><title>Go Proverbs, how to play?</title><link>http://localhost:1313/post/go/base/series-go-3/</link><pubDate>Mon, 01 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>http://localhost:1313/post/go/base/series-go-3/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;以上是Go Fundamentals的简要介绍和代码举例。这些基本概念是Go编程的核心，熟练掌握它们可以帮助您编写清晰、高效和可读性强的代码。&lt;/p&gt;</description></item><item><title>Go Proverbs, how to play?</title><link>https://cugbtang.github.io/post/go/base/series-go-3/</link><pubDate>Mon, 01 Jan 2024 16:01:23 +0800</pubDate><author>cugbtang@sina.com (yesplease)</author><guid>https://cugbtang.github.io/post/go/base/series-go-3/</guid><description>&lt;blockquote&gt;
 &lt;p&gt;需要牢记这些谚语，在使用过程中感受谚语带来的变化&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
