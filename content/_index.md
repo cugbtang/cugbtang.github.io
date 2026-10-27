@@ -1,52 +1,51 @@
 ---
-title: Custom home page
-layout: custom_home  # use custom home layout
+title: 首页
+layout: custom_home
 
 introductionWidget:
-  title: Hi, I'm Jane
+  title: 你好，我是 yesplease
   description: |
-    Full-stack developer passionate about creating elegant solutions to complex problems.
+    **K8s / DevOps 6 年 → All in AI。**
 
-    - 🚀 Working on web development
-    - 📝 Writing about tech
-    - 💡 Learning new things
-  avatar: /hugo-theme-jane/image/blank-profile.png
+    把生产级工程能力搬进 AI：垂直 Agent、AI Infra、GPU 调度。只写跑得通、能落地的。
+
+    - 🤖 垂直 Agent：RAG · ReAct / SOP · HITL
+    - ☸️ AI Infra：K8s 上的 GPU 调度与 vLLM 推理服务
+    - 🧪 本地训练：从 miniMind 起步补模型训练与微调
   showSocial: true
 
 postWidget:
   - type: recent
-    title: Recent Posts
-    count: 3
-  - type: category
-    title: Posts From Category Demo
-    category: demo
-    count: 3
-  # - type: category
-  #   title: Documents
-  #   category: docs
-  #   count: 3
-
+    title: 最新文章
+    count: 5
 
 projectWidget:
-  - title: Open Source Projects
+  - title: 代表项目
     items:
-      - title: Hugo Theme Jane
-        imgUrl: /hugo-theme-jane/image/example.jpg
-        description: A readable & concise theme for Hugo, color schemes to choose, easy to personalize. Working well since 2018.
-        link: https://github.com/xianmin/hugo-theme-jane
-
-  - title: Featured Projects
+      - title: t-minimind
+        imgUrl: https://opengraph.githubassets.com/1/cugbtang/t-minimind
+        description: 本地小模型训练实践，基于 miniMind 复现文本模型训练流程。
+        link: https://github.com/cugbtang/t-minimind
+      - title: english-buddy
+        imgUrl: https://opengraph.githubassets.com/1/cugbtang/english-buddy
+        description: AI 角色扮演的英语口语练习应用。
+        link: https://github.com/cugbtang/english-buddy
+      - title: myBook
+        imgUrl: https://opengraph.githubassets.com/1/cugbtang/myBook
+        description: 用 AI Skills 把一本书读透：一文速览 + 深度系列。
+        link: https://github.com/cugbtang/myBook
+  - title: Agent / RAG 工程
     items:
-      - title: E-Commerce Platform
-        imgUrl: /hugo-theme-jane/image/example.jpg
-        description: A full-featured online store with real-time inventory management.
-        link: https://example.com
-      - title: Task Management App
-        imgUrl: /hugo-theme-jane/image/example.jpg
-        description: Collaborative task management with real-time updates.
-        link: https://example.com
-      - title: Another App
-        imgUrl: /hugo-theme-jane/image/example.jpg
-        description: Collaborative task management with real-time updates.
-        link: https://example.com
+      - title: husky
+        imgUrl: https://opengraph.githubassets.com/1/cugbtang/husky
+        description: "Go + RAG + ReAct + 飞书工单系统，垂直 Agent 的工程样本。"
+        link: https://github.com/cugbtang/husky
+      - title: WeKnora
+        imgUrl: https://opengraph.githubassets.com/1/cugbtang/WeKnora
+        description: LLM + RAG 的文档理解与检索框架。
+        link: https://github.com/cugbtang/WeKnora
+      - title: codefather-cli
+        imgUrl: https://opengraph.githubassets.com/1/cugbtang/codefather-cli
+        description: 编程导航 CLI，在终端里搜索浏览 codefather.cn。
+        link: https://github.com/cugbtang/codefather-cli
 ---
