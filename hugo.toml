@@ -3,7 +3,7 @@
 # And see https://gohugo.io/getting-started/configuration/ .
 
 baseURL = "https://cugbtang.github.io/"
-title = "✌yesplease's blog"
+title = "yesplease | All in AI"
 enableRobotsTXT = true
 enableEmoji = true
 theme = "jane"
@@ -28,7 +28,7 @@ defaultContentLanguage = "en"           # Default language to use
   filename = "sitemap.xml"
 
 [[menu.main]]             # config your menu              # 配置目录
-  name = "This is Home"
+  name = "Home"
   weight = 10
   identifier = "home"
   pageref = "/"
@@ -58,9 +58,9 @@ defaultContentLanguage = "en"           # Default language to use
   author.url = "/about"        # optional                      # 可选
 
   # site info (optional)                                  # 站点信息（可选，不需要的可以直接注释掉）
-  logoTitle = "✌yesplease"        # default: the title value    # 默认值: 上面设置的title值
-  keywords = ["Hugo", "theme","jane"]
-  description = "Hugo theme jane example site."
+  logoTitle = "yesplease"        # default: the title value    # 默认值: 上面设置的title值
+  keywords = ["AI Infra", "Agent", "LLM", "Kubernetes", "GPU", "Go"]
+  description = "K8s/DevOps 6 年 → All in AI · 垂直 Agent / AI Infra / GPU 调度"
 
   # The date format to use; for a list of valid formats, see https://gohugo.io/functions/format/
   dateFormatToUse = "2006-01-02"
